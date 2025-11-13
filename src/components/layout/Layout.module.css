@@ -1,0 +1,6 @@
+.layout {
+  width: var(--width);
+  margin: auto;
+  height: 100vh;
+  background-color: whitesmoke;
+}

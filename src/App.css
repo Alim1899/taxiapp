@@ -1,0 +1,13 @@
+:root {
+  --yellow: #ffc02e;
+  --width: clamp(280px, 95vw, 1920px);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+}
+.app {
+  margin: 0;
+  padding: 0;
+}
