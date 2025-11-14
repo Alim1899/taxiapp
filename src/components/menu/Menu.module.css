@@ -1,0 +1,63 @@
+.menu {
+  width: var(--content);
+  margin: auto;
+  margin-top: 5vh;
+}
+.firstNav,
+.secondNav {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+}
+.icon {
+  height: 70%;
+  width: 80%;
+  display: grid;
+  grid-template-rows: 80% 20%;
+  margin: auto;
+  position: relative;
+}
+
+.icon > svg {
+  background-color: var(--yellow);
+  width: 70%;
+  padding: 2px;
+  height: 90%;
+  border-radius: 25px;
+  color: darkolivegreen;
+  margin: auto;
+}
+.notif {
+  border: 1px solid red;
+  width: 10%;
+  height: 13%;
+  min-height: 14px;
+  min-width: 15px;
+  font-size: 0.9rem;
+  font-weight: 900;
+  background-color: red;
+  color: var(--yellow);
+  border-radius: 50%;
+  position: absolute;
+  right: 7%;
+  top: 0;
+  text-align: center;
+}
+.icon > h3 {
+  text-align: center;
+  font-size: clamp(0.7rem, 2vw, 1.2rem);
+}
+
+.balance {
+  margin: 2vh 0;
+  height: clamp(100px, 20vw, 170px);
+  background-color: rgb(181, 206, 228);
+  border-radius: 50px;
+}
+.star {
+  color: var(--yellow);
+}
+.balance > h3,
+.balance > h1 {
+  margin-left: 50px;
+  max-width: 280px;
+}
