@@ -1,0 +1,14 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  width: 80%;
+  margin: auto;
+  font-size: clamp(0.8rem, 3vw, 1.3rem);
+}
+.header > button {
+  width: 25px;
+  font-weight: 900;
+  border: none;
+  background-color: unset;
+  cursor: pointer;
+}

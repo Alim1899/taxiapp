@@ -6,12 +6,14 @@ import {
 } from "react-icons/md";
 import { FaPeopleGroup } from "react-icons/fa6";
 import { TbZoomMoney } from "react-icons/tb";
-
+import Withdraw from "../amount/withdraw/Withdraw";
 import { FaStar, FaPlus } from "react-icons/fa";
 import { GiCctvCamera } from "react-icons/gi";
 import classes from "./Menu.module.css";
 import MenuItem from "./MenuItem";
+import { useState } from "react";
 const Menu = ({ balance }) => {
+  const [showWithdraw, setShowWithdraw] = useState(true);
   return (
     <div className={classes.menu}>
       <nav className={classes.firstNav}>
@@ -35,7 +37,12 @@ const Menu = ({ balance }) => {
         </h1>
       </div>
       <nav className={classes.secondNav}>
-        <MenuItem icon={<MdCloudUpload />} text="თანხის გატანა" />
+        <MenuItem
+          icon={<MdCloudUpload />}
+          text="თანხის გატანა"
+          onClick={() => setShowWithdraw(!showWithdraw)}
+        />
+        {showWithdraw && <Withdraw close={() => setShowWithdraw(false)} />}
         <MenuItem icon={<MdSend />} text="სხვასთან გადარიცხვა" />
         <MenuItem icon={<FaPlus />} text="ბალანსის შევსება" />
         <MenuItem icon={<GiCctvCamera />} text="ვიდეო ჯარიმები" />
