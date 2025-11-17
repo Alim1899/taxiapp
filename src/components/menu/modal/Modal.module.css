@@ -1,0 +1,13 @@
+.backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(8px);
+  z-index: 8;
+  display: flex;
+  flex-direction: column;
+}
+.temp {
+  background-color: aliceblue;
+  margin: auto;
+}

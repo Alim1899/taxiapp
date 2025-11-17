@@ -12,18 +12,47 @@ import { GiCctvCamera } from "react-icons/gi";
 import classes from "./Menu.module.css";
 import MenuItem from "./MenuItem";
 import { useState } from "react";
+import Modal from "./modal/Modal";
 const Menu = ({ balance }) => {
-  const [showWithdraw, setShowWithdraw] = useState(true);
+  const [showModal, setShowModal] = useState(false);
+  const [modalDetails, setModalDetails] = useState({});
+  const { name, header } = modalDetails;
+
+  const modalHandler = (e) => {
+    setShowModal(true);
+    setModalDetails({
+      name: e.currentTarget.getAttribute("name"),
+      header: e.currentTarget.getAttribute("header"),
+    });
+  };
   return (
     <div className={classes.menu}>
       <nav className={classes.firstNav}>
         <MenuItem
           icon={<FaPeopleGroup className={classes.svg} />}
+          name="refs"
           text="რეფერალები"
+          onClick={(e) => modalHandler(e)}
         />
-        <MenuItem notif={1} icon={<MdCloudDownload />} text="აპლიკაცია" />
-        <MenuItem icon={<TbZoomMoney />} text="ბონუსები" />
-        <MenuItem icon={<MdCarRental />} text="დაქირავება" />
+        <MenuItem
+          notif={1}
+          name="app"
+          icon={<MdCloudDownload />}
+          text="აპლიკაცია"
+          onClick={(e) => modalHandler(e)}
+        />
+        <MenuItem
+          name="bonus"
+          icon={<TbZoomMoney />}
+          text="ბონუსები"
+          onClick={(e) => modalHandler(e)}
+        />
+        <MenuItem
+          name="rent"
+          icon={<MdCarRental />}
+          text="დაქირავება"
+          onClick={(e) => modalHandler(e)}
+        />
       </nav>
       <div className={classes.balance}>
         <h3 className={classes.driver}>
@@ -40,12 +69,34 @@ const Menu = ({ balance }) => {
         <MenuItem
           icon={<MdCloudUpload />}
           text="თანხის გატანა"
-          onClick={() => setShowWithdraw(!showWithdraw)}
+          name="withdraw"
+          onClick={(e) => modalHandler(e)}
         />
-        {showWithdraw && <Withdraw close={() => setShowWithdraw(false)} />}
-        <MenuItem icon={<MdSend />} text="სხვასთან გადარიცხვა" />
-        <MenuItem icon={<FaPlus />} text="ბალანსის შევსება" />
-        <MenuItem icon={<GiCctvCamera />} text="ვიდეო ჯარიმები" />
+        {showModal && (
+          <Modal
+            close={() => setShowModal(false)}
+            header={header}
+            name={name}
+          />
+        )}
+        <MenuItem
+          icon={<MdSend />}
+          name="send"
+          text="სხვასთან გადარიცხვა"
+          onClick={(e) => modalHandler(e)}
+        />
+        <MenuItem
+          icon={<FaPlus />}
+          name="balance"
+          text="ბალანსის შევსება"
+          onClick={(e) => modalHandler(e)}
+        />
+        <MenuItem
+          icon={<GiCctvCamera />}
+          name="camera"
+          text="ვიდეო ჯარიმები"
+          onClick={(e) => modalHandler(e)}
+        />
       </nav>
     </div>
   );
