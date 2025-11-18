@@ -39,3 +39,19 @@
   color: rgb(77, 63, 63);
   cursor: pointer;
 }
+
+.add {
+  width: 35%;
+  height: 35px;
+  border-radius: 15px;
+  margin: auto;
+  background-color: rgb(65, 67, 88);
+  border: 1px solid lightcoral;
+  padding: 0px 10px;
+  color: var(--yellow);
+}
+.logo {
+  height: 20px;
+  width: 20px;
+  border: 1px solid red;
+}

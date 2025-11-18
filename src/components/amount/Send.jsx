@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
-import Header from "../../UI/Header";
-import classes from "./Withdraw.module.css";
-const Withdraw = ({ close, header }) => {
+import Header from "../UI/header";
+import classes from "./withdraw/Withdraw.module.css";
+const Send = ({ close, header }) => {
   const { register, handleSubmit } = useForm();
   const onSubmit = (data) => console.log(data);
 
@@ -22,14 +22,16 @@ const Withdraw = ({ close, header }) => {
       <label>ანგარიშის ნომერი</label>
       <input {...register("iban")} placeholder="GE29NB0000000101904917" />
       <label>მიმღების დასახელება</label>
-      <input {...register("recipient")} placeholder="მიხეილ მარღიშვილი" />
+      <input {...register("recipient")} placeholder="სახელი და გვარი" />
       <label>თანხა</label>
       <input {...register("amount")} placeholder="თანხა" />
+      <label>დანიშნულება</label>
+      <input placeholder="პირადი გადარიცხვა"></input>
       <button className={classes.btn} type="submit">
-        გატანა
+        გადარიცხვა
       </button>
     </form>
   );
 };
 
-export default Withdraw;
+export default Send;
