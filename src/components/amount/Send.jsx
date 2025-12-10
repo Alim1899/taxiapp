@@ -1,17 +1,16 @@
 import { useForm } from "react-hook-form";
-import Header from "../UI/header";
 import classes from "./withdraw/Withdraw.module.css";
-const Send = ({ close, header }) => {
+import Header from "../UI/Header";
+const Send = ({ close, headerText }) => {
   const { register, handleSubmit } = useForm();
   const onSubmit = (data) => console.log(data);
-
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
       onClick={(e) => e.stopPropagation()}
       className={classes.withdraw}
     >
-      <Header text={header} type="button" onClick={close} />
+      <Header text={headerText} type="button" onClick={close} />
       <label>აირჩიე ბანკი</label>
       <select {...register("bank")} placeholder="აირჩიე ბანკი">
         <option value="tbc">თიბისი ბანკი</option>

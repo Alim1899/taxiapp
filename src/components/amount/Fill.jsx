@@ -4,7 +4,7 @@ import classes from "./withdraw/Withdraw.module.css";
 
 import { MdOutlineAddCard } from "react-icons/md";
 
-const Fill = ({ header }) => {
+const Fill = ({ close, headerText }) => {
   const { register, handleSubmit } = useForm();
   const onSubmit = (data) => console.log(data);
   return (
@@ -13,7 +13,7 @@ const Fill = ({ header }) => {
       onClick={(e) => e.stopPropagation()}
       className={classes.withdraw}
     >
-      <Header text={header} type="button" onClick={close} />
+      <Header text={headerText} type="button" onClick={close} />
       <label>აირჩიე ბარათი</label>
       <select {...register("card")} placeholder="აირჩიე ბარათი">
         <option value="tbc">xxxx5132</option>
