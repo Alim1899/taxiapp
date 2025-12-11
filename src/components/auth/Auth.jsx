@@ -1,15 +1,22 @@
-import { Formik, Form, Field, ErrorMessage } from "formik";
+import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import classes from "./Auth.module.css";
 import Error from "../UI/Error";
 import logo from "../../assets/logo.jpg";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Button from "../UI/Button";
 import { onSubmit } from "../../utils/Functions";
 import Spinner from "../UI/Spinner";
+import useUsers from "../context/useUsers";
 const Auth = () => {
+  const { state, dispatch } = useUsers();
+
   const [userNotFound, setUserNotFound] = useState(false);
   const [showSpinner, setShowSpinner] = useState(false);
+  const [correctNumber, setCorrectNumber] = useState(false);
+  useEffect(() => {
+    console.log(state);
+  }, [state]);
   const PhoneSchema = Yup.object().shape({
     number: Yup.string()
       .required("აუცილებელი ველი")
@@ -20,8 +27,10 @@ const Auth = () => {
     <div className={classes.auth}>
       <h2>TAXI | APP</h2>
       <img alt="logo" className={classes.logo} src={logo} />
-      <h4>ავტორიზაცია</h4>
-
+      <h4>
+        {correctNumber ? "შეიყვანე მობილურზე მიღებული კოდი" : "ავტორიზაცია"}
+      </h4>
+      {}
       {showSpinner ? (
         <Spinner />
       ) : (
@@ -29,7 +38,14 @@ const Auth = () => {
           initialValues={{ number: "" }}
           validationSchema={PhoneSchema}
           onSubmit={(values) => {
-            onSubmit(values, setUserNotFound, setShowSpinner);
+            onSubmit(
+              values,
+              setUserNotFound,
+              setShowSpinner,
+              setCorrectNumber,
+
+              dispatch
+            );
           }}
         >
           {({ values, setFieldValue, isValid, errors }) => (
@@ -52,7 +68,7 @@ const Auth = () => {
               <Button
                 btnName="შესვლა"
                 type="submit"
-                disabled={!isValid}
+                disabled={!isValid || !values.number}
               ></Button>
             </Form>
           )}

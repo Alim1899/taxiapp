@@ -1,14 +1,25 @@
 import { URL, TOKEN, PARKID } from "./constants";
 
-export const onSubmit = (data, setUserNotFound, setShowSpinner) => {
-  console.log(data);
+export const onSubmit = (
+  data,
+  setUserNotFound,
+  setShowSpinner,
+  setCorrectNumber,
+  dispatch
+) => {
   setShowSpinner(true);
   if (!data) return;
   const number = data.number.replace(/\s/g, "");
-  getData(number, setUserNotFound, setShowSpinner);
+  getData(number, setUserNotFound, setShowSpinner, setCorrectNumber, dispatch);
 };
 
-const getData = async (number, setUserNotFound, setShowSpinner) => {
+const getData = async (
+  number,
+  setUserNotFound,
+  setShowSpinner,
+  setCorrectNumber,
+  dispatch
+) => {
   await fetch(`${URL}`, {
     method: "POST",
     headers: {
@@ -24,7 +35,11 @@ const getData = async (number, setUserNotFound, setShowSpinner) => {
     .then((res) => res.json())
     .then((data) => {
       setShowSpinner(false);
-      console.log(data);
+      if (typeof data === "number") {
+        setCorrectNumber(true);
+        dispatch({ type: "NUMBER_CHECK", payload: true });
+        dispatch({ type: "CODE_ARRIVED", payload: data });
+      } else console.log("pppp");
       if (data.statusCode === 500) setUserNotFound(true);
     })
     .catch((err) => console.error(err.statusCode));
