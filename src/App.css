@@ -1,5 +1,6 @@
 :root {
   --yellow: #ffc02e;
+  --dark: #250246;
   --width: clamp(280px, 95vw, 1920px);
   --content: clamp(280px, 85vw, 1180px);
 }
