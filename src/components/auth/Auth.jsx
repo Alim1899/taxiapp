@@ -1,8 +1,8 @@
-import { useForm, Controller } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import classes from "./Auth.module.css";
 import Error from "../UI/Error";
 import logo from "../../assets/logo.jpg";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { TOKEN, URL, PARKID } from "./constants";
 
 const Auth = () => {
@@ -11,6 +11,7 @@ const Auth = () => {
     register,
     handleSubmit,
     setValue,
+    getValues,
     formState: { errors },
   } = useForm();
   const formatNumber = (value) => {
@@ -50,9 +51,6 @@ const Auth = () => {
       })
       .catch((err) => console.error(err.statusCode));
   };
-  useEffect(() => {
-    getData();
-  }, []);
 
   return (
     <div className={classes.auth}>
@@ -84,9 +82,14 @@ const Auth = () => {
 
         <button
           className={classes.submit}
-          // onClick={() => getData()}
-          // onClick={() => onSubmit()}
-          disabled={errors.number || userNotFound ? true : false}
+          disabled={
+            !getValues("number") ||
+            getValues("number").length === 0 ||
+            errors.number ||
+            userNotFound
+              ? true
+              : false
+          }
           type="submit"
         >
           შესვლა
