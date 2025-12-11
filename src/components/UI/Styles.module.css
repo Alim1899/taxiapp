@@ -24,3 +24,35 @@
   color: crimson;
   text-align: center;
 }
+.submit {
+  width: 50%;
+  margin-left: 25%;
+  height: 40px;
+  border: none;
+  outline: none;
+  background-color: var(--yellow);
+  font-weight: 900;
+  font-size: 1rem;
+  color: var(--dark);
+  cursor: pointer;
+  border-radius: 15px;
+}
+.submit:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+.loader {
+  margin: auto;
+  width: 32px;
+  height: 32px;
+  border: 2px solid #ddd;
+  border-top: 2px solid #000;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
