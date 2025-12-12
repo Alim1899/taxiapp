@@ -6,6 +6,7 @@
   height: 60vh;
   border-radius: 15px;
   color: var(--dark);
+  position: relative;
 }
 .auth > h2 {
   text-align: center;
@@ -62,4 +63,35 @@
   font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
   letter-spacing: 1px;
   background-color: #ffffff;
+}
+
+.wrapper {
+  position: relative;
+}
+.codeWrapper {
+  align-items: center;
+  margin-top: 20px;
+}
+
+.codeBoxes {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 15px;
+}
+
+.codeBox {
+  width: 55px;
+  height: 60px;
+  font-size: 28px;
+  text-align: center;
+  border-radius: 12px;
+  border: 2px solid #d0d0d0;
+  outline: none;
+  transition: 0.2s;
+}
+
+.codeBox:focus {
+  border-color: var(--yellow);
+  box-shadow: 0 0 5px rgba(79, 125, 249, 0.4);
 }

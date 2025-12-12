@@ -13,17 +13,20 @@
   cursor: pointer;
 }
 
+/* ERROR */
 .error {
   height: 20px;
   text-align: center;
-  margin-top: 15px;
-  position: relative;
+
+  position: absolute;
   font-size: 12px;
-  margin: auto;
+  width: 100%;
   margin-top: 5px;
   color: crimson;
   text-align: center;
 }
+
+/* BUTTON */
 .submit {
   width: 50%;
   margin-left: 25%;
@@ -36,11 +39,14 @@
   color: var(--dark);
   cursor: pointer;
   border-radius: 15px;
+  margin-top: 25px;
 }
 .submit:disabled {
   opacity: 0.7;
   cursor: not-allowed;
 }
+
+/* SPINNER */
 .loader {
   margin: auto;
   width: 32px;

@@ -1,5 +1,7 @@
 const initialState = {
   correctNumber: false,
+  userNotFound: false,
+  showSpinner: false,
   arrivedCode: "",
 };
 
@@ -9,6 +11,16 @@ const userReducer = (state = initialState, action) => {
       return {
         ...state,
         correctNumber: action.payload,
+      };
+    case "USER_CHECK":
+      return {
+        ...state,
+        userNotFound: action.payload,
+      };
+    case "SPINNER_CHECK":
+      return {
+        ...state,
+        showSpinner: action.payload,
       };
 
     case "CODE_ARRIVED":
