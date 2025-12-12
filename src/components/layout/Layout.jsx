@@ -1,20 +1,27 @@
+import { useEffect } from "react";
 import classes from "./Layout.module.css";
 import Navbar from "../navbar/Navbar";
 import Menu from "../menu/Menu";
 import Auth from "../auth/Auth";
 import useUsers from "../context/useUsers";
-const Layour = () => {
+
+const Layout = () => {
   const { state, dispatch } = useUsers();
   const { userAuthorized } = state;
-  const token = sessionStorage.getItem("token");
-  if (token && token.length > 0) {
-    sessionStorage.getItem("token", token);
-    dispatch({
-      type: "LOG_IN",
-      payload: true,
-    });
-  }
+
+  useEffect(() => {
+    const token = sessionStorage.getItem("token");
+
+    if (token && token.length > 0) {
+      dispatch({
+        type: "LOG_IN",
+        payload: true,
+      });
+    }
+  }, [dispatch]);
+
   const balance = 123.5;
+
   return (
     <div className={classes.layout}>
       <Navbar balance={balance} authorized={userAuthorized} />
@@ -23,4 +30,4 @@ const Layour = () => {
   );
 };
 
-export default Layour;
+export default Layout;
