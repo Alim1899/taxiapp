@@ -1,4 +1,4 @@
-import { NUMBER, CODE, TOKEN, PARKID } from "./constants";
+import { NUMBER, CODE, TOKEN, PARKID } from "./Constants";
 
 export const onSubmit = (data, dispatch) => {
   dispatch({ type: "SPINNER_CHECK", payload: true });

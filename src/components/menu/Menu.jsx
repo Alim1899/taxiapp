@@ -6,7 +6,6 @@ import {
 } from "react-icons/md";
 import { FaPeopleGroup } from "react-icons/fa6";
 import { TbZoomMoney } from "react-icons/tb";
-import Withdraw from "../amount/withdraw/Withdraw";
 import { FaStar, FaPlus } from "react-icons/fa";
 import { GiCctvCamera } from "react-icons/gi";
 import classes from "./Menu.module.css";
