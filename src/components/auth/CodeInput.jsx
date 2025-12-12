@@ -2,11 +2,12 @@ import { Formik, Form, Field } from "formik";
 import { useRef } from "react";
 import useUsers from "../context/useUsers";
 import Button from "../UI/Button";
+import { checkLogin } from "../../utils/Functions";
 import classes from "./Auth.module.css";
 
 const CodeInput = () => {
-  const { state } = useUsers();
-  const { arrivedCode } = state;
+  const { state, dispatch } = useUsers();
+  const { arrivedCode, userNumber } = state;
 
   const digits = String(arrivedCode).slice(0, 4).split("");
   const initialValues = {
@@ -19,7 +20,18 @@ const CodeInput = () => {
   const inputRefs = [useRef(null), useRef(null), useRef(null), useRef(null)];
 
   return (
-    <Formik initialValues={initialValues} enableReinitialize>
+    <Formik
+      initialValues={initialValues}
+      enableReinitialize
+      onSubmit={(values, { resetForm }) => {
+        checkLogin(
+          userNumber,
+          Number(Object.values(values).join("")),
+          dispatch
+        );
+        resetForm({ values: { 0: "", 1: "", 2: "", 3: "" } });
+      }}
+    >
       {({ setFieldValue, values }) => (
         <Form>
           <div className={classes.codeWrapper}>
@@ -51,6 +63,7 @@ const CodeInput = () => {
             </div>
 
             <Button
+              type="submit"
               disabled={Object.values(values).some((v) => v === "")}
               btnName="დადასტურება"
             />

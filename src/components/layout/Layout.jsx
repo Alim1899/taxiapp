@@ -2,9 +2,18 @@ import classes from "./Layout.module.css";
 import Navbar from "../navbar/Navbar";
 import Menu from "../menu/Menu";
 import Auth from "../auth/Auth";
-import { useState } from "react";
+import useUsers from "../context/useUsers";
 const Layour = () => {
-  const [userAuthorized, setUserAuthorized] = useState(false);
+  const { state, dispatch } = useUsers();
+  const { userAuthorized } = state;
+  const token = sessionStorage.getItem("token");
+  if (token && token.length > 0) {
+    sessionStorage.getItem("token", token);
+    dispatch({
+      type: "LOG_IN",
+      payload: true,
+    });
+  }
   const balance = 123.5;
   return (
     <div className={classes.layout}>

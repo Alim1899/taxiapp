@@ -2,6 +2,10 @@ const initialState = {
   correctNumber: false,
   userNotFound: false,
   showSpinner: false,
+  userAuthorized: false,
+  correctCode: true,
+  token: "",
+  userNumber: "",
   arrivedCode: "",
 };
 
@@ -12,10 +16,37 @@ const userReducer = (state = initialState, action) => {
         ...state,
         correctNumber: action.payload,
       };
+    case "CODE_CHECK":
+      return {
+        ...state,
+        correctCode: action.payload.correctCode,
+        userAuthorized: action.payload.correctCode === true,
+        token: action.payload.token || null,
+      };
+    case "LOG_OUT":
+      return {
+        state: initialState,
+        userAuthorized: action.payload,
+      };
+    case "LOG_IN":
+      return {
+        ...state,
+        userAuthorized: action.payload,
+      };
+    case "CORRECT_CODE":
+      return {
+        ...state,
+        userAuthorized: action.payload,
+      };
     case "USER_CHECK":
       return {
         ...state,
         userNotFound: action.payload,
+      };
+    case "CORRECT_NUMBER":
+      return {
+        ...state,
+        userNumber: action.payload,
       };
     case "SPINNER_CHECK":
       return {

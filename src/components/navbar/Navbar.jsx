@@ -25,7 +25,9 @@ const Navbar = ({ balance }) => {
             <FaChevronDown className={classes.icon} />
           )}
         </div>
-        {showDropDown && <Dropdown balance={balance} />}
+        {showDropDown && (
+          <Dropdown balance={balance} setShowDropDown={setShowDropDown} />
+        )}
       </div>
     </div>
   );
