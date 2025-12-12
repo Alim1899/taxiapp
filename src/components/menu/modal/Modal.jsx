@@ -1,4 +1,4 @@
-import { modalComponents } from "./modalMap";
+import { modalComponents } from "./ModalMap";
 import Header from "../../UI/Header";
 import classes from "./Modal.module.css";
 
