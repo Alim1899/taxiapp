@@ -7,6 +7,7 @@ const Dropdown = ({ balance, setShowDropDown }) => {
   const { state, dispatch } = useUsers();
   const { userAuthorized } = state;
   const logOut = () => {
+    sessionStorage.removeItem("token");
     dispatch({ type: "LOG_OUT", payload: false });
   };
   return (

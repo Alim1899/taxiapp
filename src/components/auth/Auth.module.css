@@ -3,7 +3,7 @@
   width: clamp(280px, 50%, 700px);
   background-color: #fff;
   padding: 2vh;
-  height: 60vh;
+  height: 70vh;
   border-radius: 15px;
   color: var(--dark);
   position: relative;
@@ -65,6 +65,7 @@
   background-color: #ffffff;
 }
 
+/* CODE INPUT|||||||||||||||||||||||||\ */
 .wrapper {
   position: relative;
 }
@@ -81,9 +82,9 @@
 }
 
 .codeBox {
-  width: 55px;
-  height: 60px;
-  font-size: 28px;
+  width: 45px;
+  height: 40px;
+  font-size: 22px;
   text-align: center;
   border-radius: 12px;
   border: 2px solid #d0d0d0;
@@ -94,4 +95,24 @@
 .codeBox:focus {
   border-color: var(--yellow);
   box-shadow: 0 0 5px rgba(79, 125, 249, 0.4);
+}
+
+/* |||||||||||||||      TIMER     |||||||||||||||| */
+
+.timer {
+  display: flex;
+  flex-direction: column;
+  width: clamp(280px, 50%, 700px);
+  margin: auto;
+}
+.timer > div {
+  display: grid;
+  justify-content: space-around;
+  grid-template-columns: 50% 50%;
+  text-align: center;
+  align-items: center;
+  font-size: clamp(0.8rem, 1vw, 1.5rem);
+}
+.time {
+  text-align: center;
 }

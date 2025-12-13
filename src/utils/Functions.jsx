@@ -46,7 +46,7 @@ export const checkLogin = async (number, code, dispatch) => {
 
 // WORKS|||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 
-const checkNumber = async (number, dispatch) => {
+export const checkNumber = async (number, dispatch) => {
   await fetch(`${NUMBER}`, {
     method: "POST",
     headers: {

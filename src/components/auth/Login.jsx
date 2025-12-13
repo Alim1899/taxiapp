@@ -5,7 +5,6 @@ import useUsers from "../context/useUsers";
 import { onSubmit } from "../../utils/Functions";
 import Button from "../UI/Button";
 import Error from "../UI/Error";
-
 const Login = () => {
   const { dispatch } = useUsers();
 
@@ -47,11 +46,13 @@ const Login = () => {
 
             {errors.number && <Error errorText={errors.number} />}
 
-            <Button
-              btnName="შესვლა"
-              type="submit"
-              disabled={!isValid || !values.number}
-            />
+            <div className={classes.btn}>
+              <Button
+                btnName="შესვლა"
+                type="submit"
+                disabled={!isValid || !values.number}
+              />
+            </div>
           </Form>
         );
       }}

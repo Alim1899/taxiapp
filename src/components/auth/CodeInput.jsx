@@ -2,9 +2,9 @@ import { Formik, Form, Field } from "formik";
 import { useRef } from "react";
 import useUsers from "../context/useUsers";
 import Button from "../UI/Button";
-import { checkLogin } from "../../utils/Functions";
+import { checkLogin, checkNumber } from "../../utils/Functions";
 import classes from "./Auth.module.css";
-
+import Timer from "./Timer";
 const CodeInput = () => {
   const { state, dispatch } = useUsers();
   const { arrivedCode, userNumber } = state;
@@ -61,7 +61,7 @@ const CodeInput = () => {
                 />
               ))}
             </div>
-
+            <Timer onFinish={() => checkNumber("577090280", dispatch)} />
             <Button
               type="submit"
               disabled={Object.values(values).some((v) => v === "")}
