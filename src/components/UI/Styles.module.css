@@ -42,7 +42,7 @@
   color: var(--dark);
   cursor: pointer;
   border-radius: 15px;
-  margin-top: 2vh;
+  margin-top: 4vh;
 }
 .submit:disabled {
   opacity: 0.7;

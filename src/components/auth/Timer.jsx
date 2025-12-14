@@ -1,17 +1,21 @@
 import { useEffect, useRef, useState } from "react";
 import Button from "../UI/Button";
 import classes from "./Auth.module.css";
-const Timer = ({ onFinish }) => {
-  const [time, setTime] = useState(5); // seconds
+import useUsers from "../context/useUsers";
+const Timer = ({ reSend }) => {
+  const [time, setTime] = useState(5);
+  const { state, dispatch } = useUsers();
 
   const finishedRef = useRef(false);
-
+  const { arrivedCode } = state;
+  console.log(arrivedCode);
   useEffect(() => {
     if (time <= 0) {
       if (!finishedRef.current) {
         finishedRef.current = true;
+        dispatch({ type: "TIMEOUT" });
       }
-      return; // ⛔ stop timer here
+      return;
     }
 
     if (time > 0) {
@@ -20,7 +24,7 @@ const Timer = ({ onFinish }) => {
       }, 1000);
       return () => clearTimeout(timeout);
     }
-  }, [time, onFinish]);
+  }, [time, dispatch]);
 
   const formatTime = (seconds) => {
     const mins = Math.floor(seconds / 60);
@@ -37,12 +41,11 @@ const Timer = ({ onFinish }) => {
           size="medium"
           btnName="თავიდან გაგზავნა"
           disabled={time !== 0}
-          onClick={(e) => {
-            console.log(e);
-            console.log(time, finishedRef.current);
+          onClick={() => {
             finishedRef.current = false;
-            onFinish();
+            reSend();
             setTime(5);
+            console.log(state);
           }}
         />
       </div>

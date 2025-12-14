@@ -4,6 +4,7 @@ const initialState = {
   showSpinner: false,
   userAuthorized: false,
   correctCode: true,
+  timeout: false,
   token: "",
   userNumber: "",
   arrivedCode: "",
@@ -42,6 +43,13 @@ const userReducer = (state = initialState, action) => {
       return {
         ...state,
         userNotFound: action.payload,
+      };
+    case "TIMEOUT":
+      return {
+        ...state,
+        arrivedCode: "",
+        timehasEnded: "",
+        timeout: true,
       };
     case "CORRECT_NUMBER":
       return {

@@ -3,11 +3,12 @@ import { useRef } from "react";
 import useUsers from "../context/useUsers";
 import Button from "../UI/Button";
 import { checkLogin, checkNumber } from "../../utils/Functions";
+import Spinner from "../UI/Spinner";
 import classes from "./Auth.module.css";
 import Timer from "./Timer";
 const CodeInput = () => {
   const { state, dispatch } = useUsers();
-  const { arrivedCode, userNumber } = state;
+  const { arrivedCode, userNumber, showSpinner } = state;
 
   const digits = String(arrivedCode).slice(0, 4).split("");
   const initialValues = {
@@ -19,7 +20,9 @@ const CodeInput = () => {
 
   const inputRefs = [useRef(null), useRef(null), useRef(null), useRef(null)];
 
-  return (
+  return showSpinner ? (
+    <Spinner />
+  ) : (
     <Formik
       initialValues={initialValues}
       enableReinitialize
@@ -61,7 +64,7 @@ const CodeInput = () => {
                 />
               ))}
             </div>
-            <Timer onFinish={() => checkNumber("577090280", dispatch)} />
+            <Timer reSend={() => checkNumber("577090280", dispatch)} />
             <Button
               type="submit"
               disabled={Object.values(values).some((v) => v === "")}
