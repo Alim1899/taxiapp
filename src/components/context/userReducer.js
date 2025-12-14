@@ -1,71 +1,69 @@
+const storedToken = sessionStorage.getItem("token");
 const initialState = {
-  correctNumber: false,
-  userNotFound: false,
-  showSpinner: false,
-  userAuthorized: false,
-  correctCode: true,
-  timeout: false,
-  token: "",
+  step: storedToken ? "authorized" : "enter_number",
+  token: null,
   userNumber: "",
   arrivedCode: "",
+  error: null,
 };
 
 const userReducer = (state = initialState, action) => {
   switch (action.type) {
-    case "NUMBER_CHECK":
+    case "CHECKING_NUMBER":
       return {
         ...state,
-        correctNumber: action.payload,
+        step: "checking_number",
+        error: null,
       };
-    case "CODE_CHECK":
+    case "NUMBER_SUCCESS":
       return {
         ...state,
-        correctCode: action.payload.correctCode,
-        userAuthorized: action.payload.correctCode === true,
-        token: action.payload.token || null,
+        step: "enter_code",
+        userNumber: action.payload.userNumber,
+        arrivedCode: action.payload.arrivedCode,
+        error: null,
       };
-    case "LOG_OUT":
-      return {
-        state: initialState,
-        userAuthorized: action.payload,
-      };
-    case "LOG_IN":
+    case "WRONG_NUMBER":
       return {
         ...state,
-        userAuthorized: action.payload,
+        step: "enter_number",
+        userNumber: "",
+        error: "number",
       };
-    case "CORRECT_CODE":
+
+    case "CHECKING_CODE":
       return {
         ...state,
-        userAuthorized: action.payload,
+        step: "checking_code",
+        error: null,
       };
-    case "USER_CHECK":
+    case "CODE_SUCCESS":
       return {
         ...state,
-        userNotFound: action.payload,
+        step: "authorized",
+        token: action.payload,
+        error: null,
       };
-    case "TIMEOUT":
+    case "CODE_ERROR":
+      return {
+        ...state,
+        step: "enter_code",
+        arrivedCode: "",
+        error: "code",
+      };
+    case "CODE_TIMEOUT":
       return {
         ...state,
         arrivedCode: "",
-        timehasEnded: "",
-        timeout: true,
+        error: "code_expired",
       };
-    case "CORRECT_NUMBER":
+    case "LOG_OUT":
       return {
-        ...state,
-        userNumber: action.payload,
-      };
-    case "SPINNER_CHECK":
-      return {
-        ...state,
-        showSpinner: action.payload,
-      };
-
-    case "CODE_ARRIVED":
-      return {
-        ...state,
-        arrivedCode: action.payload,
+        step: "",
+        token: null,
+        userNumber: "",
+        arrivedCode: "",
+        error: null,
       };
 
     default:

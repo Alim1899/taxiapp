@@ -7,20 +7,22 @@ import CodeInput from "./CodeInput";
 import Header from "./Header";
 const Auth = () => {
   const { state } = useUsers();
-  const { correctNumber, userNotFound, showSpinner } = state;
+  const { error, showSpinner, step } = state;
   return (
     <div className={classes.auth}>
-      <Header correctNumber={correctNumber} />
+      <Header />
 
-      {!correctNumber ? (
-        <div className={classes.wrapper}>
-          {showSpinner ? <Spinner /> : <Login />}
-        </div>
-      ) : (
-        <CodeInput />
-      )}
+      <div className={classes.wrapper}>
+        {step === "checking_number" || showSpinner ? (
+          <Spinner />
+        ) : step === "enter_code" ? (
+          <CodeInput />
+        ) : (
+          <Login />
+        )}
+      </div>
 
-      {userNotFound && <Error />}
+      {error === "number" && <Error />}
     </div>
   );
 };

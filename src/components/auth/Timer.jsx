@@ -4,16 +4,14 @@ import classes from "./Auth.module.css";
 import useUsers from "../context/useUsers";
 const Timer = ({ reSend }) => {
   const [time, setTime] = useState(5);
-  const { state, dispatch } = useUsers();
+  const { dispatch } = useUsers();
 
   const finishedRef = useRef(false);
-  const { arrivedCode } = state;
-  console.log(arrivedCode);
   useEffect(() => {
     if (time <= 0) {
       if (!finishedRef.current) {
         finishedRef.current = true;
-        dispatch({ type: "TIMEOUT" });
+        dispatch({ type: "CODE_TIMEOUT" });
       }
       return;
     }
@@ -45,7 +43,6 @@ const Timer = ({ reSend }) => {
             finishedRef.current = false;
             reSend();
             setTime(5);
-            console.log(state);
           }}
         />
       </div>

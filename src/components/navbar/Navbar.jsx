@@ -3,10 +3,9 @@ import classes from "./Navbar.module.css";
 import logo from "../../assets/logo.jpg";
 import { FaPhoneSquareAlt } from "react-icons/fa";
 import { FaUserCircle, FaChevronDown, FaChevronUp } from "react-icons/fa";
-
 import Dropdown from "./Dropdown";
 
-const Navbar = ({ balance }) => {
+const Navbar = ({ balance, isLoggedIn, dispatch }) => {
   const [showDropDown, setShowDropDown] = useState(false);
 
   return (
@@ -26,7 +25,12 @@ const Navbar = ({ balance }) => {
           )}
         </div>
         {showDropDown && (
-          <Dropdown balance={balance} setShowDropDown={setShowDropDown} />
+          <Dropdown
+            balance={balance}
+            setShowDropDown={setShowDropDown}
+            isLoggedIn={isLoggedIn}
+            dispatch={dispatch}
+          />
         )}
       </div>
     </div>

@@ -72,9 +72,11 @@
 .codeWrapper {
   align-items: center;
   margin-top: 20px;
+  position: relative;
 }
 
 .codeBoxes {
+  position: relative;
   display: flex;
   justify-content: center;
   gap: 12px;
@@ -94,7 +96,10 @@
 
 .codeBox:focus {
   border-color: var(--yellow);
-  box-shadow: 0 0 5px rgba(79, 125, 249, 0.4);
+  box-shadow: 0 0 5px var(--dark);
+}
+.codeBox:disabled {
+  cursor: not-allowed;
 }
 
 /* |||||||||||||||      TIMER     |||||||||||||||| */
@@ -104,6 +109,8 @@
   flex-direction: column;
   width: clamp(280px, 50%, 700px);
   margin: auto;
+  position: relative;
+  margin-top: 50px;
 }
 .timer > div {
   display: grid;

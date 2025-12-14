@@ -2,17 +2,15 @@ import classes from "./Navbar.module.css";
 import { FaPiggyBank, FaPowerOff } from "react-icons/fa";
 import { FaLariSign, FaMoneyBillTransfer } from "react-icons/fa6";
 import { FiSettings } from "react-icons/fi";
-import useUsers from "../context/useUsers";
-const Dropdown = ({ balance, setShowDropDown }) => {
-  const { state, dispatch } = useUsers();
-  const { userAuthorized } = state;
+
+const Dropdown = ({ balance, setShowDropDown, isLoggedIn, dispatch }) => {
   const logOut = () => {
     sessionStorage.removeItem("token");
-    dispatch({ type: "LOG_OUT", payload: false });
+    dispatch();
   };
   return (
     <div className={classes.dropdown}>
-      {userAuthorized ? (
+      {isLoggedIn ? (
         <ul className={classes.list}>
           <li className={classes.listItem}>
             ბალანსი:

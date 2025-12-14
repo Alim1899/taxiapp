@@ -1,12 +1,14 @@
 import { NUMBER, CODE, TOKEN, PARKID } from "./Constants";
 
 export const onSubmit = (data, dispatch) => {
-  dispatch({ type: "SPINNER_CHECK", payload: true });
   if (!data) return;
   const number = data.number.replace(/\s/g, "");
   checkNumber(number, dispatch);
 };
+
+// |||||||||   CHECK ARRIVED CODE
 export const checkLogin = async (number, code, dispatch) => {
+  dispatch({ type: "CHECKING_CODE" });
   try {
     const res = await fetch(`${CODE}`, {
       method: "POST",
@@ -15,7 +17,7 @@ export const checkLogin = async (number, code, dispatch) => {
         Authorization: `Bearer ${TOKEN}`,
       },
       body: JSON.stringify({
-        phoneNumber: String(number), // ensure string
+        phoneNumber: String(number),
         parkId: String(PARKID),
         code: String(code),
         roleId: 0,
@@ -27,26 +29,27 @@ export const checkLogin = async (number, code, dispatch) => {
     const data = await res.json();
     const token = data.access_token;
 
-    if (token && token.length > 0) {
-      sessionStorage.setItem("token", token);
-      dispatch({
-        type: "CODE_CHECK",
-        payload: { correctCode: true, token },
-      });
-    } else {
-      dispatch({
-        type: "CODE_CHECK",
-        payload: { correctCode: false, token: null },
-      });
+    if (!token) {
+      dispatch({ type: "CODE_ERROR" });
+      return;
     }
+
+    sessionStorage.setItem("token", token);
+
+    dispatch({
+      type: "CODE_SUCCESS",
+      payload: token,
+    });
   } catch (err) {
     console.error("Login error:", err.message);
+    dispatch({ type: "CODE_ERROR" });
   }
 };
 
 // WORKS|||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 
 export const checkNumber = async (number, dispatch) => {
+  dispatch({ type: "CHECKING_NUMBER" });
   await fetch(`${NUMBER}`, {
     method: "POST",
     headers: {
@@ -61,14 +64,17 @@ export const checkNumber = async (number, dispatch) => {
   })
     .then((res) => res.json())
     .then((data) => {
-      dispatch({ type: "SPINNER_CHECK", payload: false });
       if (typeof data === "number") {
-        dispatch({ type: "NUMBER_CHECK", payload: true });
-        dispatch({ type: "CORRECT_NUMBER", payload: `+995${number}` });
-        dispatch({ type: "CODE_ARRIVED", payload: data });
+        dispatch({
+          type: "NUMBER_SUCCESS",
+          payload: {
+            userNumber: `+995${number}`,
+            arrivedCode: data,
+          },
+        });
+      } else if (data.statusCode === 500) {
+        dispatch({ type: "WRONG_NUMBER" });
       }
-      if (data.statusCode === 500)
-        dispatch({ type: "USER_CHECK", payload: true });
     })
     .catch((err) => console.error(err.statusCode));
 };
