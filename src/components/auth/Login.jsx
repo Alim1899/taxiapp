@@ -5,10 +5,9 @@ import useUsers from "../context/useUsers";
 import { onSubmit } from "../../utils/Functions";
 import Button from "../UI/Button";
 import Error from "../UI/Error";
-const Login = () => {
+const Login = ({ children }) => {
   const { state, dispatch } = useUsers();
-  const { userNumber } = state;
-
+  const { userNumber, error } = state;
   const PhoneSchema = Yup.object().shape({
     number: Yup.string()
       .required("აუცილებელი ველი")
@@ -38,17 +37,19 @@ const Login = () => {
                 name="number"
                 value={formattedNumber}
                 onChange={(e) => {
-                  dispatch({ type: "USER_CHECK", payload: false });
                   const cleaned = e.target.value.replace(/\D/g, "").slice(0, 9);
                   setFieldValue("number", cleaned);
                 }}
+                onClick={() => dispatch({ type: "ERROR_RESET" })}
                 placeholder="მობილურის ნომერი"
                 className={classes.input}
               />
             </div>
-
-            {errors.number && <Error errorText={errors.number} />}
-
+            {errors.number && error !== "number" && (
+              <Error errorText={errors.number} />
+            )}
+            {error === "number" && <Error />}
+            {children}
             <div className={classes.btn}>
               <Button
                 btnName="შესვლა"

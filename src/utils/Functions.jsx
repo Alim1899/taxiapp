@@ -30,7 +30,7 @@ export const checkLogin = async (number, code, dispatch) => {
     const token = data.access_token;
 
     if (!token) {
-      dispatch({ type: "CODE_ERROR" });
+      dispatch({ type: "WRONG_CODE" });
       return;
     }
 
@@ -41,8 +41,8 @@ export const checkLogin = async (number, code, dispatch) => {
       payload: token,
     });
   } catch (err) {
-    console.error("Login error:", err.message);
-    dispatch({ type: "CODE_ERROR" });
+    console.error(err, "Invalid Code");
+    dispatch({ type: "WRONG_CODE" });
   }
 };
 

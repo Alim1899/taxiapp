@@ -7,7 +7,7 @@ import CodeInput from "./CodeInput";
 import Header from "./Header";
 const Auth = () => {
   const { state } = useUsers();
-  const { error, step } = state;
+  const { step } = state;
   return (
     <div className={classes.auth}>
       <Header />
@@ -23,8 +23,6 @@ const Auth = () => {
           <Login />
         )}
       </div>
-
-      {error === "number" && <Error />}
     </div>
   );
 };

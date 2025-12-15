@@ -5,56 +5,68 @@
   padding: 2vh;
   border-radius: 15px;
   color: var(--dark);
-  min-height: 70vh;
   position: relative;
 }
-.auth > h2 {
-  text-align: center;
-}
-.auth > h4 {
-  text-align: center;
-}
-.auth > span {
+
+/* ||| HEADER |||||||||||||||||\\ */
+.header {
   display: flex;
+  flex-direction: column;
   justify-content: center;
+  align-items: center;
+}
+.back {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 20% 60% 20%;
+  display: flex;
+}
+.back > div {
+  text-align: center;
+  height: 30px;
+  width: 100%;
 }
 .logo {
   width: 70%;
-  margin-left: 15%;
+}
+.icon {
+  border-radius: 15px;
+  color: var(--dark);
+  cursor: pointer;
+  width: 50%;
+  height: 70%;
+  border: 2px solid var(--yellow);
 }
 
-.number {
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  border-radius: 8px;
-
-  background-color: #fff;
-  margin: 2vh auto;
-}
+/* || INPUT  FIELD |||||||||||||||||||||||| */
 .field {
   width: 70%;
+  min-width: 250px;
   height: 40px;
   border-radius: 15px;
   display: flex;
   align-items: center;
   border: 1px solid #d0d0d0;
   margin: auto;
-  overflow: hidden; /* so it looks like one input */
+  margin-top: 20px;
+  overflow: hidden;
 }
 
 .prefix {
   padding: 0 2px 0 35px;
   height: 100%;
+
   align-content: center;
   text-align: right;
   font-size: 20px;
   font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
   background-color: unset;
+  font-size: clamp(0.7rem, 2vw, 1.5rem);
 }
 
 .input {
   flex: 1;
+
   height: 100%;
   border: none;
   outline: none;
@@ -63,6 +75,14 @@
   font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
   letter-spacing: 1px;
   background-color: #ffffff;
+  font-size: clamp(0.7rem, 2vw, 1.5rem);
+}
+.btn {
+  margin: auto;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  margin-top: 25px;
 }
 
 /* CODE INPUT|||||||||||||||||||||||||\ */
@@ -110,24 +130,17 @@
   width: clamp(280px, 50%, 700px);
   margin: auto;
   position: relative;
-  margin-top: 50px;
+  margin-top: 20px;
 }
 .timer > div {
   display: grid;
   justify-content: space-around;
   grid-template-columns: 50% 50%;
   text-align: center;
+
   align-items: center;
   font-size: clamp(0.8rem, 1vw, 1.5rem);
 }
 .time {
   text-align: center;
-}
-
-.icon {
-  width: 100px;
-  border-radius: 15px;
-  height: 30px;
-  background-color: var(--yellow);
-  color: var(--dark);
 }

@@ -3,7 +3,7 @@ import Button from "../UI/Button";
 import classes from "./Auth.module.css";
 import useUsers from "../context/useUsers";
 const Timer = ({ reSend }) => {
-  const [time, setTime] = useState(5);
+  const [time, setTime] = useState(10);
   const { dispatch } = useUsers();
 
   const finishedRef = useRef(false);
@@ -32,6 +32,7 @@ const Timer = ({ reSend }) => {
 
   return (
     <div className={classes.timer}>
+      <h3 className={classes.time}>{formatTime(time)}</h3>
       <div>
         არ მიგიღიათ კოდი?
         <Button
@@ -46,7 +47,6 @@ const Timer = ({ reSend }) => {
           }}
         />
       </div>
-      <h3 className={classes.time}>{formatTime(time)}</h3>
     </div>
   );
 };
