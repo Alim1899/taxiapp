@@ -7,16 +7,18 @@ import CodeInput from "./CodeInput";
 import Header from "./Header";
 const Auth = () => {
   const { state } = useUsers();
-  const { error, showSpinner, step } = state;
+  const { error, step } = state;
   return (
     <div className={classes.auth}>
       <Header />
 
       <div className={classes.wrapper}>
-        {step === "checking_number" || showSpinner ? (
+        {step === "checking_number" ? (
           <Spinner />
         ) : step === "enter_code" ? (
           <CodeInput />
+        ) : step === "checking_code" ? (
+          <Spinner />
         ) : (
           <Login />
         )}

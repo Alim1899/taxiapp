@@ -1,11 +1,11 @@
 .auth {
-  margin: 5vh auto;
+  margin: auto;
   width: clamp(280px, 50%, 700px);
   background-color: #fff;
   padding: 2vh;
-  height: 70vh;
   border-radius: 15px;
   color: var(--dark);
+  min-height: 70vh;
   position: relative;
 }
 .auth > h2 {
@@ -122,4 +122,12 @@
 }
 .time {
   text-align: center;
+}
+
+.icon {
+  width: 100px;
+  border-radius: 15px;
+  height: 30px;
+  background-color: var(--yellow);
+  color: var(--dark);
 }

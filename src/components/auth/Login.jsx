@@ -6,7 +6,8 @@ import { onSubmit } from "../../utils/Functions";
 import Button from "../UI/Button";
 import Error from "../UI/Error";
 const Login = () => {
-  const { dispatch } = useUsers();
+  const { state, dispatch } = useUsers();
+  const { userNumber } = state;
 
   const PhoneSchema = Yup.object().shape({
     number: Yup.string()
@@ -17,7 +18,9 @@ const Login = () => {
 
   return (
     <Formik
-      initialValues={{ number: "" }}
+      initialValues={{
+        number: userNumber.replace(/^\+995/, ""),
+      }}
       validationSchema={PhoneSchema}
       onSubmit={(values) => {
         onSubmit(values, dispatch);

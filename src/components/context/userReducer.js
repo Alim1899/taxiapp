@@ -59,11 +59,18 @@ const userReducer = (state = initialState, action) => {
       };
     case "LOG_OUT":
       return {
-        step: "",
+        step: "enter_number",
         token: null,
         userNumber: "",
         arrivedCode: "",
         error: null,
+      };
+    case "BACK":
+      return {
+        ...state,
+        error: null,
+        arrivedCode: "",
+        step: "enter_number",
       };
 
     default:

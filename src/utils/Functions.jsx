@@ -46,7 +46,7 @@ export const checkLogin = async (number, code, dispatch) => {
   }
 };
 
-// WORKS|||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+// CHECK NUMBER IS CORRET OR NOT |||||||||||||||||
 
 export const checkNumber = async (number, dispatch) => {
   dispatch({ type: "CHECKING_NUMBER" });
