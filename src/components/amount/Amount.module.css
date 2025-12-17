@@ -1,19 +1,28 @@
-.withdraw {
+.withdraw,
+.send {
   margin: auto;
   width: 80%;
   max-width: 600px;
   height: 70%;
+  min-height: 250px;
+  min-width: 260px;
   background-color: whitesmoke;
   z-index: 9;
   border-radius: 15px;
   display: flex;
   flex-direction: column;
-  overflow: auto;
   padding: 10px;
+  position: relative;
+  overflow-y: auto;
 }
+
 .withdraw > input,
 .withdraw > select,
-.withdraw > label {
+.withdraw > label,
+.send > input,
+.send > select,
+.send > label {
+  position: relative;
   width: 80%;
   margin: 5px auto;
   border-radius: 15px;
@@ -21,12 +30,11 @@
   outline: none;
   padding-left: 5px;
 }
-.withdraw > input,
-.withdraw > select {
+.send > input,
+.send > select {
   border: 1px solid lightgray;
 }
 .btn {
-  border: 1px solid red;
   height: 35px;
   width: 50%;
   margin: auto;
@@ -38,6 +46,10 @@
   font-size: clamp(0.8rem, 2vw, 1rem);
   color: rgb(77, 63, 63);
   cursor: pointer;
+}
+.btn:disabled {
+  opacity: 0.8;
+  cursor: not-allowed;
 }
 
 .add {
@@ -54,4 +66,13 @@
   height: 20px;
   width: 20px;
   border: 1px solid red;
+}
+
+.errorWrapp {
+  width: 250px;
+  height: 100px;
+  width: 70%;
+  position: relative;
+  margin: auto;
+  min-width: 220px;
 }

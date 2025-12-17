@@ -10,6 +10,8 @@ const Error = ({ errorText }) => {
       ? "კოდი არასწორია"
       : error === "code_expired"
       ? "დრო ამოიწურა"
+      : errorText
+      ? errorText
       : "დაფიქსირდა შეცდომა";
 
   return (

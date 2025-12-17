@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
 import Header from "../UI/Header";
-import classes from "./withdraw/Withdraw.module.css";
+import classes from "./Amount.module.css";
 
 import { MdOutlineAddCard } from "react-icons/md";
 

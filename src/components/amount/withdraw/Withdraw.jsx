@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
 import Header from "../../UI/Header";
-import classes from "./Withdraw.module.css";
+import classes from "../Amount.module.css";
 const Withdraw = ({ close, header }) => {
   const { register, handleSubmit } = useForm();
   const onSubmit = (data) => console.log(data);
