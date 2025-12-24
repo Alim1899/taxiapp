@@ -1,12 +1,11 @@
 import classes from "./Amount.module.css";
 import Header from "../UI/Header";
-import { Formik, Form, Field, ErrorMessage } from "formik";
+import { Formik, Form } from "formik";
 import * as Yup from "yup";
-import Error from "../UI/Error";
-import FieldError from "./withdraw/ErrorWrapper";
+import FormikField from "./FormikField";
 
 const Send = ({ close, headerText }) => {
-  const SendSchema = Yup.object().shape({
+  const SendSchema = Yup.object({
     bank: Yup.string().required("აირჩიე ბანკი"),
     iban: Yup.string()
       .required("აუცილებელი ველი")
@@ -16,7 +15,7 @@ const Send = ({ close, headerText }) => {
       .typeError("მხოლოდ რიცხვი")
       .positive("თანხა უნდა იყოს დადებითი")
       .required("აუცილებელი ველი"),
-    purpose: Yup.string(),
+    purpose: Yup.string().required("აუცილებელი ველი"),
   });
 
   return (
@@ -26,48 +25,47 @@ const Send = ({ close, headerText }) => {
         iban: "",
         recipient: "",
         amount: "",
-        purpose: "",
+        purpose: "პირადი გადარიცხვა",
       }}
       validationSchema={SendSchema}
-      onSubmit={(values) => {
-        console.log(values);
-      }}
+      onSubmit={(values) => console.log(values)}
     >
-      {({ isValid, errors, touched }) => (
+      {({ isValid }) => (
         <Form onClick={(e) => e.stopPropagation()} className={classes.send}>
           <Header text={headerText} type="button" onClick={close} />
-          <label>აირჩიე ბანკი</label>
-          <Field as="select" name="bank">
-            <option value="" disabled>
-              აირჩიე ბანკი
-            </option>
-            <option value="tbc">თიბისი ბანკი</option>
-            <option value="bog">საქართველოს ბანკი</option>
-            <option value="liberty">ლიბერთი ბანკი</option>
-            <option value="other">სხვა ბანკი</option>
-          </Field>
-          <FieldError error={errors.bank} touched={touched.bank} />
 
-          <label>ანგარიშის ნომერი</label>
-          <Field name="iban" placeholder="GE29NB0000000101904917" />
-          <FieldError error={errors.iban} touched={touched.iban} />
-
-          <label>მიმღების დასახელება</label>
-          <Field name="recipient" placeholder="სახელი და გვარი" />
-
-          <FieldError error={errors.recipient} touched={touched.recipient} />
-
-          <label>თანხა</label>
-          <Field name="amount" placeholder="თანხა" />
-          <FieldError error={errors.amount} touched={touched.amount} />
-
-          <label>დანიშნულება</label>
-          <Field
-            name="purpose"
-            placeholder="პირადი გადარიცხვა"
-            defaultValue="პირადი გადარიცხვა"
+          <FormikField
+            name="bank"
+            label="აირჩიე ბანკი"
+            as="select"
+            options={[
+              { value: "", label: "აირჩიე ბანკი", disabled: true },
+              { value: "tbc", label: "თიბისი ბანკი" },
+              { value: "bog", label: "საქართველოს ბანკი" },
+              { value: "liberty", label: "ლიბერთი ბანკი" },
+              { value: "other", label: "სხვა ბანკი" },
+            ]}
           />
-          <FieldError error={errors.purpose} touched={touched.purpose} />
+
+          <FormikField
+            name="iban"
+            label="ანგარიშის ნომერი"
+            placeholder="GE29NB0000000101904917"
+          />
+
+          <FormikField
+            name="recipient"
+            label="მიმღების დასახელება"
+            placeholder="სახელი და გვარი"
+          />
+
+          <FormikField name="amount" label="თანხა" placeholder="თანხა" />
+
+          <FormikField
+            name="purpose"
+            label="დანიშნულება"
+            placeholder="პირადი გადარიცხვა"
+          />
 
           <button className={classes.btn} type="submit" disabled={!isValid}>
             გადარიცხვა

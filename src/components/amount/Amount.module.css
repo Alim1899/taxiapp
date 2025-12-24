@@ -9,33 +9,36 @@
   background-color: whitesmoke;
   z-index: 9;
   border-radius: 15px;
-  display: flex;
-  flex-direction: column;
   padding: 10px;
   position: relative;
   overflow-y: auto;
+  display: flex;
+  flex-direction: column;
 }
 
-.withdraw > input,
-.withdraw > select,
-.withdraw > label,
-.send > input,
-.send > select,
-.send > label {
-  position: relative;
+.fields {
   width: 80%;
   margin: 5px auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.field {
+  position: relative;
+  width: 100%;
+  margin: 5px auto;
   border-radius: 15px;
-  height: 30px;
   outline: none;
   padding-left: 5px;
-}
-.send > input,
-.send > select {
+  height: 30px;
+  outline: none;
+  border: none;
   border: 1px solid lightgray;
 }
+.err {
+  height: 10px;
+}
 .btn {
-  height: 35px;
   width: 50%;
   margin: auto;
   border-radius: 15px;
@@ -46,6 +49,8 @@
   font-size: clamp(0.8rem, 2vw, 1rem);
   color: rgb(77, 63, 63);
   cursor: pointer;
+  margin-top: 20px;
+  padding: 5px 0 5px 0;
 }
 .btn:disabled {
   opacity: 0.8;
@@ -69,10 +74,12 @@
 }
 
 .errorWrapp {
-  width: 250px;
-  height: 100px;
   width: 70%;
+  height: 20px;
   position: relative;
   margin: auto;
   min-width: 220px;
+  text-align: center;
+  display: flex;
+  align-items: center;
 }
