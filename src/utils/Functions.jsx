@@ -1,4 +1,4 @@
-import { NUMBER, CODE, TOKEN, PARKID } from "./Constants";
+import { CHECK_NUMBER, CHECK_CODE, TOKEN, PARKID } from "./Constants";
 
 export const onSubmit = (data, dispatch) => {
   if (!data) return;
@@ -10,7 +10,7 @@ export const onSubmit = (data, dispatch) => {
 export const checkLogin = async (number, code, dispatch) => {
   dispatch({ type: "CHECKING_CODE" });
   try {
-    const res = await fetch(`${CODE}`, {
+    const res = await fetch(`${CHECK_CODE}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -50,7 +50,7 @@ export const checkLogin = async (number, code, dispatch) => {
 
 export const checkNumber = async (number, dispatch) => {
   dispatch({ type: "CHECKING_NUMBER" });
-  await fetch(`${NUMBER}`, {
+  await fetch(`${CHECK_NUMBER}`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

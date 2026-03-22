@@ -12,11 +12,12 @@ const CodeInput = () => {
   const { arrivedCode, userNumber, error, isCheckingCode } = state;
 
   const digits = String(arrivedCode).slice(0, 4).split("");
+  console.log(digits);
   const initialValues = {
-    0: digits[0] || "",
-    1: digits[1] || "",
-    2: digits[2] || "",
-    3: digits[3] || "",
+    0: "",
+    1: "",
+    2: "",
+    3: "",
   };
 
   const inputRefs = [useRef(null), useRef(null), useRef(null), useRef(null)];
@@ -29,7 +30,7 @@ const CodeInput = () => {
           checkLogin(
             userNumber,
             Number(Object.values(values).join("")),
-            dispatch
+            dispatch,
           );
           resetForm({ values: { 0: "", 1: "", 2: "", 3: "" } });
         }}

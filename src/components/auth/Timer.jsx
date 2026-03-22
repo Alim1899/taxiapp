@@ -3,7 +3,7 @@ import Button from "../UI/Button";
 import classes from "./Auth.module.css";
 import useUsers from "../context/useUsers";
 const Timer = ({ reSend }) => {
-  const [time, setTime] = useState(10);
+  const [time, setTime] = useState(60);
   const { dispatch } = useUsers();
 
   const finishedRef = useRef(false);
