@@ -1,4 +1,4 @@
-import useUsers from "../context/useUsers";
+import useUsers from "../context/AuthContext/useUsers";
 import classes from "./Styles.module.css";
 const Error = ({ errorText }) => {
   const { state } = useUsers();

@@ -1,12 +1,15 @@
 import "./App.css";
 import Layout from "./components/layout/Layout";
-import UserProvider from "./components/context/UserProvider";
+import UserProvider from "./components/context/AuthContext/UserProvider";
+import AmountProvider from "./components/context/AmountContext/AmountProvider";
 function App() {
   return (
     <UserProvider>
-      <div className="app">
-        <Layout />
-      </div>
+      <AmountProvider>
+        <div className="app">
+          <Layout />
+        </div>
+      </AmountProvider>
     </UserProvider>
   );
 }

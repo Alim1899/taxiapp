@@ -1,6 +1,6 @@
 import logo from "../../assets/logo.jpg";
 import classes from "./Auth.module.css";
-import useUsers from "../context/useUsers";
+import useUsers from "../context/AuthContext/useUsers";
 import { IoIosArrowRoundBack } from "react-icons/io";
 
 const Header = () => {

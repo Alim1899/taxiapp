@@ -5,7 +5,9 @@ import * as Yup from "yup";
 import FormikField from "../FormikField";
 import isIBAN from "validator/lib/isIBAN";
 import BankSelect from "./SavedIbans";
+import useAmount from "../../context/AmountContext/useAmount";
 const Withdraw = ({ close, header }) => {
+  const { state } = useAmount();
   const WithdrawSchema = Yup.object({
     bank: Yup.string().required("აირჩიე ბანკი"),
      iban: Yup.string()
@@ -13,19 +15,17 @@ const Withdraw = ({ close, header }) => {
     .test("is-iban", "არასწორი IBAN", (value) =>
       value ? isIBAN(value.replace(/\s+/g, "")) : false
     ),
-    recipient: Yup.string().required("აუცილებელი ველი"),
+    fullName: Yup.string().required("აუცილებელი ველი"),
     amount: Yup.number()
       .typeError("მხოლოდ რიცხვი")
       .positive("თანხა უნდა იყოს დადებითი")
       .required("აუცილებელი ველი"),
   });
-console.log(isIBAN("GE33BG0000000602842703"));
   return (
     <Formik
       initialValues={{
-        bank: "",
-        iban: "",
-        recipient: "",
+        iban:state.selectedAccount.iban|| "",
+        fullName:state.selectedAccount.fullName|| "",
         amount: "",
       }}
       validationSchema={WithdrawSchema}
@@ -45,7 +45,7 @@ console.log(isIBAN("GE33BG0000000602842703"));
           />
 
           <FormikField
-            name="recipient"
+            name="fullName"
             label="მიმღების დასახელება"
             placeholder="მიხეილ მარღიშვილი"
           />

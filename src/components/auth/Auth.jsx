@@ -2,7 +2,7 @@ import classes from "./Auth.module.css";
 import Error from "../UI/Error";
 import Spinner from "../UI/Spinner";
 import Login from "./Login";
-import useUsers from "../context/useUsers";
+import useUsers from "../context/AuthContext/useUsers";
 import CodeInput from "./CodeInput";
 import Header from "./Header";
 const Auth = () => {

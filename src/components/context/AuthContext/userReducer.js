@@ -13,6 +13,7 @@ const initialState = {
   userNumber: "",
   arrivedCode: "",
   error: null,
+  userDetails:""
 };
 
 const userReducer = (state = initialState, action) => {
@@ -56,8 +57,10 @@ const userReducer = (state = initialState, action) => {
         ...state,
         step: STEPS.AUTHORIZED,
         isCheckingCode: false,
-        token: action.payload,
+        token: action.payload.acces_token,
         error: null,
+        arrivedCode:"",
+        userDetails:action.payload
       };
     case "CODE_ERROR":
       return {
@@ -65,6 +68,7 @@ const userReducer = (state = initialState, action) => {
         step: STEPS.ENTER_CODE,
         arrivedCode: "",
         error: "code",
+
       };
     case "CODE_TIMEOUT":
       return {

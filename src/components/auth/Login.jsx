@@ -1,7 +1,7 @@
 import classes from "./Auth.module.css";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
-import useUsers from "../context/useUsers";
+import useUsers from "../context/AuthContext/useUsers";
 import { onSubmit } from "../../utils/Functions";
 import Button from "../UI/Button";
 import Error from "../UI/Error";
