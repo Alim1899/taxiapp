@@ -3,20 +3,23 @@ import Header from "../../UI/Header";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import FormikField from "../FormikField";
-
+import isIBAN from "validator/lib/isIBAN";
+import BankSelect from "./SavedIbans";
 const Withdraw = ({ close, header }) => {
   const WithdrawSchema = Yup.object({
     bank: Yup.string().required("აირჩიე ბანკი"),
-    iban: Yup.string()
-      .required("აუცილებელი ველი")
-      .matches(/^GE\d{2}[A-Z0-9]{16,}$/, "არასწორი IBAN ფორმატი"),
+     iban: Yup.string()
+    .required("აუცილებელი ველი")
+    .test("is-iban", "არასწორი IBAN", (value) =>
+      value ? isIBAN(value.replace(/\s+/g, "")) : false
+    ),
     recipient: Yup.string().required("აუცილებელი ველი"),
     amount: Yup.number()
       .typeError("მხოლოდ რიცხვი")
       .positive("თანხა უნდა იყოს დადებითი")
       .required("აუცილებელი ველი"),
   });
-
+console.log(isIBAN("GE33BG0000000602842703"));
   return (
     <Formik
       initialValues={{
@@ -32,18 +35,8 @@ const Withdraw = ({ close, header }) => {
         <Form onClick={(e) => e.stopPropagation()} className={classes.withdraw}>
           <Header text={header} type="button" onClick={close} />
 
-          <FormikField
-            name="bank"
-            label="აირჩიე ბანკი"
-            as="select"
-            options={[
-              { value: "", label: "აირჩიე ბანკი", disabled: true },
-              { value: "tbc", label: "თიბისი ბანკი" },
-              { value: "bog", label: "საქართველოს ბანკი" },
-              { value: "liberty", label: "ლიბერთი ბანკი" },
-              { value: "other", label: "სხვა ბანკი" },
-            ]}
-          />
+        <BankSelect/>  
+        
 
           <FormikField
             name="iban"
