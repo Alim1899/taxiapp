@@ -1,6 +1,6 @@
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { useRef } from "react";
-import useUsers from "../context/AuthContext/useUsers";
+import useAuth from "../context/AuthContext/useAuth";
 import Button from "../UI/Button";
 import { checkLogin, checkNumber } from "../../utils/Functions";
 import Spinner from "../UI/Spinner";
@@ -8,7 +8,7 @@ import Error from "../UI/Error";
 import classes from "./Auth.module.css";
 import Timer from "./Timer";
 const CodeInput = () => {
-  const { state, dispatch } = useUsers();
+  const { state, dispatch } = useAuth();
   const {  userNumber, error, isCheckingCode } = state;
 
   const initialValues = {

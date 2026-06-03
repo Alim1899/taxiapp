@@ -2,7 +2,7 @@ import classes from "../Amount.module.css";
 import Select from "react-select";
 import { Star } from "lucide-react";
 import { useFormikContext } from "formik";
-import useAmount from "../../context/AmountContext/useAmount";
+import useUser from "../../context/AmountContext/useUser";
 
 const CustomOption = ({ innerProps, data }) => (
   <div
@@ -24,7 +24,7 @@ const CustomOption = ({ innerProps, data }) => (
 );
 
 export default function BankSelect() {
-  const { state, dispatch } = useAmount();
+  const { state, dispatch } = useUser();
 
   const { setFieldValue } = useFormikContext();
 

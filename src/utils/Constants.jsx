@@ -6,3 +6,4 @@ export const VALID = "577090280";
 export const PARKID = "4d98e8bc5e1b4787885eeb3dcfaa7cd1";
 export const DRIVER_BALANCE = "https://goldpay.ge/driver/balance"
 export const FILES = "https://goldpay.ge/files"
+export const DRIVER_INFO = "https://goldpay.ge/api/driver/info"

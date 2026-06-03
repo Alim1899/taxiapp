@@ -1,7 +1,7 @@
-import useUsers from "../context/AuthContext/useUsers";
+import useAuth from "../context/AuthContext/useAuth";
 import classes from "./Styles.module.css";
 const Error = ({ errorText }) => {
-  const { state } = useUsers();
+  const { state } = useAuth();
   const { error } = state;
   const stateError =
     error === "number"

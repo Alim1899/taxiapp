@@ -1,12 +1,12 @@
 import classes from "./Auth.module.css";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
-import useUsers from "../context/AuthContext/useUsers";
+import useAuth from "../context/AuthContext/useAuth";
 import { onSubmit } from "../../utils/Functions";
 import Button from "../UI/Button";
 import Error from "../UI/Error";
 const Login = ({ children }) => {
-  const { state, dispatch } = useUsers();
+  const { state, dispatch } = useAuth();
   const { userNumber, error } = state;
   const PhoneSchema = Yup.object().shape({
     number: Yup.string()

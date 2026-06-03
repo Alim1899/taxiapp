@@ -1,10 +1,10 @@
 import logo from "../../assets/logo.jpg";
 import classes from "./Auth.module.css";
-import useUsers from "../context/AuthContext/useUsers";
+import useAuth from "../context/AuthContext/useAuth";
 import { IoIosArrowRoundBack } from "react-icons/io";
 
 const Header = () => {
-  const { dispatch, state } = useUsers();
+  const { dispatch, state } = useAuth();
   const { step } = state;
   const showBtn = step === "enter_code" || step === "checking_number";
   return (

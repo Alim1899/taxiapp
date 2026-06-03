@@ -5,9 +5,9 @@ import * as Yup from "yup";
 import FormikField from "../FormikField";
 import isIBAN from "validator/lib/isIBAN";
 import BankSelect from "./SavedIbans";
-import useAmount from "../../context/AmountContext/useAmount";
+import useUser from "../../context/AmountContext/useUser";
 const Withdraw = ({ close, header }) => {
-  const { state } = useAmount();
+  const { state } = useUser();
   const WithdrawSchema = Yup.object({
     bank: Yup.string().required("აირჩიე ბანკი"),
      iban: Yup.string()

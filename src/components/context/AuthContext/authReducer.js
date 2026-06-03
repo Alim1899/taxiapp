@@ -16,7 +16,7 @@ const initialState = {
   userDetails:""
 };
 
-const userReducer = (state = initialState, action) => {
+const authReducer = (state = initialState, action) => {
   switch (action.type) {
     case "CHECKING_NUMBER":
       return {
@@ -103,4 +103,4 @@ const userReducer = (state = initialState, action) => {
 };
 
 export { initialState };
-export default userReducer;
+export default authReducer;

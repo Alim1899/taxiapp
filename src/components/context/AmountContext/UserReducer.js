@@ -29,7 +29,7 @@ const initialState = {
   amount: 0,
 };
 
-const amountReducer = (
+const UserReducer = (
   state = initialState,
   action
 ) => {
@@ -75,4 +75,4 @@ const amountReducer = (
 };
 
 export { initialState };
-export default amountReducer;
+export default UserReducer;

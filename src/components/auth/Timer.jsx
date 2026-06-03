@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import Button from "../UI/Button";
 import classes from "./Auth.module.css";
-import useUsers from "../context/AuthContext/useUsers";
+import useAuth from "../context/AuthContext/useAuth";
 const Timer = ({ reSend }) => {
   const [time, setTime] = useState(60);
-  const { dispatch } = useUsers();
+  const { dispatch } = useAuth();
 
   const finishedRef = useRef(false);
   useEffect(() => {
