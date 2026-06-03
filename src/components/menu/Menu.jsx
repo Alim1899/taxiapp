@@ -12,11 +12,12 @@ import classes from "./Menu.module.css";
 import MenuItem from "./MenuItem";
 import { useState } from "react";
 import Modal from "./modal/Modal";
-const Menu = ({ balance }) => {
+import Balance from "./balance/Balance";
+
+const Menu = () => {
   const [showModal, setShowModal] = useState(false);
   const [modalDetails, setModalDetails] = useState({});
   const { name, header } = modalDetails;
-
   const modalHandler = (e) => {
     setShowModal(true);
     setModalDetails({
@@ -53,17 +54,7 @@ const Menu = ({ balance }) => {
           onClick={(e) => modalHandler(e)}
         />
       </nav>
-      <div className={classes.balance}>
-        <h3 className={classes.driver}>
-          Mamuka G. <FaStar className={classes.star} />
-          5.0
-        </h3>
-
-        <h1>
-          ჩემი ბალანსი:<br></br>
-          {balance}
-        </h1>
-      </div>
+      <Balance />
       <nav className={classes.secondNav}>
         <MenuItem
           icon={<MdCloudUpload />}

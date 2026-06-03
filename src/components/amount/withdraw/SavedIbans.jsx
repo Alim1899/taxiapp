@@ -2,7 +2,7 @@ import classes from "../Amount.module.css";
 import Select from "react-select";
 import { Star } from "lucide-react";
 import { useFormikContext } from "formik";
-import useUser from "../../context/AmountContext/useUser";
+import useUser from "../../context/UserContext/useUser";
 
 const CustomOption = ({ innerProps, data }) => (
   <div

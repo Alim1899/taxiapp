@@ -5,7 +5,7 @@ import * as Yup from "yup";
 import FormikField from "../FormikField";
 import isIBAN from "validator/lib/isIBAN";
 import BankSelect from "./SavedIbans";
-import useUser from "../../context/AmountContext/useUser";
+import useUser from "../../context/UserContext/useUser";
 const Withdraw = ({ close, header }) => {
   const { state } = useUser();
   const WithdrawSchema = Yup.object({

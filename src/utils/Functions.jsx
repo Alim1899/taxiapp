@@ -1,4 +1,10 @@
-import { CHECK_NUMBER, CHECK_CODE, TOKEN, PARKID, DRIVER_INFO } from "./Constants";
+import {
+  CHECK_NUMBER,
+  CHECK_CODE,
+  TOKEN,
+  PARKID,
+  DRIVER_INFO,
+} from "./Constants";
 
 export const onSubmit = (data, dispatch) => {
   if (!data) return;
@@ -38,9 +44,9 @@ export const checkLogin = async (number, code, dispatch) => {
 
     dispatch({
       type: "CODE_SUCCESS",
-      payload: token
+      payload: token,
     });
-    await getDriverInfo()
+
   } catch (err) {
     console.error(err, "Invalid Code");
     dispatch({ type: "WRONG_CODE" });
@@ -81,31 +87,24 @@ export const checkNumber = async (number, dispatch) => {
 };
 
 //  GET DRIVER NAME LASTNAME AND BALANCE  |||||||||||||||||||||
- const getDriverInfo = async (
-) => {
+export const getDriverInfo = async (dispatch) => {
   try {
-    const res = await fetch(
-      `${DRIVER_INFO}`,
-      {
-       headers: {
+    const res = await fetch(`${DRIVER_INFO}`, {
+      headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${sessionStorage.getItem("token")}`,
       },
-      }
-    );
+    });
 
     if (!res.ok) {
-      throw new Error(
-        "Failed to fetch driver info"
-      );
+      throw new Error("Failed to fetch driver info");
     }
 
     const data = await res.json();
-console.log(data);
-    // dispatch({
-    //   type: "SET_DRIVER",
-    //   payload: data,
-    // });
+    dispatch({
+      type: "SET_USER_DETAILS",
+      payload: data,
+    });
 
     return data;
   } catch (err) {

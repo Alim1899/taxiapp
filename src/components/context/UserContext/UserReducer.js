@@ -14,41 +14,32 @@ const accounts = [
 ];
 
 const sortedAccounts = [...accounts].sort(
-  (a, b) => Number(b.favourite) - Number(a.favourite)
+  (a, b) => Number(b.favourite) - Number(a.favourite),
 );
 
 const defaultAccount =
   sortedAccounts.length === 1
     ? sortedAccounts[0]
-    : sortedAccounts.find((item) => item.favourite) ||
-      null;
+    : sortedAccounts.find((item) => item.favourite) || null;
 
 const initialState = {
   accounts: sortedAccounts,
   selectedAccount: defaultAccount,
   amount: 0,
+  userDetails: {},
 };
 
-const UserReducer = (
-  state = initialState,
-  action
-) => {
+const UserReducer = (state = initialState, action) => {
   switch (action.type) {
     case "SET_ACCOUNTS": {
-      const sortedAccounts = [
-        ...action.payload,
-      ].sort(
-        (a, b) =>
-          Number(b.favourite) -
-          Number(a.favourite)
+      const sortedAccounts = [...action.payload].sort(
+        (a, b) => Number(b.favourite) - Number(a.favourite),
       );
 
       const defaultAccount =
         sortedAccounts.length === 1
           ? sortedAccounts[0]
-          : sortedAccounts.find(
-              (item) => item.favourite
-            ) || null;
+          : sortedAccounts.find((item) => item.favourite) || null;
 
       return {
         ...state,
@@ -61,6 +52,11 @@ const UserReducer = (
       return {
         ...state,
         selectedAccount: action.payload,
+      };
+    case "SET_USER_DETAILS":
+      return {
+        ...state,
+        userDetails: action.payload,
       };
 
     case "SET_AMOUNT":

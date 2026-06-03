@@ -8,17 +8,15 @@ const Layout = () => {
   const { step } = state;
 
   const isLoggedIn = step === "authorized";
-  const balance = 123.5;
 
   return (
     <div className={classes.layout}>
       <Navbar
-        balance={balance}
         isLoggedIn={isLoggedIn}
         dispatch={() => dispatch({ type: "LOG_OUT" })}
       />
 
-      {isLoggedIn ? <Menu balance={balance} /> : <Auth />}
+      {isLoggedIn ? <Menu /> : <Auth />}
     </div>
   );
 };

@@ -1,0 +1,29 @@
+.balance {
+  margin: 2vh 0;
+  height: clamp(100px, 20vw, 170px);
+  background-color: rgb(181, 206, 228);
+  border-radius: 50px;
+  
+}
+.driver{
+  width: 50%;
+  display: flex;
+  justify-content: space-evenly;
+  padding-top: 1vh;
+  font-weight: 900;
+  font-size: clamp(1rem,2.5vw,2rem)
+}
+.star {
+  color: var(--yellow);
+}
+.whiteStar{
+  color: white;
+}
+.balance > h3,
+.balance > h1 {
+  margin-left: 50px;
+  max-width: 280px;
+}
+.span{
+  font-size: small;
+}

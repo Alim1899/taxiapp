@@ -48,17 +48,3 @@
   font-size: clamp(0.7rem, 2vw, 1.2rem);
 }
 
-.balance {
-  margin: 2vh 0;
-  height: clamp(100px, 20vw, 170px);
-  background-color: rgb(181, 206, 228);
-  border-radius: 50px;
-}
-.star {
-  color: var(--yellow);
-}
-.balance > h3,
-.balance > h1 {
-  margin-left: 50px;
-  max-width: 280px;
-}

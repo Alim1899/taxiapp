@@ -1,7 +1,7 @@
 import "./App.css";
 import Layout from "./components/layout/Layout";
 import AuthProvider from "./components/context/AuthContext/AuthProvider";
-import UserProvider from "./components/context/AmountContext/UserProvider";
+import UserProvider from "./components/context/UserContext/UserProvider";
 function App() {
   return (
     <AuthProvider>
