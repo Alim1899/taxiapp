@@ -1,6 +1,6 @@
 import { useReducer } from "react";
 import PropTypes from "prop-types";
-import userReducer, { initialState } from "./userReducer"; // Ensure this is correct
+import userReducer, { initialState } from "./UserReducer"; // Ensure this is correct
 import UserContext from "./UserContext"; // Import from the new file
 
 const UserProvider = ({ children }) => {

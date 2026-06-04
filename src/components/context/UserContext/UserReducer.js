@@ -29,7 +29,7 @@ const initialState = {
   userDetails: {},
 };
 
-const UserReducer = (state = initialState, action) => {
+const userReducer = (state = initialState, action) => {
   switch (action.type) {
     case "SET_ACCOUNTS": {
       const sortedAccounts = [...action.payload].sort(
@@ -71,4 +71,4 @@ const UserReducer = (state = initialState, action) => {
 };
 
 export { initialState };
-export default UserReducer;
+export default userReducer;
