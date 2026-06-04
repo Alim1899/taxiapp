@@ -14,7 +14,7 @@ import { useState } from "react";
 import Modal from "./modal/Modal";
 import Balance from "./balance/Balance";
 
-const Menu = () => {
+const Menu = ({ firstName, lastName, rating, balance }) => {
   const [showModal, setShowModal] = useState(false);
   const [modalDetails, setModalDetails] = useState({});
   const { name, header } = modalDetails;
@@ -54,7 +54,12 @@ const Menu = () => {
           onClick={(e) => modalHandler(e)}
         />
       </nav>
-      <Balance />
+      <Balance
+        balance={balance}
+        lastName={lastName}
+        firstName={firstName}
+        rating={rating}
+      />
       <nav className={classes.secondNav}>
         <MenuItem
           icon={<MdCloudUpload />}

@@ -1,25 +1,19 @@
 import { FaStar } from "react-icons/fa";
-import useUser from "../../context/UserContext/useUser";
 import classes from "./Balance.module.css";
-import { getDriverInfo } from "../../../utils/Functions";
-import { useEffect } from "react";
 import { FaLariSign } from "react-icons/fa6";
-
-const Balance = () => {
-  const { state, dispatch } = useUser();
-  const { userDetails } = state;
-
-  useEffect(() => {
-    getDriverInfo(dispatch);
-  }, [dispatch]);
-
-  const { firstName, lastName, balance, rating } = userDetails;
+import Spinner from "../../UI/Spinner";
+import Skeleton from "../../UI/Skeleton";
+const Balance = ({ firstName, lastName, balance, rating }) => {
   return (
     <div className={classes.balance}>
-      <p className={classes.driver}>
-        <p>
-          {firstName} {lastName}
-        </p>{" "}
+      <div className={classes.driver}>
+        {firstName ? (
+          <h6>
+            {firstName} {lastName}
+          </h6>
+        ) : (
+          <Skeleton />
+        )}
         {rating > 0 ? (
           <div>
             <FaStar className={classes.star} />
@@ -30,12 +24,12 @@ const Balance = () => {
             <span className={classes.span}>Not rated yet</span>
           </div>
         )}
-      </p>
+      </div>
 
       <h1>
         ჩემი ბალანსი:<br></br>
-        {Number(balance).toFixed(2)}
-        <FaLariSign/>
+        {balance ? Number(balance).toFixed(2) : <Skeleton />}
+        <FaLariSign />
       </h1>
     </div>
   );
