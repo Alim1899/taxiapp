@@ -16,10 +16,13 @@ const Layout = () => {
 
   const isLoggedIn = step === "authorized";
 
-  useEffect(() => {
-    
-    if (isLoggedIn) getDriverInfo(userDispatch);
-  }, [userDispatch, isLoggedIn]);
+useEffect(() => {
+  const token = sessionStorage.getItem("token");
+  if (!token) return;
+  if (isLoggedIn && token) {
+    getDriverInfo(userDispatch);
+  }
+}, [isLoggedIn, userDispatch]);
   return (
     <div className={classes.layout}>
       <Navbar

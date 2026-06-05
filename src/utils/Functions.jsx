@@ -4,6 +4,7 @@ import {
   TOKEN,
   PARKID,
   DRIVER_INFO,
+  PAYMENT_ACCOUNT
 } from "./Constants";
 
 export const onSubmit = (data, dispatch) => {
@@ -103,6 +104,32 @@ export const getDriverInfo = async (dispatch) => {
     const data = await res.json();
     dispatch({
       type: "SET_USER_DETAILS",
+      payload: data,
+    });
+
+    return data;
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+
+export const getPaymentAccount = async (dispatch) => {
+  try {
+    const res = await fetch(`${PAYMENT_ACCOUNT}`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+      },
+    });
+
+    if (!res.ok) {
+      throw new Error("Failed to fetch payment account");
+    }
+
+    const data = await res.json();
+    dispatch({
+      type: "SET_ACCOUNTS",
       payload: data,
     });
 

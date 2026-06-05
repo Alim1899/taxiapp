@@ -2,7 +2,9 @@ import classes from "../Amount.module.css";
 import Select from "react-select";
 import { Star } from "lucide-react";
 import { useFormikContext } from "formik";
-import useUser from "../../context/UserContext/useUser";
+import { getPaymentAccount } from "../../../utils/Functions";
+import Skeleton from "../../UI/Skeleton";
+import { useEffect } from "react";
 
 const CustomOption = ({ innerProps, data }) => (
   <div
@@ -23,62 +25,57 @@ const CustomOption = ({ innerProps, data }) => (
   </div>
 );
 
-export default function BankSelect() {
-  const { state, dispatch } = useUser();
-
+export default function SavedIbans({ state, selectedAccount, dispatch }) {
   const { setFieldValue } = useFormikContext();
+  useEffect(() => {
+    if(!selectedAccount.iban){
+      getPaymentAccount(dispatch); 
+    }
+   
+  }, [dispatch,selectedAccount]);
 
   const options = state.accounts.map((item) => ({
-    value: item.id,
-    label: item.iban,
-    favourite: item.favourite,
-    account: item,
+    value: item.id || "",
+    label: item.iban || "",
+    favourite: item.default || "",
+    account: item || "",
   }));
 
   return (
     <div className={classes.saved}>
-      <label className="block mb-1">
-        შენახული ანგარიშები
-      </label>
+      <label className="block mb-1">შენახული ანგარიშები</label>
 
-      <Select
-        options={options}
-        placeholder={
-          options.length
-            ? "აირჩიე ბანკი"
-            : "სია ცარიელია"
-        }
-        noOptionsMessage={() => "სია ცარიელია"}
-        value={
-          options.find(
-            (option) =>
-              option.value === state.selectedAccount?.id
-          ) || null
-        }
-      onChange={(selected) => {
-  const account = selected?.account || null;
-  dispatch({
-    type: "SET_ACCOUNT",
-    payload: account,
-  });
+      {selectedAccount.iban ? (
+        <Select
+          options={options}
+          placeholder={options.length ? "აირჩიე ბანკი" : "სია ცარიელია"}
+          noOptionsMessage={() => "სია ცარიელია"}
+          value={
+            options.find(
+              (option) => option.value === state.selectedAccount?.id,
+            ) || null
+          }
+          onChange={(selected) => {
+            const account = selected?.account || null;
+            dispatch({
+              type: "SET_ACCOUNT",
+              payload: account,
+            });
 
+            setFieldValue(
+              "fullName",
+              `${account?.receiverFirstName} ${account?.receiverLastName}`,
+            );
 
-  setFieldValue(
-    "fullName",
-    account?.fullName || ""
-  );
-
-  setFieldValue(
-    "iban",
-    account?.iban || ""
-  );
-
-  
-}}
-        components={{
-          Option: CustomOption,
-        }}
-      />
+            setFieldValue("iban", account?.iban || "");
+          }}
+          components={{
+            Option: CustomOption,
+          }}
+        />
+      ) : (
+        <Skeleton />
+      )}
     </div>
   );
 }

@@ -1,58 +1,32 @@
-const accounts = [
-  {
-    id: 1,
-    fullName: "Alim Akhchanogli",
-    iban: "GE29NB0000000101904917",
-    favourite: false,
-  },
-  {
-    id: 2,
-    fullName: "Jumber Tkabladze",
-    iban: "GE33BG0000000602842703",
-    favourite: true,
-  },
-];
-
-const sortedAccounts = [...accounts].sort(
-  (a, b) => Number(b.favourite) - Number(a.favourite),
-);
-
-const defaultAccount =
-  sortedAccounts.length === 1
-    ? sortedAccounts[0]
-    : sortedAccounts.find((item) => item.favourite) || null;
-
 const initialState = {
-  accounts: sortedAccounts,
-  selectedAccount: defaultAccount,
+  accounts: [],
+  selectedAccount: {},
   amount: 0,
   userDetails: {},
 };
 
 const userReducer = (state = initialState, action) => {
   switch (action.type) {
-    case "SET_ACCOUNTS": {
-      const sortedAccounts = [...action.payload].sort(
-        (a, b) => Number(b.favourite) - Number(a.favourite),
-      );
-
+  case "SET_ACCOUNTS": {
       const defaultAccount =
-        sortedAccounts.length === 1
-          ? sortedAccounts[0]
-          : sortedAccounts.find((item) => item.favourite) || null;
+        action.payload.find(
+          (item) => item.default
+        ) || action.payload[0] || {};
 
       return {
         ...state,
-        accounts: sortedAccounts,
+        accounts: action.payload,
         selectedAccount: defaultAccount,
       };
     }
-
     case "SET_ACCOUNT":
       return {
         ...state,
         selectedAccount: action.payload,
+        amount:0
       };
+
+
     case "SET_USER_DETAILS":
       return {
         ...state,
