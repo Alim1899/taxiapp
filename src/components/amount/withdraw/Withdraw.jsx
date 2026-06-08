@@ -6,11 +6,13 @@ import FormikField from "../FormikField";
 import isIBAN from "validator/lib/isIBAN";
 import SavedIbans from "./SavedIbans";
 import useUser from "../../context/UserContext/useUser";
+import { withdraw } from "../../../utils/Functions";
 import Skeleton from "../../UI/Skeleton";
+import CheckBoxes from "./CheckBoxes";
 const Withdraw = ({ close, header }) => {
   const { state, dispatch } = useUser();
-  const { selectedAccount,amount } = state;
-  console.log(selectedAccount);
+  const { selectedAccount, amount, isSaving, isDefault } = state;
+
   const WithdrawSchema = Yup.object({
     iban: Yup.string()
       .required("აუცილებელი ველი")
@@ -34,14 +36,23 @@ const Withdraw = ({ close, header }) => {
         iban: selectedAccount?.iban || "",
         fullName: `${selectedAccount?.receiverFirstName} ${selectedAccount.receiverLastName}`,
         amount: amount,
+        isSaving: isSaving,
+        isDefault: isDefault,
       }}
       validationSchema={WithdrawSchema}
       onSubmit={(values) => {
-        console.log(values);
         const [firstName, ...lastNameParts] = values.fullName.split(" ");
         const lastName = lastNameParts.join(" ");
-        console.log(firstName); // Amirani
-        console.log(lastName); // Gachechiladze
+        const userSettings = {
+          iban:values.iban,
+          firstName:firstName,
+          lastName:lastName,
+          amount:Number(values.amount),
+          savePaymentAccount:isSaving,
+          setDefaultPaymentAccount:isDefault
+        }
+        withdraw(userSettings)
+     
       }}
     >
       {({ isValid }) => (
@@ -78,6 +89,11 @@ const Withdraw = ({ close, header }) => {
           ) : (
             <Skeleton />
           )}
+          <CheckBoxes
+            isDefault={isDefault}
+            isSaving={isSaving}
+            dispatch={dispatch}
+          />
 
           <button className={classes.btn} type="submit" disabled={!isValid}>
             გატანა

@@ -84,6 +84,26 @@
   align-items: center;
 }
 
+.checkboxes{
+  display: flex;
+ 
+  flex-direction: column;
+}
+.checkSave,.favorite{
+display: flex;
+width: 50%;
+margin: auto;
+  height: 100%;
+  justify-content: left;
+  align-items: center;
+  font-size: large;
+}
+.checkSave>div,.favorite>div{
+  margin: 0;
+  padding: 0;
+  width: 20px;
+}
+
 
 
 

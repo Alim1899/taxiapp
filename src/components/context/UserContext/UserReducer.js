@@ -3,15 +3,15 @@ const initialState = {
   selectedAccount: {},
   amount: 0,
   userDetails: {},
+  isSaving: false,
+  isDefault: false,
 };
 
 const userReducer = (state = initialState, action) => {
   switch (action.type) {
-  case "SET_ACCOUNTS": {
+    case "SET_ACCOUNTS": {
       const defaultAccount =
-        action.payload.find(
-          (item) => item.default
-        ) || action.payload[0] || {};
+        action.payload.find((item) => item.default) || action.payload[0] || {};
 
       return {
         ...state,
@@ -23,9 +23,8 @@ const userReducer = (state = initialState, action) => {
       return {
         ...state,
         selectedAccount: action.payload,
-        amount:0
+        amount: 0,
       };
-
 
     case "SET_USER_DETAILS":
       return {
@@ -37,6 +36,16 @@ const userReducer = (state = initialState, action) => {
       return {
         ...state,
         amount: action.payload,
+      };
+    case "SET_DEFAULT":
+      return {
+        ...state,
+        isDefault: action.payload,
+      };
+    case "SET_SAVING":
+      return {
+        ...state,
+        isSaving: action.payload,
       };
 
     default:

@@ -4,7 +4,8 @@ import {
   TOKEN,
   PARKID,
   DRIVER_INFO,
-  PAYMENT_ACCOUNT
+  PAYMENT_ACCOUNT,
+  WITHDRAW,
 } from "./Constants";
 
 export const onSubmit = (data, dispatch) => {
@@ -47,7 +48,6 @@ export const checkLogin = async (number, code, dispatch) => {
       type: "CODE_SUCCESS",
       payload: token,
     });
-
   } catch (err) {
     console.error(err, "Invalid Code");
     dispatch({ type: "WRONG_CODE" });
@@ -113,7 +113,6 @@ export const getDriverInfo = async (dispatch) => {
   }
 };
 
-
 export const getPaymentAccount = async (dispatch) => {
   try {
     const res = await fetch(`${PAYMENT_ACCOUNT}`, {
@@ -136,5 +135,25 @@ export const getPaymentAccount = async (dispatch) => {
     return data;
   } catch (err) {
     console.error(err);
+  }
+};
+
+export const withdraw = async (userDetails) => {
+  console.log(userDetails);
+  try {
+    const res = await fetch(`${WITHDRAW}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+      },
+      body: JSON.stringify(userDetails),
+    });
+
+    if (!res.ok) throw new Error(res.status);
+
+   console.log(res);
+  } catch (err) {
+    console.error(err, "Something went wrong");
   }
 };
