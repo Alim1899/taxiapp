@@ -141,7 +141,6 @@ export const getPaymentAccount = async (dispatch) => {
 };
 
 export const withdraw = async (userDetails) => {
-  console.log(userDetails);
   try {
     const res = await fetch(`${WITHDRAW}`, {
       method: "POST",
@@ -154,7 +153,7 @@ export const withdraw = async (userDetails) => {
 
     if (!res.ok) throw new Error(res.status);
 
-   console.log(res);
+    console.log(res);
   } catch (err) {
     console.error(err, "Something went wrong");
   }

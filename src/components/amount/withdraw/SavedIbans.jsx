@@ -39,7 +39,6 @@ export default function SavedIbans({ state, selectedAccount, dispatch }) {
   }));
 
   const renderSelect = () => {
-    console.log(isLoading);
     if (isLoading) return <Skeleton />;
 
     if (!options.length) {
