@@ -1,11 +1,13 @@
 const initialState = {
-  isLoading:false,
+  isLoading: false,
   accounts: [],
+  transactions: [],
   selectedAccount: {},
   amount: "",
   userDetails: {},
   isSaving: false,
   isDefault: false,
+  transactionLoading: true,
 };
 
 const userReducer = (state = initialState, action) => {
@@ -47,12 +49,18 @@ const userReducer = (state = initialState, action) => {
         ...state,
         isSaving: action.payload,
       };
-      case "SET_LOADING":
-  return {
-    ...state,
-    isLoading: action.payload,
-  };
-
+    case "SET_LOADING":
+      return {
+        ...state,
+        isLoading: action.payload,
+      };
+    case "SET_TRANSACTIONS":
+      return {
+        ...state,
+        transactions: action.payload,
+      };
+    case "SET_TRANSACTIONS_LOADING":
+      return { ...state, transactionLoading: action.payload };
     default:
       return state;
   }

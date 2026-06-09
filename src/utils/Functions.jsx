@@ -6,6 +6,7 @@ import {
   DRIVER_INFO,
   PAYMENT_ACCOUNT,
   WITHDRAW,
+  TRANSACTIONS,
 } from "./Constants";
 
 export const onSubmit = (data, dispatch) => {
@@ -88,7 +89,7 @@ export const checkNumber = async (number, dispatch) => {
 };
 
 //  GET DRIVER NAME LASTNAME AND BALANCE  |||||||||||||||||||||
-export const getDriverInfo = async (dispatch,token) => {
+export const getDriverInfo = async (dispatch, token) => {
   try {
     const res = await fetch(`${DRIVER_INFO}`, {
       headers: {
@@ -112,7 +113,7 @@ export const getDriverInfo = async (dispatch,token) => {
     console.error(err);
   }
 };
-
+// GET USERS SAVED PAYMENT IBANS  ||||||||||||||||||||||||||||
 export const getPaymentAccount = async (dispatch) => {
   try {
     const res = await fetch(`${PAYMENT_ACCOUNT}`, {
@@ -139,7 +140,7 @@ export const getPaymentAccount = async (dispatch) => {
     dispatch({ type: "SET_LOADING", payload: false }); // 👈 always runs
   }
 };
-
+// WITHDRAW MONEY FROM BALANCE TO IBAN |||||||||||||||||||||
 export const withdraw = async (userDetails) => {
   try {
     const res = await fetch(`${WITHDRAW}`, {
@@ -152,8 +153,32 @@ export const withdraw = async (userDetails) => {
     });
 
     if (!res.ok) throw new Error(res.status);
-
   } catch (err) {
     console.error(err, "Something went wrong");
+  }
+};
+
+// GET TRANSACTION HYSTORY |||||||||||||||||\
+export const getTransactions = async (take, skip, token, dispatch) => {
+  dispatch({ type: "SET_TRANSACTIONS_LOADING", payload: true });
+  try {
+    const res = await fetch(`${TRANSACTIONS}?take=${take}&skip=${skip}`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    console.log("status:", res.status);
+    if (!res.ok) throw new Error("Failed to fetch transactions");
+
+    const data = await res.json();
+    console.log("data:", data);
+    dispatch({ type: "SET_TRANSACTIONS", payload: data });
+    return data;
+  } catch (err) {
+    console.error(err);
+  } finally {
+    dispatch({ type: "SET_TRANSACTIONS_LOADING", payload: false });
   }
 };

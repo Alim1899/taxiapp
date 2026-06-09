@@ -13,7 +13,7 @@ import MenuItem from "./MenuItem";
 import { useState } from "react";
 import Modal from "./modal/Modal";
 import Balance from "./balance/Balance";
-
+import Transactions from "./transactions/transactions";
 const Menu = ({ firstName, lastName, rating, balance }) => {
   const [showModal, setShowModal] = useState(false);
   const [modalDetails, setModalDetails] = useState({});
@@ -93,6 +93,7 @@ const Menu = ({ firstName, lastName, rating, balance }) => {
           onClick={(e) => modalHandler(e)}
         />
       </nav>
+      <Transactions/>
     </div>
   );
 };
