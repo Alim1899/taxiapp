@@ -1,4 +1,5 @@
 const storedToken = sessionStorage.getItem("token");
+
 const STEPS = {
   ENTER_NUMBER: "enter_number",
   CHECKING_NUMBER: "checking_number",
@@ -6,24 +7,21 @@ const STEPS = {
   CHECKING_CODE: "checking_code",
   AUTHORIZED: "authorized",
 };
+
 const initialState = {
   step: storedToken ? STEPS.AUTHORIZED : STEPS.ENTER_NUMBER,
   isCheckingCode: false,
-  token: storedToken,
+  token: storedToken || null,
   userNumber: "",
   arrivedCode: "",
   error: null,
-  userDetails:""
 };
 
 const authReducer = (state = initialState, action) => {
   switch (action.type) {
     case "CHECKING_NUMBER":
-      return {
-        ...state,
-        step: STEPS.CHECKING_NUMBER,
-        error: null,
-      };
+      return { ...state, step: STEPS.CHECKING_NUMBER, error: null };
+
     case "NUMBER_SUCCESS":
       return {
         ...state,
@@ -32,51 +30,35 @@ const authReducer = (state = initialState, action) => {
         arrivedCode: action.payload.arrivedCode,
         error: null,
       };
+
     case "WRONG_NUMBER":
-      return {
-        ...state,
-        step: STEPS.ENTER_NUMBER,
-        userNumber: "",
-        error: "number",
-      };
+      return { ...state, step: STEPS.ENTER_NUMBER, userNumber: "", error: "number" };
 
     case "CHECKING_CODE":
-      return {
-        ...state,
-        isCheckingCode: true,
-        error: null,
-      };
+      return { ...state, isCheckingCode: true, error: null };
+
     case "WRONG_CODE":
-      return {
-        ...state,
-        isCheckingCode: false,
-        error: "code",
-      };
+      return { ...state, isCheckingCode: false, error: "code" };
+
     case "CODE_SUCCESS":
+      sessionStorage.setItem("token", action.payload.access_token); // 👈 typo fixed: acces_token -> access_token
       return {
         ...state,
         step: STEPS.AUTHORIZED,
         isCheckingCode: false,
-        token: action.payload.acces_token,
+        token: action.payload.access_token,
+        arrivedCode: "",
         error: null,
-        arrivedCode:"",
-        userDetails:action.payload
       };
-    case "CODE_ERROR":
-      return {
-        ...state,
-        step: STEPS.ENTER_CODE,
-        arrivedCode: "",
-        error: "code",
 
-      };
+    case "CODE_ERROR":
+      return { ...state, step: STEPS.ENTER_CODE, arrivedCode: "", error: "code" };
+
     case "CODE_TIMEOUT":
-      return {
-        ...state,
-        arrivedCode: "",
-        error: "code_expired",
-      };
+      return { ...state, arrivedCode: "", error: "code_expired" };
+
     case "LOG_OUT":
+      sessionStorage.removeItem("token"); // 👈 clean up on logout
       return {
         step: STEPS.ENTER_NUMBER,
         token: null,
@@ -84,18 +66,12 @@ const authReducer = (state = initialState, action) => {
         arrivedCode: "",
         error: null,
       };
+
     case "ERROR_RESET":
-      return {
-        ...state,
-        error: null,
-      };
+      return { ...state, error: null };
+
     case "BACK":
-      return {
-        ...state,
-        error: null,
-        arrivedCode: "",
-        step: STEPS.ENTER_NUMBER,
-      };
+      return { ...state, error: null, arrivedCode: "", step: STEPS.ENTER_NUMBER };
 
     default:
       return state;

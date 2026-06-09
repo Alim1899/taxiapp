@@ -46,7 +46,7 @@ export const checkLogin = async (number, code, dispatch) => {
 
     dispatch({
       type: "CODE_SUCCESS",
-      payload: token,
+      payload: data,
     });
   } catch (err) {
     console.error(err, "Invalid Code");
@@ -88,12 +88,12 @@ export const checkNumber = async (number, dispatch) => {
 };
 
 //  GET DRIVER NAME LASTNAME AND BALANCE  |||||||||||||||||||||
-export const getDriverInfo = async (dispatch) => {
+export const getDriverInfo = async (dispatch,token) => {
   try {
     const res = await fetch(`${DRIVER_INFO}`, {
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+        Authorization: `Bearer ${token}`,
       },
     });
 
@@ -153,7 +153,6 @@ export const withdraw = async (userDetails) => {
 
     if (!res.ok) throw new Error(res.status);
 
-    console.log(res);
   } catch (err) {
     console.error(err, "Something went wrong");
   }

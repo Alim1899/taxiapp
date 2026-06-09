@@ -6,26 +6,25 @@ import useAuth from "../context/AuthContext/useAuth";
 import useUser from "../context/UserContext/useUser";
 import { getDriverInfo } from "../../utils/Functions";
 import { useEffect } from "react";
+
 const Layout = () => {
   const { state, dispatch } = useAuth();
   const { state: userState, dispatch: userDispatch } = useUser();
   const { userDetails } = userState;
   const { firstName, lastName, balance, rating } = userDetails;
-  const { step } = state;
+  const { step, token } = state;
   const isLoggedIn = step === "authorized";
-const handleLogout = () => dispatch({ type: "LOG_OUT" });
-useEffect(() => {
-  if (isLoggedIn) {
-    getDriverInfo(userDispatch);
-  }
-}, [isLoggedIn, userDispatch])
+  const handleLogout = () => {
+    dispatch({ type: "LOG_OUT" });
+  };
+  useEffect(() => {
+    if (!isLoggedIn || !token) return;
+    getDriverInfo(userDispatch, token);
+  }, [isLoggedIn, token, userDispatch]);
+
   return (
     <div className={classes.layout}>
-      <Navbar
-        isLoggedIn={isLoggedIn}
-      dispatch={handleLogout}
-      />
-
+      <Navbar isLoggedIn={isLoggedIn} dispatch={handleLogout} />
       {isLoggedIn ? (
         <Menu
           balance={balance}
