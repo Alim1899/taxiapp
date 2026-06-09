@@ -9,9 +9,10 @@ import useUser from "../../context/UserContext/useUser";
 import { withdraw } from "../../../utils/Functions";
 import Skeleton from "../../UI/Skeleton";
 import CheckBoxes from "./CheckBoxes";
+
 const Withdraw = ({ close, header }) => {
   const { state, dispatch } = useUser();
-  const { selectedAccount, amount, isSaving, isDefault } = state;
+  const { selectedAccount,  isSaving, isDefault, isLoading } = state;
 
   const WithdrawSchema = Yup.object({
     iban: Yup.string()
@@ -22,6 +23,7 @@ const Withdraw = ({ close, header }) => {
     fullName: Yup.string().required("აუცილებელი ველი"),
     amount: Yup.number()
       .nullable()
+      .transform((value, original) => (original === "" ? null : value))
       .typeError("მხოლოდ რიცხვი")
       .positive("თანხა უნდა იყოს დადებითი")
       .required("აუცილებელი ველი"),
@@ -34,25 +36,22 @@ const Withdraw = ({ close, header }) => {
       validateOnChange
       initialValues={{
         iban: selectedAccount?.iban || "",
-        fullName: `${selectedAccount?.receiverFirstName} ${selectedAccount.receiverLastName}`,
-        amount: amount,
-        isSaving: isSaving,
-        isDefault: isDefault,
+        fullName: `${selectedAccount?.receiverFirstName || ""} ${selectedAccount?.receiverLastName || ""}`.trim(),
+        amount: "",
       }}
       validationSchema={WithdrawSchema}
       onSubmit={(values) => {
         const [firstName, ...lastNameParts] = values.fullName.split(" ");
         const lastName = lastNameParts.join(" ");
         const userSettings = {
-          iban:values.iban,
-          firstName:firstName,
-          lastName:lastName,
-          amount:Number(values.amount),
-          savePaymentAccount:isSaving,
-          setDefaultPaymentAccount:isDefault
-        }
-        withdraw(userSettings)
-     
+          iban: values.iban,
+          firstName: firstName,
+          lastName: lastName,
+          amount: Number(values.amount),
+          savePaymentAccount: isSaving,
+          setDefaultPaymentAccount: isDefault,
+        };
+        withdraw(userSettings);
       }}
     >
       {({ isValid }) => (
@@ -64,31 +63,33 @@ const Withdraw = ({ close, header }) => {
             selectedAccount={selectedAccount}
             dispatch={dispatch}
           />
-          {selectedAccount.iban ? (
+
+          {isLoading ? (
+            <Skeleton />
+          ) : (
             <FormikField
               name="iban"
               label="ანგარიშის ნომერი"
               placeholder="GE29NB0000000101904917"
             />
-          ) : (
-            <Skeleton />
           )}
 
-          {selectedAccount.iban ? (
+          {isLoading ? (
+            <Skeleton />
+          ) : (
             <FormikField
               name="fullName"
               label="მიმღების დასახელება"
               placeholder="მიხეილ მარღიშვილი"
             />
-          ) : (
-            <Skeleton />
           )}
 
-          {selectedAccount.iban ? (
-            <FormikField name="amount" label="თანხა" placeholder="თანხა" />
-          ) : (
+          {isLoading ? (
             <Skeleton />
+          ) : (
+            <FormikField name="amount" label="თანხა" placeholder="მინ. 0 - მაქს. 1500" />
           )}
+
           <CheckBoxes
             isDefault={isDefault}
             isSaving={isSaving}

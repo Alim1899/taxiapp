@@ -1,7 +1,8 @@
 const initialState = {
+  isLoading:false,
   accounts: [],
   selectedAccount: {},
-  amount: 0,
+  amount: "",
   userDetails: {},
   isSaving: false,
   isDefault: false,
@@ -23,7 +24,6 @@ const userReducer = (state = initialState, action) => {
       return {
         ...state,
         selectedAccount: action.payload,
-        amount: 0,
       };
 
     case "SET_USER_DETAILS":
@@ -47,6 +47,11 @@ const userReducer = (state = initialState, action) => {
         ...state,
         isSaving: action.payload,
       };
+      case "SET_LOADING":
+  return {
+    ...state,
+    isLoading: action.payload,
+  };
 
     default:
       return state;

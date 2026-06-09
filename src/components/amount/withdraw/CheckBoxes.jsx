@@ -5,7 +5,7 @@ const CheckBoxes = ({ isDefault, isSaving, dispatch }) => {
   return (
     <div className={classes.checkboxes}>
       <label className={classes.checkSave}>
-        <input
+        <FormikField
           type="checkbox"
           name="isSaving"
           checked={isSaving}
@@ -16,7 +16,7 @@ const CheckBoxes = ({ isDefault, isSaving, dispatch }) => {
       </label>
 
       <label className={classes.favorite}>
-        <input
+        <FormikField
           type="checkbox"
           name="isDefault"
           checked={isDefault}

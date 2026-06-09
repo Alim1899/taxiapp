@@ -135,6 +135,8 @@ export const getPaymentAccount = async (dispatch) => {
     return data;
   } catch (err) {
     console.error(err);
+  } finally {
+    dispatch({ type: "SET_LOADING", payload: false }); // 👈 always runs
   }
 };
 

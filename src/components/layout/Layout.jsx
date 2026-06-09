@@ -11,23 +11,19 @@ const Layout = () => {
   const { state: userState, dispatch: userDispatch } = useUser();
   const { userDetails } = userState;
   const { firstName, lastName, balance, rating } = userDetails;
-
   const { step } = state;
-
   const isLoggedIn = step === "authorized";
-
+const handleLogout = () => dispatch({ type: "LOG_OUT" });
 useEffect(() => {
-  const token = sessionStorage.getItem("token");
-  if (!token) return;
-  if (isLoggedIn && token) {
+  if (isLoggedIn) {
     getDriverInfo(userDispatch);
   }
-}, [isLoggedIn, userDispatch]);
+}, [isLoggedIn, userDispatch])
   return (
     <div className={classes.layout}>
       <Navbar
         isLoggedIn={isLoggedIn}
-        dispatch={() => dispatch({ type: "LOG_OUT" })}
+      dispatch={handleLogout}
       />
 
       {isLoggedIn ? (
