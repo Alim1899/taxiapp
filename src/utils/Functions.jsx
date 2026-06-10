@@ -169,11 +169,9 @@ export const getTransactions = async (take, skip, token, dispatch) => {
       },
     });
 
-    console.log("status:", res.status);
     if (!res.ok) throw new Error("Failed to fetch transactions");
 
     const data = await res.json();
-    console.log("data:", data);
     dispatch({ type: "SET_TRANSACTIONS", payload: data });
     return data;
   } catch (err) {

@@ -54,13 +54,21 @@ const userReducer = (state = initialState, action) => {
         ...state,
         isLoading: action.payload,
       };
-    case "SET_TRANSACTIONS":
-      return {
-        ...state,
-        transactions: action.payload,
-      };
+   case "SET_TRANSACTIONS": {
+  const incoming = Array.isArray(action.payload)
+    ? action.payload
+    : action.payload?.data ?? [];
+  const existing = state.transactions.map((t) => t.id);
+  const filtered = incoming.filter((t) => !existing.includes(t.id)); // 👈 no duplicates
+  return {
+    ...state,
+    transactions: [...state.transactions, ...filtered],
+  };
+}
     case "SET_TRANSACTIONS_LOADING":
       return { ...state, transactionLoading: action.payload };
+    case "RESET_TRANSACTIONS":
+      return { ...state, transactions: [] };
     default:
       return state;
   }
