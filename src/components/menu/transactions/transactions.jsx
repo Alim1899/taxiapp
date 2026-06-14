@@ -72,11 +72,10 @@ useEffect(() => {
             hour: "2-digit",
             minute: "2-digit",
           });
-          console.log(el.id);
           return (
             <li className={classes.listItem} key={el.id}>
-              <div className={`${classes.iconWrap} ${el.statusId === 999 ? classes.success : classes.blocked}`}>
-                {el.statusId === 999
+              <div className={`${classes.iconWrap} ${el.statusId === 1000 ? classes.success : classes.blocked}`}>
+                {el.statusId === 1000
                   ? <GiConfirmed className={classes.succesIcon} />
                   : <MdBlock className={classes.blockIcon} />}
               </div>
@@ -84,8 +83,8 @@ useEffect(() => {
                 <div className={classes.txDate}>{formattedDate} — {formattedTime}</div>
                 <div className={classes.txAmount}>{el.amount} <FaLariSign /></div>
               </div>
-              <span className={`${classes.badge} ${el.statusId === 999 ? classes.success : classes.blocked}`}>
-                {el.statusId === 999 ? "დადასტურებული" : "უარყოფილი"}
+              <span className={`${classes.badge} ${el.statusId === 1000 ? classes.success : classes.blocked}`}>
+                {el.statusId === 1000 ? "დადასტურებული" : "უარყოფილი"}
               </span>
             </li>
           );

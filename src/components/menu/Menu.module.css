@@ -16,6 +16,7 @@
   margin: auto;
   position: relative;
   cursor: pointer;
+  
 }
 
 .icon > svg {
@@ -26,6 +27,7 @@
   border-radius: 25px;
   color: darkolivegreen;
   margin: auto;
+  
 }
 .notif {
   border: 1px solid red;

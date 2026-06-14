@@ -20,6 +20,7 @@ const Menu = ({ firstName, lastName, rating, balance }) => {
   const { name, header } = modalDetails;
   const modalHandler = (e) => {
     setShowModal(true);
+    console.log(e.currentTarget);
     setModalDetails({
       name: e.currentTarget.getAttribute("name"),
       header: e.currentTarget.getAttribute("header"),
@@ -31,26 +32,26 @@ const Menu = ({ firstName, lastName, rating, balance }) => {
         <MenuItem
           icon={<FaPeopleGroup className={classes.svg} />}
           name="refs"
-          text="რეფერალები"
+          text=""
           onClick={(e) => modalHandler(e)}
         />
         <MenuItem
           notif={1}
           name="app"
           icon={<MdCloudDownload />}
-          text="აპლიკაცია"
+          text=""
           onClick={(e) => modalHandler(e)}
         />
         <MenuItem
           name="bonus"
           icon={<TbZoomMoney />}
-          text="ბონუსები"
+          text=""
           onClick={(e) => modalHandler(e)}
         />
         <MenuItem
           name="rent"
           icon={<MdCarRental />}
-          text="დაქირავება"
+          text=""
           onClick={(e) => modalHandler(e)}
         />
       </nav>
@@ -59,14 +60,17 @@ const Menu = ({ firstName, lastName, rating, balance }) => {
         lastName={lastName}
         firstName={firstName}
         rating={rating}
+        text="თანხის გატანა"
+        name="withdraw"
+        onClick={(e) => modalHandler(e)}
       />
       <nav className={classes.secondNav}>
-        <MenuItem
+        {/* <MenuItem
           icon={<MdCloudUpload />}
           text="თანხის გატანა"
           name="withdraw"
           onClick={(e) => modalHandler(e)}
-        />
+        /> */}
         {showModal && (
           <Modal
             close={() => setShowModal(false)}
@@ -74,26 +78,15 @@ const Menu = ({ firstName, lastName, rating, balance }) => {
             name={name}
           />
         )}
-        <MenuItem
-          icon={<MdSend />}
-          name="send"
-          text="სხვასთან გადარიცხვა"
-          onClick={(e) => modalHandler(e)}
-        />
-        <MenuItem
-          icon={<FaPlus />}
-          name="balance"
-          text="ბალანსის შევსება"
-          onClick={(e) => modalHandler(e)}
-        />
-        <MenuItem
+
+        {/* <MenuItem
           icon={<GiCctvCamera />}
           name="camera"
           text="ვიდეო ჯარიმები"
           onClick={(e) => modalHandler(e)}
-        />
+        /> */}
       </nav>
-      <Transactions/>
+      <Transactions />
     </div>
   );
 };
