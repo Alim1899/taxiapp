@@ -8,6 +8,7 @@ const initialState = {
   isSaving: false,
   isDefault: false,
   transactionLoading: true,
+  paymentAccountName: "",
 };
 
 const userReducer = (state = initialState, action) => {
@@ -49,22 +50,24 @@ const userReducer = (state = initialState, action) => {
         ...state,
         isSaving: action.payload,
       };
+      case "SET_PAYMENT_ACCOUNT_NAME":
+return { ...state, paymentAccountName: action.payload };
     case "SET_LOADING":
       return {
         ...state,
         isLoading: action.payload,
       };
-   case "SET_TRANSACTIONS": {
-  const incoming = Array.isArray(action.payload)
-    ? action.payload
-    : action.payload?.data ?? [];
-  const existing = state.transactions.map((t) => t.id);
-  const filtered = incoming.filter((t) => !existing.includes(t.id)); // 👈 no duplicates
-  return {
-    ...state,
-    transactions: [...state.transactions, ...filtered],
-  };
-}
+    case "SET_TRANSACTIONS": {
+      const incoming = Array.isArray(action.payload)
+        ? action.payload
+        : (action.payload?.data ?? []);
+      const existing = state.transactions.map((t) => t.id);
+      const filtered = incoming.filter((t) => !existing.includes(t.id)); // 👈 no duplicates
+      return {
+        ...state,
+        transactions: [...state.transactions, ...filtered],
+      };
+    }
     case "SET_TRANSACTIONS_LOADING":
       return { ...state, transactionLoading: action.payload };
     case "RESET_TRANSACTIONS":

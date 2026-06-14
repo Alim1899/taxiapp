@@ -20,7 +20,6 @@ const Menu = ({ firstName, lastName, rating, balance }) => {
   const { name, header } = modalDetails;
   const modalHandler = (e) => {
     setShowModal(true);
-    console.log(e.currentTarget);
     setModalDetails({
       name: e.currentTarget.getAttribute("name"),
       header: e.currentTarget.getAttribute("header"),

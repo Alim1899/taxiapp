@@ -9,18 +9,30 @@ import useUser from "../../context/UserContext/useUser";
 import { withdraw } from "../../../utils/Functions";
 import Skeleton from "../../UI/Skeleton";
 import CheckBoxes from "./CheckBoxes";
+import { useState } from "react";
 
 const Withdraw = ({ close, header }) => {
   const { state, dispatch } = useUser();
-  const { selectedAccount,  isSaving, isDefault, isLoading,userDetails } = state;
-const {balance} = userDetails;
+  const {
+    selectedAccount,
+    isSaving,
+    isDefault,
+    isLoading,
+    userDetails,
+    paymentAccountName,
+  } = state;
+  const { balance } = userDetails;
+  const [amount, setAmount] = useState(() => balance || "");
+  
+
   const WithdrawSchema = Yup.object({
     iban: Yup.string()
       .required("აუცილებელი ველი")
       .test("is-iban", "არასწორი IBAN", (value) =>
         value ? isIBAN(value.replace(/\s+/g, "")) : false,
       ),
-    fullName: Yup.string().required("აუცილებელი ველი")
+    fullName: Yup.string()
+      .required("აუცილებელი ველი")
       .matches(/^\S+\s+\S+/, "გთხოვთ შეიყვანოთ სახელი და გვარი"),
     amount: Yup.number()
       .nullable()
@@ -29,10 +41,14 @@ const {balance} = userDetails;
       .positive("თანხა უნდა იყოს დადებითი")
       .required("აუცილებელი ველი")
       .min(1)
-      .max(1500,"მაქსიმუმ 1500₾")
+      .max(1500, "მაქსიმუმ 1500₾")
       .test("max-balance", "არასაკმარისი ბალანსი", (value) =>
-    value ? value <= balance : true
-  )
+        value ? value <= balance : true,
+      ),
+    accountName: Yup.string().when("isSaving", {
+      is: true,
+      then: (schema) => schema.required("სახელი აუცილებელია"),
+    }),
   });
 
   return (
@@ -42,8 +58,12 @@ const {balance} = userDetails;
       validateOnChange
       initialValues={{
         iban: selectedAccount?.iban || "",
-        fullName: `${selectedAccount?.receiverFirstName || ""} ${selectedAccount?.receiverLastName || ""}`.trim(),
-        amount: "",
+        fullName:
+          `${selectedAccount?.receiverFirstName || ""} ${selectedAccount?.receiverLastName || ""}`.trim(),
+        amount: amount || "",
+        accountName: "",
+        isSaving: false,
+        isDefault: false,
       }}
       validationSchema={WithdrawSchema}
       onSubmit={(values) => {
@@ -56,8 +76,9 @@ const {balance} = userDetails;
           amount: Number(values.amount),
           savePaymentAccount: isSaving,
           setDefaultPaymentAccount: isDefault,
+          setPaymentAccountName: paymentAccountName,
         };
-        withdraw(userSettings,balance);
+        withdraw(userSettings, balance);
       }}
     >
       {({ isValid }) => (
@@ -93,13 +114,23 @@ const {balance} = userDetails;
           {isLoading ? (
             <Skeleton />
           ) : (
-            <FormikField name="amount" label="თანხა" placeholder="მინ. 0 - მაქს. 1500" min={1} max={1500}/>
+            <FormikField
+              name="amount"
+              label="თანხა"
+              placeholder="მინ. 0 - მაქს. 1500"
+              min={1}
+              max={1500}
+              onChange={(e) => {
+                setAmount(e.target.value); // 👈 keep local copy
+              }}
+            />
           )}
 
           <CheckBoxes
             isDefault={isDefault}
             isSaving={isSaving}
             dispatch={dispatch}
+            accountName={paymentAccountName}
           />
 
           <button className={classes.btn} type="submit" disabled={!isValid}>
