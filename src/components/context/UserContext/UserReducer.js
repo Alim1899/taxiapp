@@ -9,6 +9,9 @@ const initialState = {
   isDefault: false,
   transactionLoading: true,
   paymentAccountName: "",
+  isWithdrawing: false,
+  withdrawStatus: null,
+  toast: null,
 };
 
 const userReducer = (state = initialState, action) => {
@@ -50,8 +53,8 @@ const userReducer = (state = initialState, action) => {
         ...state,
         isSaving: action.payload,
       };
-      case "SET_PAYMENT_ACCOUNT_NAME":
-return { ...state, paymentAccountName: action.payload };
+    case "SET_PAYMENT_ACCOUNT_NAME":
+      return { ...state, paymentAccountName: action.payload };
     case "SET_LOADING":
       return {
         ...state,
@@ -68,6 +71,12 @@ return { ...state, paymentAccountName: action.payload };
         transactions: [...state.transactions, ...filtered],
       };
     }
+    case "SET_WITHDRAWING":
+      return { ...state, isWithdrawing: action.payload };
+    case "SET_TOAST":
+      return { ...state, toast: action.payload };
+    case "SET_WITHDRAW_STATUS":
+      return { ...state, withdrawStatus: action.payload };
     case "SET_TRANSACTIONS_LOADING":
       return { ...state, transactionLoading: action.payload };
     case "RESET_TRANSACTIONS":

@@ -6,7 +6,7 @@ import useAuth from "../context/AuthContext/useAuth";
 import useUser from "../context/UserContext/useUser";
 import { getDriverInfo } from "../../utils/Functions";
 import { useEffect } from "react";
-
+import Toast from "../UI/Toast";
 const Layout = () => {
   const { state, dispatch } = useAuth();
   const { state: userState, dispatch: userDispatch } = useUser();
@@ -35,6 +35,7 @@ const Layout = () => {
       ) : (
         <Auth />
       )}
+      <Toast/>
     </div>
   );
 };

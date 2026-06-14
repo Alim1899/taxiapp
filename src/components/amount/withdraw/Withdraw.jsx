@@ -20,10 +20,11 @@ const Withdraw = ({ close, header }) => {
     isLoading,
     userDetails,
     paymentAccountName,
+    isWithdrawing,
+    withdrawStatus,
   } = state;
   const { balance } = userDetails;
   const [amount, setAmount] = useState(() => balance || "");
-  
 
   const WithdrawSchema = Yup.object({
     iban: Yup.string()
@@ -78,7 +79,7 @@ const Withdraw = ({ close, header }) => {
           setDefaultPaymentAccount: isDefault,
           setPaymentAccountName: paymentAccountName,
         };
-        withdraw(userSettings, balance);
+        withdraw(userSettings, dispatch);
       }}
     >
       {({ isValid }) => (
@@ -133,9 +134,20 @@ const Withdraw = ({ close, header }) => {
             accountName={paymentAccountName}
           />
 
-          <button className={classes.btn} type="submit" disabled={!isValid}>
-            გატანა
-          </button>
+         <button
+  className={classes.btn}
+  type="submit"
+  disabled={!isValid || isWithdrawing}
+>
+  {isWithdrawing ? "მიმდინარეობს..." : "გატანა"}
+</button>
+
+{withdrawStatus === "success" && (
+  <p className={classes.success}>თანხა წარმატებით გაიტანა!</p>
+)}
+{withdrawStatus === "error" && (
+  <p className={classes.error}>შეცდომა, სცადეთ თავიდან</p>
+)}
         </Form>
       )}
     </Formik>

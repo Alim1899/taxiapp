@@ -141,7 +141,24 @@ export const getPaymentAccount = async (dispatch) => {
   }
 };
 // WITHDRAW MONEY FROM BALANCE TO IBAN |||||||||||||||||||||
-export const withdraw = async (userDetails) => {
+export const withdraw = async (userDetails, dispatch) => {
+  dispatch({ type: "SET_WITHDRAWING", payload: true });
+  const {
+    iban,
+    firstName,
+    lastName,
+    amount,
+    savePaymentAccount,
+    setDefaultPaymentAccount,
+  } = userDetails;
+  const dataFetch = {
+    iban:iban,
+    firstName:firstName,
+     lastName:lastName,
+    amount:amount,
+    savePaymentAccount:savePaymentAccount,
+    setDefaultPaymentAccount:setDefaultPaymentAccount,
+  }
   try {
     const res = await fetch(`${WITHDRAW}`, {
       method: "POST",
@@ -149,12 +166,29 @@ export const withdraw = async (userDetails) => {
         "Content-Type": "application/json",
         Authorization: `Bearer ${sessionStorage.getItem("token")}`,
       },
-      body: JSON.stringify(userDetails),
+      body: JSON.stringify(dataFetch),
     });
 
     if (!res.ok) throw new Error(res.status);
+    dispatch({
+      type: "SET_TOAST",
+      payload: {
+        message: "თანხის გატანა წარმატებით დასრულდა!",
+        type: "success",
+      },
+    });
   } catch (err) {
-    console.error(err, "Something went wrong");
+    console.error(err);
+    dispatch({
+      type: "SET_TOAST",
+      payload: {
+        message: "შეცდომა, შეამოწმეთ დეტალები და სცადეთ თავიდან",
+        type: "error",
+      },
+    });
+  } finally {
+    dispatch({ type: "SET_WITHDRAWING", payload: false });
+    setTimeout(() => dispatch({ type: "SET_TOAST", payload: null }), 3000);
   }
 };
 
