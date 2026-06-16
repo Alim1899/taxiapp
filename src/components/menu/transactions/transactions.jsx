@@ -7,59 +7,61 @@ import { GiConfirmed } from "react-icons/gi";
 import { MdBlock } from "react-icons/md";
 import { useEffect, useRef, useState } from "react";
 
-const TAKE = 1; // change to 5 in production
-const MAX = 5;
+const TAKE = 1;
+const MAX = 10;
 
 const Transactions = () => {
   const { state: authState } = useAuth();
   const { state: userState, dispatch } = useUser();
-  const { transactions, transactionLoading } = userState;
+  const { transactions, transactionLoading, isWithdrawing } = userState;
   const { token } = authState;
   const bottomRef = useRef(null);
   const [skip, setSkip] = useState(TAKE);
   const [hasMore, setHasMore] = useState(true);
   const initialized = useRef(false);
 
+  useEffect(() => {
+    if (!token) return;
+    dispatch({ type: "RESET_TRANSACTIONS" });
+    initialized.current = false;
+    getTransactions(TAKE, 0, token, dispatch).then(() => {
+      initialized.current = true;
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [token]);
 
-useEffect(() => {
-  if (!token) return;
-  dispatch({ type: "RESET_TRANSACTIONS" }); // 👈 clear before fetch
-  initialized.current = false;
-  getTransactions(TAKE, 0, token, dispatch).then(() => {
-    initialized.current = true; // 👈 mark done
-  });
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-}, [token]);
+  useEffect(() => {
+    if (!hasMore || transactionLoading) return;
 
-useEffect(() => {
-  if (!hasMore || transactionLoading) return;
-
-  const observer = new IntersectionObserver(
-    (entries) => {
-      if (entries[0].isIntersecting && initialized.current) { // 👈 guard
-        if (skip >= MAX) {
-          setHasMore(false);
-          return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && initialized.current) {
+          if (skip >= MAX) {
+            setHasMore(false);
+            return;
+          }
+          getTransactions(TAKE, skip, token, dispatch);
+          setSkip((prev) => prev + TAKE);
         }
-        getTransactions(TAKE, skip, token, dispatch);
-        setSkip((prev) => prev + TAKE);
-      }
-    },
-    { threshold: 1.0 }
-  );
+      },
+      { threshold: 1.0 }
+    );
 
-  const el = bottomRef.current;
-  if (el) observer.observe(el);
-  return () => { if (el) observer.unobserve(el); };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-}, [skip, hasMore, transactionLoading, token]);
+    const el = bottomRef.current;
+    if (el) observer.observe(el);
+    return () => { if (el) observer.unobserve(el); };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [skip, hasMore, transactionLoading, token]);
 
   if (transactionLoading && transactions.length === 0)
     return <div>იტვირთება...</div>;
 
-  if (!transactionLoading && transactions.length === 0)
-    return <div className={classes.error}>თქვენ ჯერ არ გაქვთ შესრულებული ტრანზაქცია</div>;
-
+  if (!transactionLoading && transactions.length === 0 && !isWithdrawing)
+    return (
+      <div className={classes.error}>
+        თქვენ ჯერ არ გაქვთ შესრულებული ტრანზაქცია
+      </div>
+    );
 
   return (
     <div className={classes.main}>
@@ -89,12 +91,32 @@ useEffect(() => {
             </li>
           );
         })}
+
+        {isWithdrawing && (
+          <li className={`${classes.listItem} ${classes.pending}`}>
+            <div className={`${classes.iconWrap} ${classes.pendingIcon}`}>
+              <span className={classes.spinner} />
+            </div>
+            <div className={classes.txInfo}>
+              <div className={classes.txDate}>მიმდინარეობს...</div>
+              <div className={classes.txAmount}>— <FaLariSign /></div>
+            </div>
+            <span className={`${classes.badge} ${classes.pendingBadge}`}>
+              მუშავდება
+            </span>
+          </li>
+        )}
       </ul>
 
-      {/* sentinel element */}
       {hasMore && <div ref={bottomRef} style={{ height: "1px" }} />}
-      {transactionLoading && <div style={{ textAlign: "center", padding: "1rem" }}>იტვირთება...</div>}
-      {!hasMore && <div style={{ textAlign: "center", padding: "1rem", color: "gray", fontSize: "13px" }}>სულ {transactions.length} ტრანზაქცია</div>}
+      {transactionLoading && (
+        <div style={{ textAlign: "center", padding: "1rem" }}>იტვირთება...</div>
+      )}
+      {!hasMore && (
+        <div style={{ textAlign: "center", padding: "1rem", color: "gray", fontSize: "13px" }}>
+          სულ {transactions.length} ტრანზაქცია
+        </div>
+      )}
     </div>
   );
 };

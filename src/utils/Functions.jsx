@@ -71,17 +71,14 @@ export const checkNumber = async (number, dispatch) => {
       roleId: 0,
     }),
   })
-    .then((res) => res.json())
-    .then((data) => {
-      if (typeof data === "number") {
+    .then((res) => {
+      console.log(res.status);
+      if (res.status === 201 && res.ok) {
         dispatch({
           type: "NUMBER_SUCCESS",
-          payload: {
-            userNumber: `+995${number}`,
-            arrivedCode: data,
-          },
+          payload: `+995${number}`,
         });
-      } else if (data.statusCode === 500) {
+      } else if (res.statusCode === 500) {
         dispatch({ type: "WRONG_NUMBER" });
       }
     })
@@ -152,13 +149,13 @@ export const withdraw = async (userDetails, dispatch) => {
     setDefaultPaymentAccount,
   } = userDetails;
   const dataFetch = {
-    iban:iban,
-    firstName:firstName,
-     lastName:lastName,
-    amount:amount,
-    savePaymentAccount:savePaymentAccount,
-    setDefaultPaymentAccount:setDefaultPaymentAccount,
-  }
+    iban: iban,
+    firstName: firstName,
+    lastName: lastName,
+    amount: amount,
+    savePaymentAccount: savePaymentAccount,
+    setDefaultPaymentAccount: setDefaultPaymentAccount,
+  };
   try {
     const res = await fetch(`${WITHDRAW}`, {
       method: "POST",

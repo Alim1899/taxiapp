@@ -15,7 +15,7 @@ const Error = ({ errorText }) => {
       : "დაფიქსირდა შეცდომა";
 
   return (
-    <h1 className={classes.error}>{errorText ? errorText : stateError}</h1>
+    <h1 className={classes.errorMsg}>{errorText ? errorText : stateError}</h1>
   );
 };
 

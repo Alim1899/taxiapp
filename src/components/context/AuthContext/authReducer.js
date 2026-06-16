@@ -26,13 +26,16 @@ const authReducer = (state = initialState, action) => {
       return {
         ...state,
         step: STEPS.ENTER_CODE,
-        userNumber: action.payload.userNumber,
-        arrivedCode: action.payload.arrivedCode,
-        error: null,
+        userNumber: action.payload,
       };
 
     case "WRONG_NUMBER":
-      return { ...state, step: STEPS.ENTER_NUMBER, userNumber: "", error: "number" };
+      return {
+        ...state,
+        step: STEPS.ENTER_NUMBER,
+        userNumber: "",
+        error: "number",
+      };
 
     case "CHECKING_CODE":
       return { ...state, isCheckingCode: true, error: null };
@@ -52,7 +55,12 @@ const authReducer = (state = initialState, action) => {
       };
 
     case "CODE_ERROR":
-      return { ...state, step: STEPS.ENTER_CODE, arrivedCode: "", error: "code" };
+      return {
+        ...state,
+        step: STEPS.ENTER_CODE,
+        arrivedCode: "",
+        error: "code",
+      };
 
     case "CODE_TIMEOUT":
       return { ...state, arrivedCode: "", error: "code_expired" };
@@ -71,7 +79,12 @@ const authReducer = (state = initialState, action) => {
       return { ...state, error: null };
 
     case "BACK":
-      return { ...state, error: null, arrivedCode: "", step: STEPS.ENTER_NUMBER };
+      return {
+        ...state,
+        error: null,
+        arrivedCode: "",
+        step: STEPS.ENTER_NUMBER,
+      };
 
     default:
       return state;

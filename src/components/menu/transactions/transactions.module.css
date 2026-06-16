@@ -78,3 +78,33 @@
   font-weight: 900;
   text-align: center;
 }
+
+
+/* ||||||| */
+
+.pending {
+  opacity: 0.6;
+}
+
+.pendingIcon {
+  background: #faeeda;
+}
+
+.pendingBadge {
+  background: #faeeda;
+  color: #854F0B;
+}
+
+.spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid #854F0B;
+  border-top-color: transparent;
+  border-radius: 50%;
+  display: inline-block;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}

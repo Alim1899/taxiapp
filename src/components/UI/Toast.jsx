@@ -4,7 +4,6 @@ import classes from "./Styles.module.css";
 const Toast = () => {
   const { state, dispatch } = useUser();
   const { toast } = state;
-console.log(toast);
   if (!toast) return null;
 
   return (

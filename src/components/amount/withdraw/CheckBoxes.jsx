@@ -58,7 +58,7 @@ const CheckBoxes = ({ isDefault, isSaving, dispatch, accountName }) => {
                 type: "SET_PAYMENT_ACCOUNT_NAME",
                 payload: e.target.value,
               });
-              setFieldValue("accountName", e.target.value); // 👈 sync to Formik
+              setFieldValue("accountName", e.target.value); 
             }}
           />
         </div>

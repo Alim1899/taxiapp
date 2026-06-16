@@ -10,7 +10,7 @@ import Timer from "./Timer";
 const CodeInput = () => {
   const { state, dispatch } = useAuth();
   const {  userNumber, error, isCheckingCode } = state;
-
+console.log(state);
   const initialValues = {
     0: "",
     1: "",
