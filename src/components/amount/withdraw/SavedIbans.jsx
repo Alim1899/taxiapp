@@ -5,18 +5,26 @@ import { useFormikContext } from "formik";
 import { getPaymentAccount } from "../../../utils/Functions";
 import Skeleton from "../../UI/Skeleton";
 import { useEffect, useRef } from "react";
+import { IoMdAdd } from "react-icons/io";
+import { CiBank } from "react-icons/ci";
+import tbc from "../../../assets/banks/tbc.svg";
+import bog from "../../../assets/banks/bog.svg";
+import liberty from "../../../assets/banks/liberty.svg";
 
-const CustomOption = ({ innerProps, data }) => (
-  <div
-    {...innerProps}
-    className="flex items-center justify-between px-3 py-2 cursor-pointer"
-  >
-    <span>{data.label}</span>
-    {data.favourite && (
-      <Star size={16} style={{ color: "gold", fill: "gold" }} />
-    )}
-  </div>
-);
+const CustomOption = ({ innerProps, data }) => {
+  return (
+    <div {...innerProps} className={classes.list}>
+      {data.img && (
+        <img src={data.img} alt={data.imgAlt} className={classes.bankImg} />
+      )}
+      {!data.img && data.icon && <data.icon className={classes.icon} />}
+      <span className={classes.label}>{data.label}</span>
+      {data.favourite && (
+        <Star size={16} style={{ color: "gold", fill: "gold" }} />
+      )}
+    </div>
+  );
+};
 
 export default function SavedIbans({ state, selectedAccount, dispatch }) {
   const { setFieldValue } = useFormikContext();
@@ -30,13 +38,23 @@ export default function SavedIbans({ state, selectedAccount, dispatch }) {
   }, [dispatch]);
 
   const { isLoading } = state;
-
-  const options = state.accounts.map((item) => ({
-    value: item.id || "",
-    label: item.iban || "",
-    favourite: item.default || "",
-    account: item || "",
-  }));
+  const options = [
+    { value: "new", label: "ახალი ანგარიში", icon: IoMdAdd, account: "null" }, // 👈
+    ...state.accounts.map((item) => {
+      const isBog = item.iban.includes("BG");
+      const isTbc = item.iban.includes("TB");
+      const isLiberty = item.iban.includes("LB");
+      return {
+        value: item.id || "",
+        label: item.name || "",
+        favourite: item.default || "",
+        account: item || "",
+        img: isBog ? bog : isTbc ? tbc : isLiberty ? liberty : null,
+        imgAlt: isBog ? "bog" : isTbc ? "tbc" : isLiberty ? "liberty" : null,
+        icon: !isBog && !isTbc ? CiBank : null,
+      };
+    }),
+  ];
 
   const renderSelect = () => {
     if (isLoading) return <Skeleton />;
@@ -50,11 +68,16 @@ export default function SavedIbans({ state, selectedAccount, dispatch }) {
         options={options}
         placeholder="აირჩიე ბანკი"
         noOptionsMessage={() => "სია ცარიელია"}
-        value={options.find((option) => option.value === selectedAccount?.id) || null}
+        value={
+          options.find((option) => option.value === selectedAccount?.id) || null
+        }
         onChange={(selected) => {
           const account = selected?.account || null;
           dispatch({ type: "SET_ACCOUNT", payload: account });
-          setFieldValue("fullName", `${account?.receiverFirstName} ${account?.receiverLastName}`);
+          setFieldValue(
+            "fullName",
+            `${account?.receiverFirstName} ${account?.receiverLastName}`,
+          );
           setFieldValue("iban", account?.iban || "");
           setFieldValue("amount", "");
         }}
@@ -65,7 +88,9 @@ export default function SavedIbans({ state, selectedAccount, dispatch }) {
 
   return (
     <div className={classes.saved}>
-      {options.length?<label className="block mb-1">შენახული ანგარიშები</label>:null}
+      {options.length ? (
+        <label className="block mb-1">შენახული ანგარიშები</label>
+      ) : null}
       {renderSelect()}
     </div>
   );

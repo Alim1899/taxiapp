@@ -25,7 +25,6 @@ const Withdraw = ({ close, header }) => {
   } = state;
   const { balance } = userDetails;
   const [amount, setAmount] = useState(() => balance || "");
-
   const WithdrawSchema = Yup.object({
     iban: Yup.string()
       .required("აუცილებელი ველი")
@@ -60,7 +59,7 @@ const Withdraw = ({ close, header }) => {
       initialValues={{
         iban: selectedAccount?.iban || "",
         fullName:
-          `${selectedAccount?.receiverFirstName || ""} ${selectedAccount?.receiverLastName || ""}`.trim(),
+          `${selectedAccount?.receiverFirstName || ""} ${selectedAccount?.receiverLastName || ""}`.trim()||"",
         amount: amount || "",
         accountName: "",
         isSaving: false,
@@ -99,6 +98,7 @@ const Withdraw = ({ close, header }) => {
               name="iban"
               label="ანგარიშის ნომერი"
               placeholder="GE29NB0000000101904917"
+               onChange={() => dispatch({ type: "SET_ACCOUNT", payload: {} })}
             />
           )}
 
@@ -109,6 +109,7 @@ const Withdraw = ({ close, header }) => {
               name="fullName"
               label="მიმღების დასახელება"
               placeholder="მიხეილ მარღიშვილი"
+              onChange={() => dispatch({ type: "SET_ACCOUNT", payload: {} })}
             />
           )}
 

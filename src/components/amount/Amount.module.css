@@ -112,3 +112,15 @@ margin: auto;
   width: 80%;
   margin: auto;
 }
+.list{
+  display: flex;
+  align-items: center;
+}
+.list>img, .icon{
+  height: 40px;
+  width: 100px;
+  object-fit: scale-down;
+}
+.label{
+  padding-left: 30px;
+}

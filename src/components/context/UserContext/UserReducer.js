@@ -17,8 +17,7 @@ const initialState = {
 const userReducer = (state = initialState, action) => {
   switch (action.type) {
     case "SET_ACCOUNTS": {
-      const defaultAccount =
-        action.payload.find((item) => item.default) || action.payload[0] || {};
+      const defaultAccount = action.payload.find((item) => item.default) || {}; // || action.payload[0] თუ გვინდა პირველი ანგგარიში მოინიშნოს დეფოლტად
 
       return {
         ...state,

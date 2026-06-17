@@ -72,7 +72,6 @@ export const checkNumber = async (number, dispatch) => {
     }),
   })
     .then((res) => {
-      console.log(res.status);
       if (res.status === 201 && res.ok) {
         dispatch({
           type: "NUMBER_SUCCESS",
@@ -147,7 +146,9 @@ export const withdraw = async (userDetails, dispatch) => {
     amount,
     savePaymentAccount,
     setDefaultPaymentAccount,
+    setPaymentAccountName,
   } = userDetails;
+  console.log(userDetails);
   const dataFetch = {
     iban: iban,
     firstName: firstName,
@@ -155,6 +156,7 @@ export const withdraw = async (userDetails, dispatch) => {
     amount: amount,
     savePaymentAccount: savePaymentAccount,
     setDefaultPaymentAccount: setDefaultPaymentAccount,
+    paymentAccountName: setPaymentAccountName || "უსახელო ანგარიში",
   };
   try {
     const res = await fetch(`${WITHDRAW}`, {
