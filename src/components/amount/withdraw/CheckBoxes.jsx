@@ -1,7 +1,13 @@
 import { useFormikContext } from "formik";
 import classes from "../Amount.module.css";
 import FormikField from "../FormikField";
-const CheckBoxes = ({ isDefault, isSaving, dispatch, accountName }) => {
+const CheckBoxes = ({
+  isDefault,
+  isSaving,
+  dispatch,
+  accountName,
+  isAccountSelected,
+}) => {
   const { setFieldValue } = useFormikContext();
 
   const handleSaving = () => {
@@ -33,6 +39,7 @@ const CheckBoxes = ({ isDefault, isSaving, dispatch, accountName }) => {
           name="isSaving"
           checked={isSaving}
           onChange={handleSaving}
+          disabled={isAccountSelected}
         />
         <span>შენახვა</span>
       </label>
@@ -58,7 +65,7 @@ const CheckBoxes = ({ isDefault, isSaving, dispatch, accountName }) => {
                 type: "SET_PAYMENT_ACCOUNT_NAME",
                 payload: e.target.value,
               });
-              setFieldValue("accountName", e.target.value); 
+              setFieldValue("accountName", e.target.value);
             }}
           />
         </div>

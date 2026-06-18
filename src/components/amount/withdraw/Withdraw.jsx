@@ -1,16 +1,14 @@
 import classes from "../Amount.module.css";
 import Header from "../../UI/Header";
 import { Formik, Form } from "formik";
-import * as Yup from "yup";
 import FormikField from "../FormikField";
-import isIBAN from "validator/lib/isIBAN";
 import SavedIbans from "./SavedIbans";
 import useUser from "../../context/UserContext/useUser";
 import { withdraw } from "../../../utils/Functions";
 import Skeleton from "../../UI/Skeleton";
 import CheckBoxes from "./CheckBoxes";
 import { useState } from "react";
-
+import { createWithdrawSchema } from "./Schema";
 const Withdraw = ({ close, header }) => {
   const { state, dispatch } = useUser();
   const {
@@ -25,31 +23,8 @@ const Withdraw = ({ close, header }) => {
   } = state;
   const { balance } = userDetails;
   const [amount, setAmount] = useState(() => balance || "");
-  const WithdrawSchema = Yup.object({
-    iban: Yup.string()
-      .required("აუცილებელი ველი")
-      .test("is-iban", "არასწორი IBAN", (value) =>
-        value ? isIBAN(value.replace(/\s+/g, "")) : false,
-      ),
-    fullName: Yup.string()
-      .required("აუცილებელი ველი")
-      .matches(/^\S+\s+\S+/, "გთხოვთ შეიყვანოთ სახელი და გვარი"),
-    amount: Yup.number()
-      .nullable()
-      .transform((value, original) => (original === "" ? null : value))
-      .typeError("მხოლოდ რიცხვი")
-      .positive("თანხა უნდა იყოს დადებითი")
-      .required("აუცილებელი ველი")
-      .min(1)
-      .max(1500, "მაქსიმუმ 1500₾")
-      .test("max-balance", "არასაკმარისი ბალანსი", (value) =>
-        value ? value <= balance : true,
-      ),
-    accountName: Yup.string().when("isSaving", {
-      is: true,
-      then: (schema) => schema.required("სახელი აუცილებელია"),
-    }),
-  });
+  const isAccountSelected = !!selectedAccount?.id;
+  console.log(paymentAccountName);
 
   return (
     <Formik
@@ -59,13 +34,14 @@ const Withdraw = ({ close, header }) => {
       initialValues={{
         iban: selectedAccount?.iban || "",
         fullName:
-          `${selectedAccount?.receiverFirstName || ""} ${selectedAccount?.receiverLastName || ""}`.trim()||"",
+          `${selectedAccount?.receiverFirstName || ""} ${selectedAccount?.receiverLastName || ""}`.trim() ||
+          "",
         amount: amount || "",
-        accountName: "",
-        isSaving: false,
+        accountName: paymentAccountName,
+        isSaving: isAccountSelected ? true : false,
         isDefault: false,
       }}
-      validationSchema={WithdrawSchema}
+      validationSchema={createWithdrawSchema(balance)}
       onSubmit={(values) => {
         const [firstName, ...lastNameParts] = values.fullName.split(" ");
         const lastName = lastNameParts.join(" ");
@@ -98,7 +74,10 @@ const Withdraw = ({ close, header }) => {
               name="iban"
               label="ანგარიშის ნომერი"
               placeholder="GE29NB0000000101904917"
-               onChange={() => dispatch({ type: "SET_ACCOUNT", payload: {} })}
+              onChange={() => dispatch({ type: "SET_ACCOUNT", payload: {} })}
+              style={
+                isAccountSelected ? { opacity: 0.6, cursor: "not-allowed" } : {}
+              }
             />
           )}
 
@@ -110,6 +89,9 @@ const Withdraw = ({ close, header }) => {
               label="მიმღების დასახელება"
               placeholder="მიხეილ მარღიშვილი"
               onChange={() => dispatch({ type: "SET_ACCOUNT", payload: {} })}
+              style={
+                isAccountSelected ? { opacity: 0.6, cursor: "not-allowed" } : {}
+              }
             />
           )}
 
@@ -130,25 +112,26 @@ const Withdraw = ({ close, header }) => {
 
           <CheckBoxes
             isDefault={isDefault}
-            isSaving={isSaving}
+            isSaving={isAccountSelected ? isAccountSelected : isSaving}
             dispatch={dispatch}
             accountName={paymentAccountName}
+            isAccountSelected={isAccountSelected}
           />
 
-         <button
-  className={classes.btn}
-  type="submit"
-  disabled={!isValid || isWithdrawing}
->
-  {isWithdrawing ? "მიმდინარეობს..." : "გატანა"}
-</button>
+          <button
+            className={classes.btn}
+            type="submit"
+            disabled={!isValid || isWithdrawing}
+          >
+            {isWithdrawing ? "მიმდინარეობს..." : "გატანა"}
+          </button>
 
-{withdrawStatus === "success" && (
-  <p className={classes.success}>თანხა წარმატებით გაიტანა!</p>
-)}
-{withdrawStatus === "error" && (
-  <p className={classes.error}>შეცდომა, სცადეთ თავიდან</p>
-)}
+          {withdrawStatus === "success" && (
+            <p className={classes.success}>თანხა წარმატებით გაიტანა!</p>
+          )}
+          {withdrawStatus === "error" && (
+            <p className={classes.error}>შეცდომა, სცადეთ თავიდან</p>
+          )}
         </Form>
       )}
     </Formik>

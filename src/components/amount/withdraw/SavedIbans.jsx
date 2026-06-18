@@ -72,14 +72,29 @@ export default function SavedIbans({ state, selectedAccount, dispatch }) {
           options.find((option) => option.value === selectedAccount?.id) || null
         }
         onChange={(selected) => {
+          if (selected?.value === "new") {
+            dispatch({ type: "SET_ACCOUNT", payload: {} });
+            dispatch({ type: "SET_PAYMENT_ACCOUNT_NAME", payload: "" });
+            setFieldValue("fullName", "");
+            setFieldValue("iban", "");
+            setFieldValue("amount", "");
+            setFieldValue("isSaving", false);
+            return;
+          }
           const account = selected?.account || null;
           dispatch({ type: "SET_ACCOUNT", payload: account });
+          dispatch({
+            type: "SET_PAYMENT_ACCOUNT_NAME",
+            payload: selected?.label || "",
+          });
           setFieldValue(
             "fullName",
             `${account?.receiverFirstName} ${account?.receiverLastName}`,
           );
           setFieldValue("iban", account?.iban || "");
           setFieldValue("amount", "");
+          setFieldValue("isSaving", true);
+          setFieldValue("accountName", selected?.label || "");
         }}
         components={{ Option: CustomOption }}
       />

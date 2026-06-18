@@ -80,6 +80,8 @@ const userReducer = (state = initialState, action) => {
       return { ...state, transactionLoading: action.payload };
     case "RESET_TRANSACTIONS":
       return { ...state, transactions: [] };
+    case "RESET_PAYMENT_ACCOUNT_NAME":
+      return { ...state, paymentAccountName: state.payload };
     default:
       return state;
   }
