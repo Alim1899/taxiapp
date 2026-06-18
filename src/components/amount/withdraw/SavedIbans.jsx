@@ -66,7 +66,7 @@ export default function SavedIbans({ state, selectedAccount, dispatch }) {
     return (
       <Select
         options={options}
-        placeholder="აირჩიე ბანკი"
+        placeholder="აირჩიე ანგარიში"
         noOptionsMessage={() => "სია ცარიელია"}
         value={
           options.find((option) => option.value === selectedAccount?.id) || null

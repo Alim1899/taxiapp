@@ -13,13 +13,17 @@ const MAX = 10;
 const Transactions = () => {
   const { state: authState } = useAuth();
   const { state: userState, dispatch } = useUser();
-  const { transactions, transactionLoading, isWithdrawing } = userState;
+  const {
+    transactions,
+    transactionLoading,
+    isWithdrawing,
+    pendingTransaction,
+  } = userState;
   const { token } = authState;
   const bottomRef = useRef(null);
   const [skip, setSkip] = useState(TAKE);
   const [hasMore, setHasMore] = useState(true);
   const initialized = useRef(false);
-
   useEffect(() => {
     if (!token) return;
     dispatch({ type: "RESET_TRANSACTIONS" });
@@ -44,12 +48,14 @@ const Transactions = () => {
           setSkip((prev) => prev + TAKE);
         }
       },
-      { threshold: 1.0 }
+      { threshold: 1.0 },
     );
 
     const el = bottomRef.current;
     if (el) observer.observe(el);
-    return () => { if (el) observer.unobserve(el); };
+    return () => {
+      if (el) observer.unobserve(el);
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [skip, hasMore, transactionLoading, token]);
 
@@ -67,6 +73,28 @@ const Transactions = () => {
     <div className={classes.main}>
       <h2 className={classes.header}>ტრანზაქციების ისტორია</h2>
       <ul className={classes.list}>
+      {isWithdrawing && pendingTransaction && (
+  <li className={`${classes.listItem} ${classes.pending}`}>
+    <div className={`${classes.iconWrap} ${classes.pendingIcon}`}>
+      <span className={classes.spinner} />
+    </div>
+    <div className={classes.txInfo}>
+      <div className={classes.txDate}>
+        {new Date(pendingTransaction.time).toLocaleDateString("ka-GE")} —{" "}
+        {new Date(pendingTransaction.time).toLocaleTimeString("ka-GE", {
+          hour: "2-digit",
+          minute: "2-digit",
+        })}
+      </div>
+      <div className={classes.txAmount}>
+        {pendingTransaction.amount} <FaLariSign />
+      </div>
+    </div>
+    <span className={`${classes.badge} ${classes.pendingBadge}`}>
+      მუშავდება
+    </span>
+  </li>
+)}
         {transactions.map((el) => {
           const date = new Date(el.createdAt);
           const formattedDate = date.toLocaleDateString("ka-GE");
@@ -75,37 +103,35 @@ const Transactions = () => {
             minute: "2-digit",
           });
           return (
+            
             <li className={classes.listItem} key={el.id}>
-              <div className={`${classes.iconWrap} ${el.statusId === 1000 ? classes.success : classes.blocked}`}>
-                {el.statusId === 1000
-                  ? <GiConfirmed className={classes.succesIcon} />
-                  : <MdBlock className={classes.blockIcon} />}
+              <div
+                className={`${classes.iconWrap} ${el.statusId === 1000 ? classes.success : classes.blocked}`}
+              >
+                {el.statusId === 1000 ? (
+                  <GiConfirmed className={classes.succesIcon} />
+                ) : (
+                  <MdBlock className={classes.blockIcon} />
+                )}
               </div>
               <div className={classes.txInfo}>
-                <div className={classes.txDate}>{formattedDate} — {formattedTime}</div>
-                <div className={classes.txAmount}>{el.amount} <FaLariSign /></div>
+                <div className={classes.txDate}>
+                  {formattedDate} — {formattedTime}
+                </div>
+                <div className={classes.txAmount}>
+                  {el.amount} <FaLariSign />
+                </div>
               </div>
-              <span className={`${classes.badge} ${el.statusId === 1000 ? classes.success : classes.blocked}`}>
+              <span
+                className={`${classes.badge} ${el.statusId === 1000 ? classes.success : classes.blocked}`}
+              >
                 {el.statusId === 1000 ? "დადასტურებული" : "უარყოფილი"}
               </span>
             </li>
           );
         })}
 
-        {isWithdrawing && (
-          <li className={`${classes.listItem} ${classes.pending}`}>
-            <div className={`${classes.iconWrap} ${classes.pendingIcon}`}>
-              <span className={classes.spinner} />
-            </div>
-            <div className={classes.txInfo}>
-              <div className={classes.txDate}>მიმდინარეობს...</div>
-              <div className={classes.txAmount}>— <FaLariSign /></div>
-            </div>
-            <span className={`${classes.badge} ${classes.pendingBadge}`}>
-              მუშავდება
-            </span>
-          </li>
-        )}
+        
       </ul>
 
       {hasMore && <div ref={bottomRef} style={{ height: "1px" }} />}
@@ -113,7 +139,14 @@ const Transactions = () => {
         <div style={{ textAlign: "center", padding: "1rem" }}>იტვირთება...</div>
       )}
       {!hasMore && (
-        <div style={{ textAlign: "center", padding: "1rem", color: "gray", fontSize: "13px" }}>
+        <div
+          style={{
+            textAlign: "center",
+            padding: "1rem",
+            color: "gray",
+            fontSize: "13px",
+          }}
+        >
           სულ {transactions.length} ტრანზაქცია
         </div>
       )}

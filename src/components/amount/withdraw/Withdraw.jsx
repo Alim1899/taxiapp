@@ -24,7 +24,6 @@ const Withdraw = ({ close, header }) => {
   const { balance } = userDetails;
   const [amount, setAmount] = useState(() => balance || "");
   const isAccountSelected = !!selectedAccount?.id;
-  console.log(paymentAccountName);
 
   return (
     <Formik

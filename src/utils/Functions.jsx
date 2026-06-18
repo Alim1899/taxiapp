@@ -138,7 +138,6 @@ export const getPaymentAccount = async (dispatch) => {
 };
 // WITHDRAW MONEY FROM BALANCE TO IBAN |||||||||||||||||||||
 export const withdraw = async (userDetails, dispatch) => {
-  dispatch({ type: "SET_WITHDRAWING", payload: true });
   const {
     iban,
     firstName,
@@ -148,7 +147,6 @@ export const withdraw = async (userDetails, dispatch) => {
     setDefaultPaymentAccount,
     setPaymentAccountName,
   } = userDetails;
-  console.log(userDetails);
   const dataFetch = {
     iban: iban,
     firstName: firstName,
@@ -156,8 +154,17 @@ export const withdraw = async (userDetails, dispatch) => {
     amount: amount,
     savePaymentAccount: savePaymentAccount,
     setDefaultPaymentAccount: setDefaultPaymentAccount,
-    paymentAccountName: setPaymentAccountName || "უსახელო ანგარიში",
+    paymentAccountName: setPaymentAccountName,
   };
+  dispatch({
+    type: "SET_PENDING_TRANSACTION",
+    payload: {
+      amount: userDetails.amount,
+      time: new Date().toISOString(),
+    },
+  });
+  dispatch({ type: "SET_WITHDRAWING", payload: true });
+
   try {
     const res = await fetch(`${WITHDRAW}`, {
       method: "POST",
@@ -169,6 +176,7 @@ export const withdraw = async (userDetails, dispatch) => {
     });
 
     if (!res.ok) throw new Error(res.status);
+    console.log(res);
     dispatch({
       type: "SET_TOAST",
       payload: {
@@ -187,7 +195,8 @@ export const withdraw = async (userDetails, dispatch) => {
     });
   } finally {
     dispatch({ type: "SET_WITHDRAWING", payload: false });
-    setTimeout(() => dispatch({ type: "SET_TOAST", payload: null }), 3000);
+    setTimeout(() => dispatch({ type: "SET_TOAST", payload: null }), 5000);
+    dispatch({ type: "SET_PENDING_TRANSACTION", payload: null });
   }
 };
 

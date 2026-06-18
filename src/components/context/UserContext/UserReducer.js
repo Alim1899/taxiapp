@@ -12,6 +12,7 @@ const initialState = {
   isWithdrawing: false,
   withdrawStatus: null,
   toast: null,
+  pendingTransaction: null,
 };
 
 const userReducer = (state = initialState, action) => {
@@ -25,6 +26,8 @@ const userReducer = (state = initialState, action) => {
         selectedAccount: defaultAccount,
       };
     }
+    case "SET_PENDING_TRANSACTION":
+      return { ...state, pendingTransaction: action.payload };
     case "SET_ACCOUNT":
       return {
         ...state,
