@@ -16,7 +16,6 @@ const Withdraw = ({ close, header }) => {
   const { token } = authState;
   const { data: userDetails } = useDriverInfo(token);
   const balance = userDetails?.balance;
-  console.log(userDetails);
   const { state, dispatch } = useUser();
   const {
     selectedAccount,
@@ -78,7 +77,10 @@ const Withdraw = ({ close, header }) => {
               name="iban"
               label="ანგარიშის ნომერი"
               placeholder="GE29NB0000000101904917"
-              onChange={() => dispatch({ type: "SET_ACCOUNT", payload: {} })}
+              onChange={() => {
+                if (selectedAccount?.id)
+                  dispatch({ type: "SET_ACCOUNT", payload: {} }); // 👈 only reset if account was selected
+              }}
               style={
                 isAccountSelected ? { opacity: 0.6, cursor: "not-allowed" } : {}
               }
@@ -92,7 +94,10 @@ const Withdraw = ({ close, header }) => {
               name="fullName"
               label="მიმღების დასახელება"
               placeholder="მიხეილ მარღიშვილი"
-              onChange={() => dispatch({ type: "SET_ACCOUNT", payload: {} })}
+              onChange={() => {
+                if (selectedAccount?.id)
+                  dispatch({ type: "SET_ACCOUNT", payload: {} }); // 👈 same here
+              }}
               style={
                 isAccountSelected ? { opacity: 0.6, cursor: "not-allowed" } : {}
               }
