@@ -1,9 +1,9 @@
+import queryClient from "../queryClient";
 import {
   CHECK_NUMBER,
   CHECK_CODE,
   TOKEN,
   PARKID,
-  DRIVER_INFO,
   PAYMENT_ACCOUNT,
   WITHDRAW,
   TRANSACTIONS,
@@ -85,30 +85,7 @@ export const checkNumber = async (number, dispatch) => {
 };
 
 //  GET DRIVER NAME LASTNAME AND BALANCE  |||||||||||||||||||||
-export const getDriverInfo = async (dispatch, token) => {
-  try {
-    const res = await fetch(`${DRIVER_INFO}`, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    });
 
-    if (!res.ok) {
-      throw new Error("Failed to fetch driver info");
-    }
-
-    const data = await res.json();
-    dispatch({
-      type: "SET_USER_DETAILS",
-      payload: data,
-    });
-
-    return data;
-  } catch (err) {
-    console.error(err);
-  }
-};
 // GET USERS SAVED PAYMENT IBANS  ||||||||||||||||||||||||||||
 export const getPaymentAccount = async (dispatch) => {
   try {
@@ -184,6 +161,8 @@ export const withdraw = async (userDetails, dispatch) => {
         type: "success",
       },
     });
+    queryClient.invalidateQueries({ queryKey: ["transactions"] }); // 👈 refetch transactions
+    queryClient.invalidateQueries({ queryKey: ["driverInfo"] });
   } catch (err) {
     console.error(err);
     dispatch({

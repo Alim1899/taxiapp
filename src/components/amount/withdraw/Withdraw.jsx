@@ -9,19 +9,24 @@ import Skeleton from "../../UI/Skeleton";
 import CheckBoxes from "./CheckBoxes";
 import { useState } from "react";
 import { createWithdrawSchema } from "./Schema";
+import useAuth from "../../context/AuthContext/useAuth";
+import { useDriverInfo } from "../../Hooks/useDriverInfo";
 const Withdraw = ({ close, header }) => {
+  const { state: authState } = useAuth();
+  const { token } = authState;
+  const { data: userDetails } = useDriverInfo(token);
+  const balance = userDetails?.balance;
+  console.log(userDetails);
   const { state, dispatch } = useUser();
   const {
     selectedAccount,
     isSaving,
     isDefault,
     isLoading,
-    userDetails,
     paymentAccountName,
     isWithdrawing,
     withdrawStatus,
   } = state;
-  const { balance } = userDetails;
   const [amount, setAmount] = useState(() => balance || "");
   const isAccountSelected = !!selectedAccount?.id;
 
