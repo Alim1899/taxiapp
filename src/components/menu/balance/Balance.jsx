@@ -1,17 +1,44 @@
-import { FaStar } from "react-icons/fa";
-import classes from "./Balance.module.css";
 import { FaLariSign } from "react-icons/fa6";
-import Spinner from "../../UI/Spinner";
 import Skeleton from "../../UI/Skeleton";
-import MenuItem from "../MenuItem";
-const Balance = ({ balance, onClick, name, text }) => {
+import classes from "./Balance.module.css";
+import { queryClient } from "../../../queryClient";
+
+const Balance = ({
+  balance,
+  onClick,
+  name,
+  text,
+  isOnCooldown,
+  remainingTime,
+  onRefresh
+}) => {
+  const handleRefresh = () => {
+    console.log("clicked");
+    queryClient.invalidateQueries({ queryKey: ["transactions"] });
+    onRefresh?.()
+  };
+
   return (
-    <div className={classes.balance} >
+    <div className={classes.balance}>
       <div className={classes.icon} onClick={onClick} name={name} text={text}>
-        <h2>
-          ბალანსი: {balance ? Number(balance).toFixed(2) : <Skeleton />}
-          <FaLariSign />
-        </h2>
+        {isOnCooldown ? (
+          <h2 className={classes.cooldown}>
+            გატანა შესაძლებელია {remainingTime} წუთში{" "}
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                handleRefresh();
+              }}
+            >
+              განახლება
+            </button>
+          </h2>
+        ) : (
+          <h2>
+            ბალანსი: {balance ? Number(balance).toFixed(2) : <Skeleton />}
+            <FaLariSign />
+          </h2>
+        )}
       </div>
     </div>
   );

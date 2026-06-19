@@ -10,13 +10,17 @@ import { FaStar, FaPlus } from "react-icons/fa";
 import { GiCctvCamera } from "react-icons/gi";
 import classes from "./Menu.module.css";
 import MenuItem from "./MenuItem";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import Modal from "./modal/Modal";
 import Balance from "./balance/Balance";
 import Transactions from "./transactions/transactions";
+import { getWithdrawCooldown } from "../Hooks/useWithdrawCooldown";
+import { useTransactions } from "../Hooks/useTransactions";
+import useAuth from "../context/AuthContext/useAuth";
 const Menu = ({ firstName, lastName, rating, balance }) => {
   const [showModal, setShowModal] = useState(false);
   const [modalDetails, setModalDetails] = useState({});
+  const [cooldownKey, setCooldownKey] = useState(0);
   const { name, header } = modalDetails;
   const modalHandler = (e) => {
     setShowModal(true);
@@ -25,6 +29,20 @@ const Menu = ({ firstName, lastName, rating, balance }) => {
       header: e.currentTarget.getAttribute("header"),
     });
   };
+
+  const { state } = useAuth();
+  const { token } = state; // 👈 token not data
+  const { data } = useTransactions(token);
+  const transactions = useMemo(
+    () => data?.pages.flatMap((p) => p.data ?? p) ?? [],
+    [data],
+  );
+  const { isOnCooldown, remainingTime } = useMemo(
+    () => getWithdrawCooldown(transactions),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [transactions, cooldownKey],
+  );
+
   return (
     <div className={classes.menu}>
       <nav className={classes.firstNav}>
@@ -61,15 +79,12 @@ const Menu = ({ firstName, lastName, rating, balance }) => {
         rating={rating}
         text="თანხის გატანა"
         name="withdraw"
-        onClick={(e) => modalHandler(e)}
+        onClick={(e) => !isOnCooldown && modalHandler(e)}
+        isOnCooldown={isOnCooldown}
+        remainingTime={remainingTime?.minutes}
+        onRefresh={() => setCooldownKey((prev) => prev + 1)}
       />
       <nav className={classes.secondNav}>
-        {/* <MenuItem
-          icon={<MdCloudUpload />}
-          text="თანხის გატანა"
-          name="withdraw"
-          onClick={(e) => modalHandler(e)}
-        /> */}
         {showModal && (
           <Modal
             close={() => setShowModal(false)}
@@ -77,13 +92,6 @@ const Menu = ({ firstName, lastName, rating, balance }) => {
             name={name}
           />
         )}
-
-        {/* <MenuItem
-          icon={<GiCctvCamera />}
-          name="camera"
-          text="ვიდეო ჯარიმები"
-          onClick={(e) => modalHandler(e)}
-        /> */}
       </nav>
       <Transactions />
     </div>

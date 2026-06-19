@@ -23,7 +23,6 @@ const Transactions = () => {
   } = useTransactions(token);
 
   const transactions = data?.pages.flatMap((p) => p.data ?? p) ?? [];
-
   useEffect(() => {
     if (!hasNextPage || isFetchingNextPage) return;
 
@@ -40,7 +39,7 @@ const Transactions = () => {
     if (el) observer.observe(el);
     return () => { if (el) observer.unobserve(el); };
   }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
-
+console.log(transactions);
   if (isLoading)
     return <div>იტვირთება...</div>;
 

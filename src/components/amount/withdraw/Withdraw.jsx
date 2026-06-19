@@ -84,6 +84,7 @@ const Withdraw = ({ close, header }) => {
               style={
                 isAccountSelected ? { opacity: 0.6, cursor: "not-allowed" } : {}
               }
+              disabled={isAccountSelected}
             />
           )}
 
@@ -101,6 +102,7 @@ const Withdraw = ({ close, header }) => {
               style={
                 isAccountSelected ? { opacity: 0.6, cursor: "not-allowed" } : {}
               }
+              disabled={isAccountSelected}
             />
           )}
 

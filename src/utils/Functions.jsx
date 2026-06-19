@@ -151,7 +151,7 @@ export const withdraw = async (userDetails, dispatch) => {
       },
       body: JSON.stringify(dataFetch),
     });
-
+console.log(res);
     if (!res.ok) throw new Error(res.status);
     console.log(res);
     dispatch({
