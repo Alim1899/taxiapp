@@ -2,13 +2,16 @@ import { useEffect } from "react";
 import { modalComponents } from "./ModalMap";
 import Header from "../../UI/Header";
 import classes from "./Modal.module.css";
+import useUser from "../../context/UserContext/useUser";
 
 const Modal = ({ close, header, name }) => {
+  const { state } = useUser();
+  const { isWithdrawing } = state;
+
   const Component = modalComponents[name];
 
   useEffect(() => {
     document.body.style.overflow = "hidden";
-
     return () => {
       document.body.style.overflow = "";
     };
@@ -26,7 +29,16 @@ const Modal = ({ close, header, name }) => {
       document.removeEventListener("keydown", handleEsc);
     };
   }, [close]);
+//console.log(isWithdrawing);
+  useEffect(() => {
+    if (!isWithdrawing) return;
 
+    const timer = setTimeout(() => {
+      close();
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, [close, isWithdrawing]);
   return (
     <div className={classes.backdrop} onClick={close}>
       {Component ? (

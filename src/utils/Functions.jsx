@@ -114,33 +114,40 @@ export const getPaymentAccount = async (dispatch) => {
   }
 };
 // WITHDRAW MONEY FROM BALANCE TO IBAN |||||||||||||||||||||
+const pollTransactionStatus = async (maxAttempts = 30, intervalMs = 2000) => {
+  for (let i = 0; i < maxAttempts; i++) {
+    await new Promise((resolve) => setTimeout(resolve, intervalMs));
+
+    const res = await fetch(`${TRANSACTIONS}?take=1&skip=0`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+      },
+    });
+
+    if (!res.ok) continue;
+
+    const data = await res.json();
+    const latest = data?.data?.[0];
+
+    if (!latest) continue;
+    if (latest.statusId === 5) return "success";
+    if (latest.statusId === 6) return "failed";
+    // still pending, continue polling
+  }
+
+  return "timeout";
+};
 export const withdraw = async (userDetails, dispatch) => {
-  const {
-    iban,
-    firstName,
-    lastName,
-    amount,
-    savePaymentAccount,
-    setDefaultPaymentAccount,
-    setPaymentAccountName,
-  } = userDetails;
   const dataFetch = {
-    iban: iban,
-    firstName: firstName,
-    lastName: lastName,
-    amount: amount,
-    savePaymentAccount: savePaymentAccount,
-    setDefaultPaymentAccount: setDefaultPaymentAccount,
-    paymentAccountName: setPaymentAccountName,
+    iban: userDetails.iban,
+    firstName: userDetails.firstName,
+    lastName: userDetails.lastName,
+    amount: userDetails.amount,
+    savePaymentAccount: userDetails.savePaymentAccount,
+    setDefaultPaymentAccount: userDetails.setDefaultPaymentAccount,
+    paymentAccountName: userDetails.setPaymentAccountName,
   };
-  dispatch({
-    type: "SET_PENDING_TRANSACTION",
-    payload: {
-      amount: userDetails.amount,
-      time: new Date().toISOString(),
-    },
-  });
-  dispatch({ type: "SET_WITHDRAWING", payload: true });
 
   try {
     const res = await fetch(`${WITHDRAW}`, {
@@ -151,17 +158,57 @@ export const withdraw = async (userDetails, dispatch) => {
       },
       body: JSON.stringify(dataFetch),
     });
-console.log(res);
-    if (!res.ok) throw new Error(res.status);
-    console.log(res);
+
+    if (!res.ok) {
+      if (res.status === 409) {
+        dispatch({
+          type: "SET_TOAST",
+          payload: {
+            message: "გატანა უკვე მიმდინარეობს, გთხოვთ მოიცადოთ",
+            type: "error",
+          },
+        });
+      } else if (res.status === 422) {
+        dispatch({
+          type: "SET_TOAST",
+          payload: {
+            message:
+              "ბოლო გატანიდან უნდა გავიდეს მინიმუმ 1 საათი, გთხოვთ მოიცადოთ",
+            type: "error",
+          },
+        });
+        return;
+      }
+      throw new Error(res.status);
+    }
+
+    // request accepted — now show pending state
+    dispatch({ type: "SET_WITHDRAWING", payload: true });
     dispatch({
-      type: "SET_TOAST",
-      payload: {
-        message: "თანხის გატანა წარმატებით დასრულდა!",
-        type: "success",
-      },
+      type: "SET_PENDING_TRANSACTION",
+      payload: { amount: userDetails.amount, time: new Date().toISOString() },
     });
-    queryClient.invalidateQueries({ queryKey: ["transactions"] }); // 👈 refetch transactions
+    queryClient.invalidateQueries({ queryKey: ["transactions"] });
+
+    // poll until resolved
+    const status = await pollTransactionStatus();
+    console.log(status);
+    if (status === "success") {
+      dispatch({
+        type: "SET_TOAST",
+        payload: {
+          message: "თანხის გატანა წარმატებით დასრულდა!",
+          type: "success",
+        },
+      });
+    } else if (status === "failed") {
+      dispatch({
+        type: "SET_TOAST",
+        payload: { message: "თანხის გატანა ვერ შესრულდა", type: "error" },
+      });
+    }
+
+    queryClient.invalidateQueries({ queryKey: ["transactions"] });
     queryClient.invalidateQueries({ queryKey: ["driverInfo"] });
   } catch (err) {
     console.error(err);
@@ -174,8 +221,8 @@ console.log(res);
     });
   } finally {
     dispatch({ type: "SET_WITHDRAWING", payload: false });
-    setTimeout(() => dispatch({ type: "SET_TOAST", payload: null }), 5000);
     dispatch({ type: "SET_PENDING_TRANSACTION", payload: null });
+    setTimeout(() => dispatch({ type: "SET_TOAST", payload: null }), 5000);
   }
 };
 

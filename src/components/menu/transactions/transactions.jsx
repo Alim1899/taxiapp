@@ -39,7 +39,7 @@ const Transactions = () => {
     if (el) observer.observe(el);
     return () => { if (el) observer.unobserve(el); };
   }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
-console.log(transactions);
+//console.log(transactions);
   if (isLoading)
     return <div>იტვირთება...</div>;
 
@@ -78,29 +78,43 @@ console.log(transactions);
         )}
 
         {transactions.map((el) => {
-          const date = new Date(el.createdAt);
-          const formattedDate = date.toLocaleDateString("ka-GE");
-          const formattedTime = date.toLocaleTimeString("ka-GE", {
-            hour: "2-digit",
-            minute: "2-digit",
-          });
-          return (
-            <li className={classes.listItem} key={el.id}>
-              <div className={`${classes.iconWrap} ${el.statusId === 1000 ? classes.success : classes.blocked}`}>
-                {el.statusId === 1000
-                  ? <GiConfirmed className={classes.succesIcon} />
-                  : <MdBlock className={classes.blockIcon} />}
-              </div>
-              <div className={classes.txInfo}>
-                <div className={classes.txDate}>{formattedDate} — {formattedTime}</div>
-                <div className={classes.txAmount}>{el.amount} <FaLariSign /></div>
-              </div>
-              <span className={`${classes.badge} ${el.statusId === 1000 ? classes.success : classes.blocked}`}>
-                {el.statusId === 1000 ? "დადასტურებული" : "უარყოფილი"}
-              </span>
-            </li>
-          );
-        })}
+  const date = new Date(el.createdAt);
+  const formattedDate = date.toLocaleDateString("ka-GE");
+  const formattedTime = date.toLocaleTimeString("ka-GE", {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+
+  const statusClass =
+    el.statusId === 5 ? classes.success
+    : el.statusId === 6 ? classes.blocked
+    : classes.pending;
+
+  const statusIcon =
+    el.statusId === 5 ? <GiConfirmed className={classes.succesIcon} />
+    : el.statusId === 6 ? <MdBlock className={classes.blockIcon} />
+    : <span className={classes.spinner} />;
+
+  const statusText =
+    el.statusId === 5 ? "დადასტურებული"
+    : el.statusId === 6 ? "უარყოფილი"
+    : "მუშავდება";
+
+  return (
+    <li className={classes.listItem} key={el.id}>
+      <div className={`${classes.iconWrap} ${statusClass}`}>
+        {statusIcon}
+      </div>
+      <div className={classes.txInfo}>
+        <div className={classes.txDate}>{formattedDate} — {formattedTime}</div>
+        <div className={classes.txAmount}>{el.amount} <FaLariSign /></div>
+      </div>
+      <span className={`${classes.badge} ${statusClass}`}>
+        {statusText}
+      </span>
+    </li>
+  );
+})}
       </ul>
 
       {hasNextPage && <div ref={bottomRef} style={{ height: "1px" }} />}
