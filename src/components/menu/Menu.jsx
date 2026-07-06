@@ -42,7 +42,7 @@ const Menu = ({ firstName, lastName, rating, balance }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [transactions, cooldownKey],
   );
-
+console.log(transactions);
   return (
     <div className={classes.menu}>
       <nav className={classes.firstNav}>

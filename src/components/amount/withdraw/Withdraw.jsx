@@ -28,7 +28,7 @@ const Withdraw = ({ close, header }) => {
   } = state;
   const [amount, setAmount] = useState(() => balance || "");
   const isAccountSelected = !!selectedAccount?.id;
-
+console.log(selectedAccount.name,"+",paymentAccountName);
   return (
     <Formik
       enableReinitialize
@@ -40,7 +40,7 @@ const Withdraw = ({ close, header }) => {
           `${selectedAccount?.receiverFirstName || ""} ${selectedAccount?.receiverLastName || ""}`.trim() ||
           "",
         amount: amount || "",
-        accountName: paymentAccountName,
+        accountName: selectedAccount?.name||"",
         isSaving: isAccountSelected ? true : false,
         isDefault: false,
       }}
@@ -125,7 +125,7 @@ const Withdraw = ({ close, header }) => {
             isDefault={isDefault}
             isSaving={isAccountSelected ? isAccountSelected : isSaving}
             dispatch={dispatch}
-            accountName={paymentAccountName}
+           accountName={isAccountSelected ? selectedAccount?.name || "" : paymentAccountName}
             isAccountSelected={isAccountSelected}
           />
 
@@ -134,7 +134,7 @@ const Withdraw = ({ close, header }) => {
             type="submit"
             disabled={!isValid || isWithdrawing}
           >
-            {isWithdrawing ? "მიმდინარეობს..." : "გატანა"}
+            {isWithdrawing ? "🚫თქვენ გაქვთ აქტიური ტრანზაქცია" : "გატანა"}
           </button>
 
           {withdrawStatus === "success" && (

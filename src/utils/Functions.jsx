@@ -184,15 +184,11 @@ export const withdraw = async (userDetails, dispatch) => {
 
     // request accepted — now show pending state
     dispatch({ type: "SET_WITHDRAWING", payload: true });
-    dispatch({
-      type: "SET_PENDING_TRANSACTION",
-      payload: { amount: userDetails.amount, time: new Date().toISOString() },
-    });
+    
     queryClient.invalidateQueries({ queryKey: ["transactions"] });
 
     // poll until resolved
     const status = await pollTransactionStatus();
-    console.log(status);
     if (status === "success") {
       dispatch({
         type: "SET_TOAST",
@@ -211,6 +207,7 @@ export const withdraw = async (userDetails, dispatch) => {
     queryClient.invalidateQueries({ queryKey: ["transactions"] });
     queryClient.invalidateQueries({ queryKey: ["driverInfo"] });
   } catch (err) {
+    console.log(err);
     console.error(err);
     dispatch({
       type: "SET_TOAST",

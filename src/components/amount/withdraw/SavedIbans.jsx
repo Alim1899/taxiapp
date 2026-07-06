@@ -62,7 +62,6 @@ export default function SavedIbans({ state, selectedAccount, dispatch }) {
     if (!options.length) {
       return <p className={classes.noAccounts}>შენახული ანგარიშები არ გაქვს</p>;
     }
-
     return (
       <Select
         options={options}
@@ -73,6 +72,7 @@ export default function SavedIbans({ state, selectedAccount, dispatch }) {
         }
         onChange={(selected) => {
           if (selected?.value === "new") {
+            
             dispatch({ type: "SET_ACCOUNT", payload: {} });
             dispatch({ type: "SET_PAYMENT_ACCOUNT_NAME", payload: "" });
             setFieldValue("fullName", "");
@@ -104,7 +104,7 @@ export default function SavedIbans({ state, selectedAccount, dispatch }) {
   return (
     <div className={classes.saved}>
       {options.length ? (
-        <label className="block mb-1">შენახული ანგარიშები</label>
+        <label>შენახული ანგარიშები</label>
       ) : null}
       {renderSelect()}
     </div>
