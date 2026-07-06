@@ -28,7 +28,6 @@ const Withdraw = ({ close, header }) => {
   } = state;
   const [amount, setAmount] = useState(() => balance || "");
   const isAccountSelected = !!selectedAccount?.id;
-console.log(selectedAccount.name,"+",paymentAccountName);
   return (
     <Formik
       enableReinitialize
@@ -48,6 +47,7 @@ console.log(selectedAccount.name,"+",paymentAccountName);
       onSubmit={(values) => {
         const [firstName, ...lastNameParts] = values.fullName.split(" ");
         const lastName = lastNameParts.join(" ");
+        console.log(values);
         const userSettings = {
           iban: values.iban,
           firstName: firstName,
@@ -55,7 +55,7 @@ console.log(selectedAccount.name,"+",paymentAccountName);
           amount: Number(values.amount),
           savePaymentAccount: isSaving,
           setDefaultPaymentAccount: isDefault,
-          setPaymentAccountName: paymentAccountName,
+          setPaymentAccountName: values.accountName,
         };
         withdraw(userSettings, dispatch);
       }}

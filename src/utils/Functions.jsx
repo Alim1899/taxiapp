@@ -7,6 +7,7 @@ import {
   PAYMENT_ACCOUNT,
   WITHDRAW,
   TRANSACTIONS,
+  DRIVER_INFO,
 } from "./Constants";
 
 export const onSubmit = (data, dispatch) => {
@@ -114,30 +115,7 @@ export const getPaymentAccount = async (dispatch) => {
   }
 };
 // WITHDRAW MONEY FROM BALANCE TO IBAN |||||||||||||||||||||
-const pollTransactionStatus = async (maxAttempts = 30, intervalMs = 2000) => {
-  for (let i = 0; i < maxAttempts; i++) {
-    await new Promise((resolve) => setTimeout(resolve, intervalMs));
 
-    const res = await fetch(`${TRANSACTIONS}?take=1&skip=0`, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
-      },
-    });
-
-    if (!res.ok) continue;
-
-    const data = await res.json();
-    const latest = data?.data?.[0];
-
-    if (!latest) continue;
-    if (latest.statusId === 5) return "success";
-    if (latest.statusId === 6) return "failed";
-    // still pending, continue polling
-  }
-
-  return "timeout";
-};
 export const withdraw = async (userDetails, dispatch) => {
   const dataFetch = {
     iban: userDetails.iban,
@@ -148,7 +126,6 @@ export const withdraw = async (userDetails, dispatch) => {
     setDefaultPaymentAccount: userDetails.setDefaultPaymentAccount,
     paymentAccountName: userDetails.setPaymentAccountName,
   };
-
   try {
     const res = await fetch(`${WITHDRAW}`, {
       method: "POST",
@@ -184,7 +161,7 @@ export const withdraw = async (userDetails, dispatch) => {
 
     // request accepted — now show pending state
     dispatch({ type: "SET_WITHDRAWING", payload: true });
-    
+
     queryClient.invalidateQueries({ queryKey: ["transactions"] });
 
     // poll until resolved
@@ -203,11 +180,7 @@ export const withdraw = async (userDetails, dispatch) => {
         payload: { message: "თანხის გატანა ვერ შესრულდა", type: "error" },
       });
     }
-
-    queryClient.invalidateQueries({ queryKey: ["transactions"] });
-    queryClient.invalidateQueries({ queryKey: ["driverInfo"] });
   } catch (err) {
-    console.log(err);
     console.error(err);
     dispatch({
       type: "SET_TOAST",
@@ -219,6 +192,7 @@ export const withdraw = async (userDetails, dispatch) => {
   } finally {
     dispatch({ type: "SET_WITHDRAWING", payload: false });
     dispatch({ type: "SET_PENDING_TRANSACTION", payload: null });
+    queryClient.invalidateQueries({ queryKey: ["transactions"] });
     setTimeout(() => dispatch({ type: "SET_TOAST", payload: null }), 5000);
   }
 };
@@ -244,4 +218,31 @@ export const getTransactions = async (take, skip, token, dispatch) => {
   } finally {
     dispatch({ type: "SET_TRANSACTIONS_LOADING", payload: false });
   }
+};
+
+// POLLS//||||||||||||||||||||||||||||
+
+const pollTransactionStatus = async (maxAttempts = 30, intervalMs = 2000) => {
+  for (let i = 0; i < maxAttempts; i++) {
+    await new Promise((resolve) => setTimeout(resolve, intervalMs));
+
+    const res = await fetch(`${TRANSACTIONS}?take=1&skip=0`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+      },
+    });
+
+    if (!res.ok) continue;
+
+    const data = await res.json();
+    const latest = data?.data?.[0];
+
+    if (!latest) continue;
+    if (latest.statusId === 5) return "success";
+    if (latest.statusId === 6) return "failed";
+    // still pending, continue polling
+  }
+
+  return "timeout";
 };

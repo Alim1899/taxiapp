@@ -31,7 +31,7 @@ const Menu = ({ firstName, lastName, rating, balance }) => {
   };
 
   const { state } = useAuth();
-  const { token } = state; // 👈 token not data
+  const { token } = state; 
   const { data } = useTransactions(token);
   const transactions = useMemo(
     () => data?.pages.flatMap((p) => p.data ?? p) ?? [],
@@ -42,7 +42,6 @@ const Menu = ({ firstName, lastName, rating, balance }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [transactions, cooldownKey],
   );
-console.log(transactions);
   return (
     <div className={classes.menu}>
       <nav className={classes.firstNav}>
