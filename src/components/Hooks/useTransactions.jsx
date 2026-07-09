@@ -3,7 +3,8 @@ import { TRANSACTIONS } from "../../utils/Constants";
 
 const TAKE = 1; // change to 5 in production
 
-export const useTransactions = (token) => {
+export const useTransactions = (token, hasPending = false) => {
+  
   return useInfiniteQuery({
     queryKey: ["transactions"],
     queryFn: async ({ pageParam = 0 }) => {
@@ -16,15 +17,16 @@ export const useTransactions = (token) => {
           },
         },
       );
+     
       if (!res.ok) throw new Error("Failed to fetch transactions");
-   
       return res.json();
     },
     getNextPageParam: (lastPage, allPages) => {
       const fetched = allPages.flatMap((p) => p.data ?? p).length;
-      const hasMore = fetched < (lastPage.total ?? allPages[0].count); // 👈 adjust if server returns total
+      const hasMore = fetched < (lastPage.total ?? allPages[0].count);
       return hasMore ? fetched : undefined;
     },
     enabled: !!token,
+    refetchInterval: hasPending ? 3000 : false, 
   });
 };

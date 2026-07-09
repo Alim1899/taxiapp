@@ -9,7 +9,7 @@ const initialState = {
   isWithdrawing: false,
   withdrawStatus: null,
   toast: null,
-  pendingTransaction: null,
+  pendingTransaction: false,
 };
 
 const userReducer = (state = initialState, action) => {

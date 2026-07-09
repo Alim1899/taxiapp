@@ -161,7 +161,7 @@ export const withdraw = async (userDetails, dispatch) => {
 
     // request accepted — now show pending state
     dispatch({ type: "SET_WITHDRAWING", payload: true });
-
+   
     queryClient.invalidateQueries({ queryKey: ["transactions"] });
 
     // poll until resolved
@@ -179,7 +179,7 @@ export const withdraw = async (userDetails, dispatch) => {
         type: "SET_TOAST",
         payload: { message: "თანხის გატანა ვერ შესრულდა", type: "error" },
       });
-    }
+    } 
   } catch (err) {
     console.error(err);
     dispatch({
@@ -190,9 +190,14 @@ export const withdraw = async (userDetails, dispatch) => {
       },
     });
   } finally {
-    dispatch({ type: "SET_WITHDRAWING", payload: false });
-    dispatch({ type: "SET_PENDING_TRANSACTION", payload: null });
     queryClient.invalidateQueries({ queryKey: ["transactions"] });
+    queryClient.invalidateQueries({ queryKey: ["driverInfo"] });
+
+    // 👈 wait for refetch to complete before hiding pending state
+    setTimeout(() => {
+      dispatch({ type: "SET_WITHDRAWING", payload: false });
+    }, 1500);
+
     setTimeout(() => dispatch({ type: "SET_TOAST", payload: null }), 5000);
   }
 };
@@ -222,7 +227,7 @@ export const getTransactions = async (take, skip, token, dispatch) => {
 
 // POLLS//||||||||||||||||||||||||||||
 
-const pollTransactionStatus = async (maxAttempts = 30, intervalMs = 2000) => {
+const pollTransactionStatus = async (maxAttempts = 500, intervalMs = 2000) => {
   for (let i = 0; i < maxAttempts; i++) {
     await new Promise((resolve) => setTimeout(resolve, intervalMs));
 
@@ -239,8 +244,10 @@ const pollTransactionStatus = async (maxAttempts = 30, intervalMs = 2000) => {
     const latest = data?.data?.[0];
 
     if (!latest) continue;
+    console.log(latest.statusId);
     if (latest.statusId === 5) return "success";
     if (latest.statusId === 6) return "failed";
+
     // still pending, continue polling
   }
 

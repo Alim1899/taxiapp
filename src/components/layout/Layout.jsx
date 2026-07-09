@@ -10,7 +10,6 @@ const Layout = () => {
   const { state, dispatch } = useAuth();
   const { step, token } = state;
   const isLoggedIn = step === "authorized";
-console.log(state);
   const { data: userDetails } = useDriverInfo(token);
 
   const handleLogout = () => {

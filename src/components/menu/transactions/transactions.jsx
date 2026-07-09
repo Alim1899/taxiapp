@@ -10,17 +10,12 @@ import { useTransactions } from "../../Hooks/useTransactions";
 const Transactions = () => {
   const { state: authState } = useAuth();
   const { state: userState } = useUser();
-  const { isWithdrawing, pendingTransaction } = userState;
+  const { isWithdrawing } = userState;
   const { token } = authState;
   const bottomRef = useRef(null);
 
-  const {
-    data,
-    isLoading,
-    isFetchingNextPage,
-    fetchNextPage,
-    hasNextPage,
-  } = useTransactions(token);
+  const { data, isLoading, isFetchingNextPage, fetchNextPage, hasNextPage } =
+    useTransactions(token, isWithdrawing);
 
   const transactions = data?.pages.flatMap((p) => p.data ?? p) ?? [];
   useEffect(() => {
@@ -32,16 +27,16 @@ const Transactions = () => {
           fetchNextPage();
         }
       },
-      { threshold: 1.0 }
+      { threshold: 1.0 },
     );
 
     const el = bottomRef.current;
     if (el) observer.observe(el);
-    return () => { if (el) observer.unobserve(el); };
+    return () => {
+      if (el) observer.unobserve(el);
+    };
   }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
-//console.log(transactions);
-  if (isLoading)
-    return <div>იტვირთება...</div>;
+  if (isLoading) return <div>იტვირთება...</div>;
 
   if (!isLoading && transactions.length === 0 && !isWithdrawing)
     return (
@@ -49,72 +44,60 @@ const Transactions = () => {
         თქვენ ჯერ არ გაქვთ შესრულებული ტრანზაქცია
       </div>
     );
-
   return (
     <div className={classes.main}>
       <h2 className={classes.header}>ტრანზაქციების ისტორია</h2>
       <ul className={classes.list}>
-        {isWithdrawing && pendingTransaction && (
-          <li className={`${classes.listItem} ${classes.pending}`}>
-            <div className={`${classes.iconWrap} ${classes.pendingIcon}`}>
-              <span className={classes.spinner} />
-            </div>
-            <div className={classes.txInfo}>
-              <div className={classes.txDate}>
-                {new Date(pendingTransaction.time).toLocaleDateString("ka-GE")} —{" "}
-                {new Date(pendingTransaction.time).toLocaleTimeString("ka-GE", {
-                  hour: "2-digit",
-                  minute: "2-digit",
-                })}
-              </div>
-              <div className={classes.txAmount}>
-                {pendingTransaction.amount} <FaLariSign />
-              </div>
-            </div>
-            <span className={`${classes.badge} ${classes.pendingBadge}`}>
-              მუშავდება
-            </span>
-          </li>
-        )}
-
         {transactions.map((el) => {
-  const date = new Date(el.createdAt);
-  const formattedDate = date.toLocaleDateString("ka-GE");
-  const formattedTime = date.toLocaleTimeString("ka-GE", {
-    hour: "2-digit",
-    minute: "2-digit",
-  });
+          const date = new Date(el.createdAt);
+          const formattedDate = date.toLocaleDateString("ka-GE");
+          const formattedTime = date.toLocaleTimeString("ka-GE", {
+            hour: "2-digit",
+            minute: "2-digit",
+          });
 
-  const statusClass =
-    el.statusId === 5 ? classes.success
-    : el.statusId === 6 ? classes.blocked
-    : classes.pending;
+          const statusClass =
+            el.statusId === 5
+              ? classes.success
+              : el.statusId === 6
+                ? classes.blocked
+                : classes.pending;
 
-  const statusIcon =
-    el.statusId === 5 ? <GiConfirmed className={classes.succesIcon} />
-    : el.statusId === 6 ? <MdBlock className={classes.blockIcon} />
-    : <span className={classes.spinner} />;
+          const statusIcon =
+            el.statusId === 5 ? (
+              <GiConfirmed className={classes.succesIcon} />
+            ) : el.statusId === 6 ? (
+              <MdBlock className={classes.blockIcon} />
+            ) : (
+              <span className={classes.spinner} />
+            );
 
-  const statusText =
-    el.statusId === 5 ? "დადასტურებული"
-    : el.statusId === 6 ? "უარყოფილი"
-    : "მუშავდება";
+          const statusText =
+            el.statusId === 5
+              ? "დადასტურებული"
+              : el.statusId === 6
+                ? "უარყოფილი"
+                : "მუშავდება";
 
-  return (
-    <li className={classes.listItem} key={el.id}>
-      <div className={`${classes.iconWrap} ${statusClass}`}>
-        {statusIcon}
-      </div>
-      <div className={classes.txInfo}>
-        <div className={classes.txDate}>{formattedDate} — {formattedTime}</div>
-        <div className={classes.txAmount}>{el.amount} <FaLariSign /></div>
-      </div>
-      <span className={`${classes.badge} ${statusClass}`}>
-        {statusText}
-      </span>
-    </li>
-  );
-})}
+          return (
+            <li className={classes.listItem} key={el.id}>
+              <div className={`${classes.iconWrap} ${statusClass}`}>
+                {statusIcon}
+              </div>
+              <div className={classes.txInfo}>
+                <div className={classes.txDate}>
+                  {formattedDate} — {formattedTime}
+                </div>
+                <div className={classes.txAmount}>
+                  {el.amount} <FaLariSign />
+                </div>
+              </div>
+              <span className={`${classes.badge} ${statusClass}`}>
+                {statusText}
+              </span>
+            </li>
+          );
+        })}
       </ul>
 
       {hasNextPage && <div ref={bottomRef} style={{ height: "1px" }} />}
@@ -122,7 +105,14 @@ const Transactions = () => {
         <div style={{ textAlign: "center", padding: "1rem" }}>იტვირთება...</div>
       )}
       {!hasNextPage && transactions.length > 0 && (
-        <div style={{ textAlign: "center", padding: "1rem", color: "gray", fontSize: "13px" }}>
+        <div
+          style={{
+            textAlign: "center",
+            padding: "1rem",
+            color: "gray",
+            fontSize: "13px",
+          }}
+        >
           სულ {transactions.length} ტრანზაქცია
         </div>
       )}

@@ -56,6 +56,7 @@ const Withdraw = ({ close, header }) => {
           savePaymentAccount: isSaving,
           setDefaultPaymentAccount: isDefault,
           setPaymentAccountName: values.accountName,
+
         };
         withdraw(userSettings, dispatch);
       }}
@@ -138,7 +139,7 @@ const Withdraw = ({ close, header }) => {
           </button>
 
           {withdrawStatus === "success" && (
-            <p className={classes.success}>თანხა წარმატებით გაიტანა!</p>
+            <p className={classes.success}>თანხა გადაირიცხა ანგარიშზე!</p>
           )}
           {withdrawStatus === "error" && (
             <p className={classes.error}>შეცდომა, სცადეთ თავიდან</p>
