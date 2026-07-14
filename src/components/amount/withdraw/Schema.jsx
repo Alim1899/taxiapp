@@ -4,10 +4,15 @@ import * as Yup from "yup";
 export const createWithdrawSchema = (balance) =>
   Yup.object({
     iban: Yup.string()
-      .required("აუცილებელი ველი")
-      .test("is-iban", "არასწორი IBAN", (value) =>
-        value ? isIBAN(value.replace(/\s+/g, "")) : false,
-      ),
+  .required("აუცილებელი ველი")
+  .test("is-iban", "არასწორი IBAN", (value) =>
+    value ? isIBAN(value.replace(/\s+/g, "")) : false,
+  )
+  .test("is-georgian-bank", "მხოლოდ BOG, TBC ან Liberty ბანკი", (value) => {
+    if (!value) return false;
+    const clean = value.replace(/\s+/g, "").toUpperCase();
+    return clean.includes("BG") || clean.includes("TB") || clean.includes("LB");
+  }),
     fullName: Yup.string()
       .required("აუცილებელი ველი")
       .matches(/^\S+\s+\S+/, "გთხოვთ შეიყვანოთ სახელი და გვარი"),

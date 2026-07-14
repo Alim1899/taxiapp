@@ -118,14 +118,15 @@ export const getPaymentAccount = async (dispatch) => {
 
 export const withdraw = async (userDetails, dispatch) => {
   const dataFetch = {
-    iban: userDetails.iban,
+    iban: userDetails.iban.replace(/\s+/g, ""),
     firstName: userDetails.firstName,
     lastName: userDetails.lastName,
     amount: userDetails.amount,
     savePaymentAccount: userDetails.savePaymentAccount,
     setDefaultPaymentAccount: userDetails.setDefaultPaymentAccount,
-    paymentAccountName: userDetails.setPaymentAccountName,
+    paymentAccountName: userDetails.setPaymentAccountName || null,
   };
+  console.log(dataFetch);
   try {
     const res = await fetch(`${WITHDRAW}`, {
       method: "POST",
@@ -145,6 +146,7 @@ export const withdraw = async (userDetails, dispatch) => {
             type: "error",
           },
         });
+        return;
       } else if (res.status === 422) {
         dispatch({
           type: "SET_TOAST",
@@ -156,12 +158,14 @@ export const withdraw = async (userDetails, dispatch) => {
         });
         return;
       }
-      throw new Error(res.status);
+
+      const errorBody = await res.json().catch(() => null);
+      console.log("error body:", errorBody);
     }
 
     // request accepted — now show pending state
     dispatch({ type: "SET_WITHDRAWING", payload: true });
-   
+
     queryClient.invalidateQueries({ queryKey: ["transactions"] });
 
     // poll until resolved
@@ -179,7 +183,7 @@ export const withdraw = async (userDetails, dispatch) => {
         type: "SET_TOAST",
         payload: { message: "თანხის გატანა ვერ შესრულდა", type: "error" },
       });
-    } 
+    }
   } catch (err) {
     console.error(err);
     dispatch({
@@ -193,7 +197,6 @@ export const withdraw = async (userDetails, dispatch) => {
     queryClient.invalidateQueries({ queryKey: ["transactions"] });
     queryClient.invalidateQueries({ queryKey: ["driverInfo"] });
 
-    // 👈 wait for refetch to complete before hiding pending state
     setTimeout(() => {
       dispatch({ type: "SET_WITHDRAWING", payload: false });
     }, 1500);
@@ -244,7 +247,7 @@ const pollTransactionStatus = async (maxAttempts = 500, intervalMs = 2000) => {
     const latest = data?.data?.[0];
 
     if (!latest) continue;
-    console.log(latest.statusId);
+  
     if (latest.statusId === 5) return "success";
     if (latest.statusId === 6) return "failed";
 

@@ -7,7 +7,6 @@ import useUser from "../../context/UserContext/useUser";
 import { withdraw } from "../../../utils/Functions";
 import Skeleton from "../../UI/Skeleton";
 import CheckBoxes from "./CheckBoxes";
-import { useState } from "react";
 import { createWithdrawSchema } from "./Schema";
 import useAuth from "../../context/AuthContext/useAuth";
 import { useDriverInfo } from "../../Hooks/useDriverInfo";
@@ -26,7 +25,7 @@ const Withdraw = ({ close, header }) => {
     isWithdrawing,
     withdrawStatus,
   } = state;
-  const [amount, setAmount] = useState(() => balance || "");
+
   const isAccountSelected = !!selectedAccount?.id;
   return (
     <Formik
@@ -38,8 +37,8 @@ const Withdraw = ({ close, header }) => {
         fullName:
           `${selectedAccount?.receiverFirstName || ""} ${selectedAccount?.receiverLastName || ""}`.trim() ||
           "",
-        amount: amount || "",
-        accountName: selectedAccount?.name||"",
+        amount: isAccountSelected ? balance : "",
+        accountName: selectedAccount?.name || "",
         isSaving: isAccountSelected ? true : false,
         isDefault: false,
       }}
@@ -56,12 +55,12 @@ const Withdraw = ({ close, header }) => {
           savePaymentAccount: isSaving,
           setDefaultPaymentAccount: isDefault,
           setPaymentAccountName: values.accountName,
-
         };
         withdraw(userSettings, dispatch);
       }}
     >
       {({ isValid }) => (
+  
         <Form onClick={(e) => e.stopPropagation()} className={classes.withdraw}>
           <Header text={header} type="button" onClick={close} />
 
@@ -116,9 +115,6 @@ const Withdraw = ({ close, header }) => {
               placeholder="მინ. 0 - მაქს. 1500"
               min={1}
               max={1500}
-              onChange={(e) => {
-                setAmount(e.target.value); // 👈 keep local copy
-              }}
             />
           )}
 
@@ -126,7 +122,11 @@ const Withdraw = ({ close, header }) => {
             isDefault={isDefault}
             isSaving={isAccountSelected ? isAccountSelected : isSaving}
             dispatch={dispatch}
-           accountName={isAccountSelected ? selectedAccount?.name || "" : paymentAccountName}
+            accountName={
+              isAccountSelected
+                ? selectedAccount?.name || ""
+                : paymentAccountName
+            }
             isAccountSelected={isAccountSelected}
           />
 
