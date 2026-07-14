@@ -46,7 +46,6 @@ const Withdraw = ({ close, header }) => {
       onSubmit={(values) => {
         const [firstName, ...lastNameParts] = values.fullName.split(" ");
         const lastName = lastNameParts.join(" ");
-        console.log(values);
         const userSettings = {
           iban: values.iban,
           firstName: firstName,

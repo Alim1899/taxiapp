@@ -2,44 +2,66 @@ import { FaLariSign } from "react-icons/fa6";
 import Skeleton from "../../UI/Skeleton";
 import classes from "./Balance.module.css";
 import { queryClient } from "../../../queryClient";
+import useUser from "../../context/UserContext/useUser";
 
 const Balance = ({
   balance,
   onClick,
   name,
-  text,
   isOnCooldown,
   remainingTime,
-  onRefresh
+  onRefresh,
 }) => {
-  const handleRefresh = () => {
-    console.log("clicked");
+  const { state } = useUser();
+  const { isWithdrawing } = state;
+
+  const handleRefresh = (e) => {
+    e.stopPropagation();
     queryClient.invalidateQueries({ queryKey: ["transactions"] });
-    onRefresh?.()
+    onRefresh?.();
+  };
+  const renderContent = () => {
+    if (isWithdrawing)
+      return (
+        <>
+          <p className={classes.label}>თქვენ გაქვთ აქტიური ტრანზაქცია</p>
+          <p className={classes.sub}>გთხოვთ დაელოდოთ დასრულებას</p>
+        </>
+      );
+
+    if (isOnCooldown)
+      return (
+        <>
+          <p className={classes.label}>
+            გატანა შესაძლებელია {remainingTime} წუთში
+          </p>
+          <button className={classes.refreshBtn} onClick={handleRefresh}>
+            განახლება
+          </button>
+        </>
+      );
+
+    return (
+      <>
+        <p className={classes.label}>ჩემი ბალანსი</p>
+        <p className={classes.amount}>
+          {balance ? Number(balance).toFixed(2) : <Skeleton />}
+          <FaLariSign />
+        </p>
+      </>
+    );
   };
 
   return (
-    <div className={classes.balance}>
-      <div className={classes.icon} onClick={onClick} name={name} text={text}>
-        {isOnCooldown ? (
-          <h2 className={classes.cooldown}>
-            გატანა შესაძლებელია {remainingTime} წუთში{" "}
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                handleRefresh();
-              }}
-            >
-              განახლება
-            </button>
-          </h2>
-        ) : (
-          <h2>
-            ბალანსი: {balance ? Number(balance).toFixed(2) : <Skeleton />}
-            <FaLariSign />
-          </h2>
-        )}
-      </div>
+    <div
+      className={classes.balance}
+      style={{
+        cursor: isOnCooldown || isWithdrawing ? "not-allowed" : "pointer",
+      }}
+      onClick={!isWithdrawing && !isOnCooldown ? onClick : undefined}
+      name={name}
+    >
+      {renderContent()}
     </div>
   );
 };

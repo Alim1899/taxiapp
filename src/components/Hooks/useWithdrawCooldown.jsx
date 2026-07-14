@@ -1,7 +1,7 @@
 // utils/getWithdrawCooldown.js
 export const getWithdrawCooldown = (transactions) => {
   const lastSuccess = [...transactions]
-    .filter((t) => t.statusId === 1000)
+    .filter((t) => t.statusId === 5)
     .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))[0];
 
   if (!lastSuccess) return { isOnCooldown: false, remainingTime: null };

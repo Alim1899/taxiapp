@@ -1,65 +1,48 @@
 .balance {
-  margin: 2vh 0;
-  height: clamp(100px, 20vw, 170px);
-  border-radius: 50px;
-}
-
-
-.span{
-  font-size: small;
-}
-
-
-.withdraw{
-  background-color: var(--yellow);
-  border: none;
-  font-size: large;
-  font-weight: 900;
-  margin-left: 20px;
-  padding:5px 20px;
-  border-radius: 15px;
-}
-
-
-.icon {
-  height: 70%;
-  width: 80%;
+  margin: 2vh auto;
+  height: clamp(100px, 10vw, 100px);
   width: 50vw;
-margin-left: 50px;
-  position: relative;
-  cursor: pointer;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  margin: auto;
-}
-
-
-.icon>h2{
-  height: 90px;
-  width: 100%;
+  border-radius: 20px;
   background-color: var(--yellow);
-  border-radius: 15px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: darkolivegreen;
-}
-
-.cooldown{
   display: flex;
   flex-direction: column;
-  cursor:auto;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  color: darkolivegreen;
+  text-align: center;
+  padding: 10px 20px;
 }
 
-.cooldown>button{
+.label {
+  font-size: 20px;
+  font-weight: 600;
+  margin: 0 0 6px;
+}
+
+.amount {
+  font-size: clamp(20px, 4vw, 32px);
+  font-weight: 900;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.sub {
+  font-size: 16px;
+  font-weight: 500;
+  margin: 0;
+  opacity: 0.8;
+}
+
+.refreshBtn {
+  margin-top: 8px;
   background-color: darkolivegreen;
   color: var(--yellow);
   border: none;
-  padding:10px 25px;
+  padding: 8px 20px;
   font-weight: 700;
-  margin: 5px 0 0px 0;
-  border-radius: 15px;
+  border-radius: 12px;
   cursor: pointer;
 }
