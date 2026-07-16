@@ -7,9 +7,9 @@ const CheckBoxes = ({
   dispatch,
   accountName,
   isAccountSelected,
+  isAlreadyDefault
 }) => {
   const { setFieldValue } = useFormikContext();
-
   const handleSaving = () => {
     const newValue = !isSaving;
     dispatch({ type: "SET_SAVING", payload: newValue });
@@ -48,8 +48,9 @@ const CheckBoxes = ({
         <FormikField
           type="checkbox"
           name="isDefault"
-          checked={isDefault}
+          checked={isAlreadyDefault}
           onChange={handleDefault}
+          disabled={isAlreadyDefault}
         />
         <span>შენახვა როგორც ძირითადი</span>
       </label>

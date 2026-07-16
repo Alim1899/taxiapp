@@ -59,7 +59,6 @@ const Withdraw = ({ close, header }) => {
       }}
     >
       {({ isValid }) => (
-  
         <Form onClick={(e) => e.stopPropagation()} className={classes.withdraw}>
           <Header text={header} type="button" onClick={close} />
 
@@ -127,6 +126,7 @@ const Withdraw = ({ close, header }) => {
                 : paymentAccountName
             }
             isAccountSelected={isAccountSelected}
+            isAlreadyDefault={selectedAccount?.default === true}
           />
 
           <button

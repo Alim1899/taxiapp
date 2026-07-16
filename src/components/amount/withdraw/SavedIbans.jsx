@@ -29,7 +29,6 @@ const CustomOption = ({ innerProps, data }) => {
 export default function SavedIbans({ state, selectedAccount, dispatch }) {
   const { setFieldValue } = useFormikContext();
   const hasFetched = useRef(false);
-
   useEffect(() => {
     if (!hasFetched.current) {
       hasFetched.current = true;

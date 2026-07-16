@@ -126,7 +126,6 @@ export const withdraw = async (userDetails, dispatch) => {
     setDefaultPaymentAccount: userDetails.setDefaultPaymentAccount,
     paymentAccountName: userDetails.setPaymentAccountName || null,
   };
-  console.log(dataFetch);
   try {
     const res = await fetch(`${WITHDRAW}`, {
       method: "POST",
@@ -158,9 +157,6 @@ export const withdraw = async (userDetails, dispatch) => {
         });
         return;
       }
-
-      const errorBody = await res.json().catch(() => null);
-      console.log("error body:", errorBody);
     }
 
     // request accepted — now show pending state
@@ -247,8 +243,9 @@ const pollTransactionStatus = async (maxAttempts = 500, intervalMs = 2000) => {
     const latest = data?.data?.[0];
 
     if (!latest) continue;
-  
+
     if (latest.statusId === 5) return "success";
+
     if (latest.statusId === 6) return "failed";
 
     // still pending, continue polling

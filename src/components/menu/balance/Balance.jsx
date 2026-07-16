@@ -43,11 +43,11 @@ const Balance = ({
 
     return (
       <>
-        <p className={classes.label}>ჩემი ბალანსი</p>
-        <p className={classes.amount}>
+        <h2 className={classes.label}>ჩემი ბალანსი</h2>
+        <h2 className={classes.amount}>
           {balance ? Number(balance).toFixed(2) : <Skeleton />}
           <FaLariSign />
-        </p>
+        </h2>
       </>
     );
   };
