@@ -34,10 +34,15 @@ const Balance = ({
         <>
           <p className={classes.label}>
             გატანა შესაძლებელია {remainingTime} წუთში
+            <button className={classes.refreshBtn} onClick={handleRefresh}>
+              განახლება
+            </button>
           </p>
-          <button className={classes.refreshBtn} onClick={handleRefresh}>
-            განახლება
-          </button>
+
+          <h6 className={classes.label}>
+            ჩემი ბალანსი: {balance ? Number(balance).toFixed(2) : <Skeleton />}
+            <FaLariSign />
+          </h6>
         </>
       );
 
