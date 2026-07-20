@@ -118,7 +118,7 @@ const Withdraw = ({ close, header }) => {
 
           <CheckBoxes
             isDefault={isDefault}
-            isSaving={isAccountSelected ? isAccountSelected : isSaving}
+            isSaving={isSaving}
             dispatch={dispatch}
             accountName={
               isAccountSelected

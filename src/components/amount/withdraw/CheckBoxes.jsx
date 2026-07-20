@@ -7,7 +7,7 @@ const CheckBoxes = ({
   dispatch,
   accountName,
   isAccountSelected,
-  isAlreadyDefault
+  isAlreadyDefault,
 }) => {
   const { setFieldValue } = useFormikContext();
   const handleSaving = () => {
@@ -31,48 +31,58 @@ const CheckBoxes = ({
     }
   };
 
-  return (
-    <div className={classes.checkboxes}>
-      <label className={classes.checkSave}>
-        <FormikField
-          type="checkbox"
-          name="isSaving"
-          checked={isSaving}
-          onChange={handleSaving}
-          disabled={isAccountSelected}
-        />
-        <span>შენახვა</span>
-      </label>
+return (
+  <div className={classes.checkboxes}>
+    <label className={classes.checkSave}>
+      <FormikField
+        type="checkbox"
+        name="isSaving"
+        checked={isAccountSelected || isSaving} // 👈 visually checked when account selected
+        onChange={handleSaving}
+        disabled={isAccountSelected}
+      />
+      <span>შენახვა</span>
+    </label>
 
-      <label className={classes.favorite}>
+   {isAlreadyDefault ? (
+  <label className={classes.favorite}>
+    <FormikField
+      type="checkbox"
+      name="isDefault"
+      checked={true}
+      disabled={true}
+      onChange={() => {}}
+    />
+    <span>ძირითადი ანგარიში </span>
+  </label>
+) : (
+  <label className={classes.favorite}>
+    <FormikField
+      type="checkbox"
+      name="isDefault"
+      checked={isDefault}
+      onChange={handleDefault}
+    />
+    <span>შენახვა როგორც ძირითადი</span>
+  </label>
+)}
+
+    {(isSaving || isAccountSelected) && ( // 👈 show when either
+      <div className={classes.accountNameWrap}>
         <FormikField
-          type="checkbox"
-          name="isDefault"
-          checked={isAlreadyDefault}
-          onChange={handleDefault}
-          disabled={isAlreadyDefault}
+          type="text"
+          name="accountName"
+          placeholder="მაგ: ჩემი TBC"
+          value={accountName}
+          onChange={(e) => {
+            dispatch({ type: "SET_PAYMENT_ACCOUNT_NAME", payload: e.target.value });
+            setFieldValue("accountName", e.target.value);
+          }}
         />
-        <span>შენახვა როგორც ძირითადი</span>
-      </label>
-      {isSaving && (
-        <div className={classes.accountNameWrap}>
-          <FormikField
-            type="text"
-            name="accountName"
-            placeholder="მაგ: ჩემი TBC"
-            value={accountName}
-            onChange={(e) => {
-              dispatch({
-                type: "SET_PAYMENT_ACCOUNT_NAME",
-                payload: e.target.value,
-              });
-              setFieldValue("accountName", e.target.value);
-            }}
-          />
-        </div>
-      )}
-    </div>
-  );
+      </div>
+    )}
+  </div>
+);
 };
 
 export default CheckBoxes;
