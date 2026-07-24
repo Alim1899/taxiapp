@@ -33,15 +33,15 @@ const Withdraw = ({ close, header }) => {
       validateOnMount
       validateOnChange
       initialValues={{
-        iban: selectedAccount?.iban || "",
-        fullName:
-          `${selectedAccount?.receiverFirstName || ""} ${selectedAccount?.receiverLastName || ""}`.trim() ||
-          "",
-        amount: isAccountSelected ? balance : "",
-        accountName: selectedAccount?.name || "",
-        isSaving: isAccountSelected ? true : false,
-        isDefault: false,
-      }}
+  iban: selectedAccount?.iban || "",
+  fullName: selectedAccount?.receiverFirstName
+    ? `${selectedAccount.receiverFirstName} ${selectedAccount.receiverLastName}`.trim()
+    : `${userDetails?.firstName || ""} ${userDetails?.lastName || ""}`.trim(), // 👈 driver's own name
+  amount: isAccountSelected ? balance : balance || "", // 👈 always prefill balance
+  accountName: selectedAccount?.name || "",
+  isSaving: isAccountSelected ? true : false,
+  isDefault: false,
+}}
       validationSchema={createWithdrawSchema(balance)}
       onSubmit={(values) => {
         const [firstName, ...lastNameParts] = values.fullName.split(" ");
@@ -92,7 +92,7 @@ const Withdraw = ({ close, header }) => {
             <FormikField
               name="fullName"
               label="მიმღების დასახელება"
-              placeholder="მიხეილ მარღიშვილი"
+              placeholder="მიმღების სახელი და გვარი"
               onChange={() => {
                 if (selectedAccount?.id)
                   dispatch({ type: "SET_ACCOUNT", payload: {} }); // 👈 same here
