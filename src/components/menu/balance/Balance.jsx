@@ -8,13 +8,14 @@ const Balance = ({
   balance,
   onClick,
   name,
+  firstName,
+  lastName,
   isOnCooldown,
   remainingTime,
   onRefresh,
 }) => {
   const { state } = useUser();
   const { isWithdrawing } = state;
-
   const handleRefresh = (e) => {
     e.stopPropagation();
     queryClient.invalidateQueries({ queryKey: ["transactions"] });
@@ -39,18 +40,23 @@ const Balance = ({
             </button>
           </p>
 
-          <h6 className={classes.label}>
-            ჩემი ბალანსი: {balance ? Number(balance).toFixed(2) : <Skeleton />}
-            <FaLariSign />
-          </h6>
+         <h2 className={classes.label}>
+          ბალანსი:{" "}
+          {balance ? <span>{Number(balance).toFixed(2)} </span> : <Skeleton />}
+          <FaLariSign />
+        </h2>
         </>
       );
 
     return (
       <>
-        <h2 className={classes.label}>ჩემი ბალანსი</h2>
-        <h2 className={classes.amount}>
-          {balance ? Number(balance).toFixed(2) : <Skeleton />}
+        <h2 className={classes.label}>
+          მომხმარებელი: {firstName ? <span>{firstName}</span> : <Skeleton />}{" "}
+          {lastName ? <span>{lastName}</span> : <Skeleton />}.
+        </h2>
+        <h2 className={classes.label}>
+          ბალანსი:{" "}
+          {balance ? <span>{Number(balance).toFixed(2)} </span> : <Skeleton />}
           <FaLariSign />
         </h2>
       </>

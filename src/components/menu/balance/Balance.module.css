@@ -16,7 +16,7 @@
 
 .label {
   font-size: 20px;
-  font-weight: 600;
+  font-weight: 100;
   margin: 0 0 6px;
 }
 
@@ -46,4 +46,7 @@
   border-radius: 12px;
   cursor: pointer;
   margin-left: 20px;
+}
+.label>span{
+  font-weight: 900;
 }

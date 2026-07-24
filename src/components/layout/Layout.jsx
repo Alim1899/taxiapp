@@ -15,7 +15,7 @@ const Layout = () => {
   const handleLogout = () => {
     dispatch({ type: "LOG_OUT" });
   };
-
+console.log(userDetails);
   return (
     <div className={classes.layout}>
       <Navbar isLoggedIn={isLoggedIn} dispatch={handleLogout} />
