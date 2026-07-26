@@ -8,8 +8,6 @@ const Balance = ({
   balance,
   onClick,
   name,
-  firstName,
-  lastName,
   isOnCooldown,
   remainingTime,
   onRefresh,
@@ -40,21 +38,21 @@ const Balance = ({
             </button>
           </p>
 
-         <h2 className={classes.label}>
-          ბალანსი:{" "}
-          {balance ? <span>{Number(balance).toFixed(2)} </span> : <Skeleton />}
-          <FaLariSign />
-        </h2>
+          <h2 className={classes.label}>
+            ბალანსი:{" "}
+            {balance ? (
+              <span>{Number(balance).toFixed(2)} </span>
+            ) : (
+              <Skeleton />
+            )}
+            <FaLariSign />
+          </h2>
         </>
       );
 
     return (
       <>
-        <h2 className={classes.label}>
-          მომხმარებელი: {firstName ? <span>{firstName}</span> : <Skeleton />}{" "}
-          {lastName ? <span>{lastName}</span> : <Skeleton />}.
-        </h2>
-        <h2 className={classes.label}>
+        <h2 className={classes.amount}>
           ბალანსი:{" "}
           {balance ? <span>{Number(balance).toFixed(2)} </span> : <Skeleton />}
           <FaLariSign />

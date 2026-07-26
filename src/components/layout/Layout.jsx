@@ -17,7 +17,12 @@ const Layout = () => {
   };
   return (
     <div className={classes.layout}>
-      <Navbar isLoggedIn={isLoggedIn} dispatch={handleLogout} />
+      <Navbar
+        isLoggedIn={isLoggedIn}
+        dispatch={handleLogout}
+        firstName={userDetails?.firstName}
+        lastName={userDetails?.lastName}
+      />
       {isLoggedIn ? (
         <Menu
           balance={userDetails?.balance}
