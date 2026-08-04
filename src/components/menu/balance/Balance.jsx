@@ -25,6 +25,15 @@ const Balance = ({
         <>
           <p className={classes.label}>თქვენ გაქვთ აქტიური ტრანზაქცია</p>
           <p className={classes.sub}>გთხოვთ დაელოდოთ დასრულებას</p>
+          <h2 className={classes.label}>
+            ბალანსი:{" "}
+            {balance ? (
+              <span>{Number(balance).toFixed(2)} </span>
+            ) : (
+              <Skeleton />
+            )}
+            <FaLariSign />
+          </h2>
         </>
       );
 
