@@ -12,6 +12,7 @@ const Balance = ({
   remainingTime,
   onRefresh,
 }) => {
+  console.log(balance);
   const { state } = useUser();
   const { isWithdrawing } = state;
   const handleRefresh = (e) => {
@@ -27,8 +28,8 @@ const Balance = ({
           <p className={classes.sub}>გთხოვთ დაელოდოთ დასრულებას</p>
           <h2 className={classes.label}>
             ბალანსი:{" "}
-            {balance ? (
-              <span>{Number(balance).toFixed(2)} </span>
+            {balance != null ? (
+              <span>{Number(balance).toFixed(2)}</span>
             ) : (
               <Skeleton />
             )}
@@ -49,8 +50,8 @@ const Balance = ({
 
           <h2 className={classes.label}>
             ბალანსი:{" "}
-            {balance ? (
-              <span>{Number(balance).toFixed(2)} </span>
+            {balance != null ? (
+              <span>{Number(balance).toFixed(2)}</span>
             ) : (
               <Skeleton />
             )}
@@ -61,9 +62,13 @@ const Balance = ({
 
     return (
       <>
-        <h2 className={classes.amount}>
+        <h2 className={classes.label}>
           ბალანსი:{" "}
-          {balance ? <span>{Number(balance).toFixed(2)} </span> : <Skeleton />}
+          {balance != null ? (
+            <span>{Number(balance).toFixed(2)}</span>
+          ) : (
+            <Skeleton />
+          )}
           <FaLariSign />
         </h2>
       </>

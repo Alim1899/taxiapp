@@ -13,9 +13,9 @@ export const useDriverInfo = (token) => {
           Authorization: `Bearer ${token}`,
         },
       });
+
       if (!res.ok) {
         if (res.status === 500) {
-          // 👈 return previous cached data silently instead of throwing
           return queryClient.getQueryData(["driverInfo"]);
         }
         throw new Error("Failed to fetch driver info");

@@ -7,7 +7,6 @@ import Dropdown from "./Dropdown";
 
 const Navbar = ({ balance, isLoggedIn, dispatch, firstName, lastName }) => {
   const [showDropDown, setShowDropDown] = useState(false);
-  console.log(firstName, lastName);
   const fullName = firstName
     ? `${firstName || ""} ${lastName[0] || ""}.`
     : null;

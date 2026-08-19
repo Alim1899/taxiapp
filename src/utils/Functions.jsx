@@ -8,6 +8,7 @@ import {
   WITHDRAW,
   TRANSACTIONS,
   DRIVER_INFO,
+  REFRESH,
 } from "./Constants";
 
 export const onSubmit = (data, dispatch) => {
@@ -38,6 +39,7 @@ export const checkLogin = async (number, code, dispatch) => {
 
     const data = await res.json();
     const token = data.access_token;
+    console.log("full login response:", JSON.stringify(data));
 
     if (!token) {
       dispatch({ type: "WRONG_CODE" });
@@ -102,11 +104,11 @@ export const getPaymentAccount = async (dispatch) => {
     }
 
     const data = await res.json();
+    console.log(data);
     dispatch({
-      type: "SET_ACCOUNTS",
       payload: data,
     });
-
+console.log(data);
     return data;
   } catch (err) {
     console.error(err);
@@ -253,3 +255,30 @@ const pollTransactionStatus = async (maxAttempts = 500, intervalMs = 2000) => {
 
   return "timeout";
 };
+
+// REFRESH //////////////////////////////////////
+
+// export const refreshLogin = async (token) => {
+// console.log(token);
+//   try {
+//     const res = await fetch(`${REFRESH}`, {
+//   method: "POST",
+//   headers: {
+//     Authorization: `Bearer ${token}`,
+//   },
+// });
+
+//     if (!res.ok) {
+//       const err = await res.json().catch(() => null);
+//       console.log("error body:", err);
+//       return;
+//     }
+
+//     const data = await res.json();
+//     console.log("login response:", data);
+
+//     return data;
+//   } catch (err) {
+//     console.error(err);
+//   }
+// };
