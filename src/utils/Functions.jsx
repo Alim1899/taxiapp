@@ -23,6 +23,7 @@ export const checkLogin = async (number, code, dispatch) => {
   try {
     const res = await fetch(`${CHECK_CODE}`, {
       method: "POST",
+      credentials: "include",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${TOKEN}`,
@@ -39,14 +40,11 @@ export const checkLogin = async (number, code, dispatch) => {
 
     const data = await res.json();
     const token = data.access_token;
-    console.log("full login response:", JSON.stringify(data));
 
     if (!token) {
       dispatch({ type: "WRONG_CODE" });
       return;
     }
-
-    sessionStorage.setItem("token", token);
 
     dispatch({
       type: "CODE_SUCCESS",
@@ -90,12 +88,12 @@ export const checkNumber = async (number, dispatch) => {
 //  GET DRIVER NAME LASTNAME AND BALANCE  |||||||||||||||||||||
 
 // GET USERS SAVED PAYMENT IBANS  ||||||||||||||||||||||||||||
-export const getPaymentAccount = async (dispatch) => {
+export const getPaymentAccount = async (dispatch, token) => {
   try {
     const res = await fetch(`${PAYMENT_ACCOUNT}`, {
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+        Authorization: `Bearer ${token}`,
       },
     });
 
@@ -104,11 +102,10 @@ export const getPaymentAccount = async (dispatch) => {
     }
 
     const data = await res.json();
-    console.log(data);
     dispatch({
+      type: "SET_ACCOUNTS",
       payload: data,
     });
-console.log(data);
     return data;
   } catch (err) {
     console.error(err);
@@ -118,7 +115,7 @@ console.log(data);
 };
 // WITHDRAW MONEY FROM BALANCE TO IBAN |||||||||||||||||||||
 
-export const withdraw = async (userDetails, dispatch) => {
+export const withdraw = async (userDetails, dispatch, token) => {
   const dataFetch = {
     iban: userDetails.iban.replace(/\s+/g, ""),
     firstName: userDetails.firstName,
@@ -133,7 +130,7 @@ export const withdraw = async (userDetails, dispatch) => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify(dataFetch),
     });
@@ -228,14 +225,18 @@ export const getTransactions = async (take, skip, token, dispatch) => {
 
 // POLLS//||||||||||||||||||||||||||||
 
-const pollTransactionStatus = async (maxAttempts = 500, intervalMs = 2000) => {
+const pollTransactionStatus = async (
+  maxAttempts = 500,
+  intervalMs = 2000,
+  token,
+) => {
   for (let i = 0; i < maxAttempts; i++) {
     await new Promise((resolve) => setTimeout(resolve, intervalMs));
 
     const res = await fetch(`${TRANSACTIONS}?take=1&skip=0`, {
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+        Authorization: `Bearer ${token}`,
       },
     });
 
@@ -258,27 +259,27 @@ const pollTransactionStatus = async (maxAttempts = 500, intervalMs = 2000) => {
 
 // REFRESH //////////////////////////////////////
 
-// export const refreshLogin = async (token) => {
-// console.log(token);
-//   try {
-//     const res = await fetch(`${REFRESH}`, {
-//   method: "POST",
-//   headers: {
-//     Authorization: `Bearer ${token}`,
-//   },
-// });
+export const refreshLogin = async () => {
+  try {
+    const res = await fetch(`${REFRESH}`, {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+        accept: "*/*",
+      },
+    });
 
-//     if (!res.ok) {
-//       const err = await res.json().catch(() => null);
-//       console.log("error body:", err);
-//       return;
-//     }
+    if (!res.ok) {
+      const err = await res.json().catch(() => null);
+      console.err("error body:", err);
+      return;
+    }
 
-//     const data = await res.json();
-//     console.log("login response:", data);
+    const data = await res.json();
 
-//     return data;
-//   } catch (err) {
-//     console.error(err);
-//   }
-// };
+    return data;
+  } catch (err) {
+    console.error(err);
+  }
+};

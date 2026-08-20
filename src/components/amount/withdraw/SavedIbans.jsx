@@ -10,6 +10,7 @@ import { CiBank } from "react-icons/ci";
 import tbc from "../../../assets/banks/tbc.svg";
 import bog from "../../../assets/banks/bog.svg";
 import liberty from "../../../assets/banks/liberty.svg";
+import useAuth from "../../context/AuthContext/useAuth";
 
 const CustomOption = ({ innerProps, data }) => {
   return (
@@ -28,13 +29,15 @@ const CustomOption = ({ innerProps, data }) => {
 
 export default function SavedIbans({ state, selectedAccount, dispatch }) {
   const { setFieldValue } = useFormikContext();
+  const { state: authState } = useAuth();
+  const { token } = authState;
   const hasFetched = useRef(false);
   useEffect(() => {
     if (!hasFetched.current) {
       hasFetched.current = true;
-      getPaymentAccount(dispatch);
+      getPaymentAccount(dispatch, token);
     }
-  }, [dispatch]);
+  }, [dispatch, token]);
 
   const { isLoading } = state;
   const options = [
@@ -57,7 +60,6 @@ export default function SavedIbans({ state, selectedAccount, dispatch }) {
 
   const renderSelect = () => {
     if (isLoading) return <Skeleton />;
-
     if (!options.length) {
       return <p className={classes.noAccounts}>შენახული ანგარიშები არ გაქვს</p>;
     }
@@ -71,7 +73,6 @@ export default function SavedIbans({ state, selectedAccount, dispatch }) {
         }
         onChange={(selected) => {
           if (selected?.value === "new") {
-            
             dispatch({ type: "SET_ACCOUNT", payload: {} });
             dispatch({ type: "SET_PAYMENT_ACCOUNT_NAME", payload: "" });
             setFieldValue("fullName", "");
@@ -102,9 +103,7 @@ export default function SavedIbans({ state, selectedAccount, dispatch }) {
 
   return (
     <div className={classes.saved}>
-      {options.length ? (
-        <label>შენახული ანგარიშები</label>
-      ) : null}
+      {options.length ? <label>შენახული ანგარიშები</label> : null}
       {renderSelect()}
     </div>
   );

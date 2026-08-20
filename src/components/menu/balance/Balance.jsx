@@ -12,7 +12,6 @@ const Balance = ({
   remainingTime,
   onRefresh,
 }) => {
-  console.log(balance);
   const { state } = useUser();
   const { isWithdrawing } = state;
   const handleRefresh = (e) => {
