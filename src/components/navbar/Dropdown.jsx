@@ -1,11 +1,10 @@
 import classes from "./Navbar.module.css";
-import { FaPiggyBank, FaPowerOff } from "react-icons/fa";
-import { FaLariSign, FaMoneyBillTransfer } from "react-icons/fa6";
-import { FiSettings } from "react-icons/fi";
-const Dropdown = ({ setShowDropDown, isLoggedIn, dispatch }) => {
+import { FaPowerOff } from "react-icons/fa";
+import { logoutFromServer } from "../../utils/Functions";
+const Dropdown = ({ setShowDropDown, isLoggedIn, dispatch, token }) => {
   const logOut = () => {
-    sessionStorage.removeItem("token");
     dispatch();
+    logoutFromServer(token);
   };
   return (
     <div className={classes.dropdown}>

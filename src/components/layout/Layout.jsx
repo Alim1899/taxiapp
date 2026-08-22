@@ -38,6 +38,7 @@ const Layout = () => {
         dispatch={handleLogout}
         firstName={userDetails?.firstName}
         lastName={userDetails?.lastName}
+        token={token}
       />
       {isLoggedIn ? (
         <Menu

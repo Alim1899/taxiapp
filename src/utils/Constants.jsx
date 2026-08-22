@@ -12,3 +12,4 @@ export const PAYMENT_ACCOUNT =
 export const WITHDRAW = "https://goldpay.ge/api/transaction/withdraw";
 export const TRANSACTIONS = "https://goldpay.ge/api/transaction";
 export const REFRESH = "https://goldpay.ge/api/auth/refresh";
+export const LOGOUT = "https://goldpay.ge/api/auth/logout";

@@ -9,6 +9,7 @@ import {
   TRANSACTIONS,
   DRIVER_INFO,
   REFRESH,
+  LOGOUT,
 } from "./Constants";
 
 export const onSubmit = (data, dispatch) => {
@@ -272,13 +273,28 @@ export const refreshLogin = async () => {
 
     if (!res.ok) {
       const err = await res.json().catch(() => null);
-      console.err("error body:", err);
+      console.error("error body:", err);
       return;
     }
 
     const data = await res.json();
 
     return data;
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+// LOGOUT||||||||||||||||
+export const logoutFromServer = async (token) => {
+  try {
+    await fetch(`${LOGOUT}`, {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
   } catch (err) {
     console.error(err);
   }

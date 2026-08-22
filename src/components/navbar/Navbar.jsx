@@ -5,7 +5,14 @@ import { FaPhoneSquareAlt } from "react-icons/fa";
 import { FaUserCircle, FaChevronDown, FaChevronUp } from "react-icons/fa";
 import Dropdown from "./Dropdown";
 
-const Navbar = ({ balance, isLoggedIn, dispatch, firstName, lastName }) => {
+const Navbar = ({
+  balance,
+  isLoggedIn,
+  dispatch,
+  firstName,
+  lastName,
+  token,
+}) => {
   const [showDropDown, setShowDropDown] = useState(false);
   const fullName = firstName
     ? `${firstName || ""} ${lastName[0] || ""}.`
@@ -34,6 +41,7 @@ const Navbar = ({ balance, isLoggedIn, dispatch, firstName, lastName }) => {
             setShowDropDown={setShowDropDown}
             isLoggedIn={isLoggedIn}
             dispatch={dispatch}
+            token={token}
           />
         )}
       </div>
