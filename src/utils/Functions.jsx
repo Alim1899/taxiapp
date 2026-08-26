@@ -165,7 +165,7 @@ export const withdraw = async (userDetails, dispatch, token) => {
     queryClient.invalidateQueries({ queryKey: ["transactions"] });
 
     // poll until resolved
-    const status = await pollTransactionStatus();
+    const status = await pollTransactionStatus(500, 2000, token);
     if (status === "success") {
       dispatch({
         type: "SET_TOAST",
@@ -226,15 +226,12 @@ export const getTransactions = async (take, skip, token, dispatch) => {
 
 // POLLS//||||||||||||||||||||||||||||
 
-const pollTransactionStatus = async (
-  maxAttempts = 500,
-  intervalMs = 2000,
-  token,
-) => {
+const pollTransactionStatus = async (maxAttempts, intervalMs, token) => {
   for (let i = 0; i < maxAttempts; i++) {
     await new Promise((resolve) => setTimeout(resolve, intervalMs));
 
     const res = await fetch(`${TRANSACTIONS}?take=1&skip=0`, {
+      credentials: "include",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,

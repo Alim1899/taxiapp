@@ -25,7 +25,7 @@ const Withdraw = ({ close, header }) => {
     isWithdrawing,
     withdrawStatus,
   } = state;
-
+console.log(token);
   const isAccountSelected = !!selectedAccount?.id;
   return (
     <Formik
@@ -55,7 +55,7 @@ const Withdraw = ({ close, header }) => {
           setDefaultPaymentAccount: isDefault,
           setPaymentAccountName: values.accountName,
         };
-        withdraw(userSettings, dispatch);
+        withdraw(userSettings, dispatch,token);
       }}
     >
       {({ isValid }) => (
