@@ -37,7 +37,6 @@ const Transactions = () => {
     };
   }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
   useEffect(() => {
-    console.log(transactions);
     if (!transactions.length) return;
     const latest = transactions[0];
     const isPending = latest.statusId !== 5 && latest.statusId !== 6;

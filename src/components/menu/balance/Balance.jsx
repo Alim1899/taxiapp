@@ -19,7 +19,6 @@ const Balance = ({
     queryClient.invalidateQueries({ queryKey: ["transactions"] });
     onRefresh?.();
   };
-  console.log(isWithdrawing);
   const renderContent = () => {
     if (isWithdrawing)
       return (
