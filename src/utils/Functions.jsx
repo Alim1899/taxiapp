@@ -242,6 +242,7 @@ const pollTransactionStatus = async (maxAttempts, intervalMs, token) => {
 
     const data = await res.json();
     const latest = data?.data?.[0];
+    console.log(data);
 
     if (!latest) continue;
 

@@ -1,4 +1,3 @@
-const storedToken = sessionStorage.getItem("token");
 
 const STEPS = {
   ENTER_NUMBER: "enter_number",
@@ -9,9 +8,9 @@ const STEPS = {
 };
 
 const initialState = {
-  step: storedToken ? STEPS.AUTHORIZED : STEPS.ENTER_NUMBER,
+  step: STEPS.ENTER_NUMBER,
   isCheckingCode: false,
-  token: storedToken || null,
+  token:  null,
   userNumber: "",
   arrivedCode: "",
   error: null,
@@ -44,7 +43,6 @@ const authReducer = (state = initialState, action) => {
       return { ...state, isCheckingCode: false, error: "code" };
 
     case "CODE_SUCCESS":
-      sessionStorage.setItem("token", action.payload.access_token); // 👈 typo fixed: acces_token -> access_token
       return {
         ...state,
         step: STEPS.AUTHORIZED,
@@ -66,7 +64,6 @@ const authReducer = (state = initialState, action) => {
       return { ...state, arrivedCode: "", error: "code_expired" };
 
     case "LOG_OUT":
-      sessionStorage.removeItem("token"); // 👈 clean up on logout
       return {
         step: STEPS.ENTER_NUMBER,
         token: null,

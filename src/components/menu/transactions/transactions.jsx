@@ -9,7 +9,7 @@ import { useTransactions } from "../../Hooks/useTransactions";
 
 const Transactions = () => {
   const { state: authState } = useAuth();
-  const { state: userState } = useUser();
+  const { state: userState, dispatch } = useUser();
   const { isWithdrawing } = userState;
   const { token } = authState;
   const bottomRef = useRef(null);
@@ -36,6 +36,16 @@ const Transactions = () => {
       if (el) observer.unobserve(el);
     };
   }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
+  useEffect(() => {
+    console.log(transactions);
+    if (!transactions.length) return;
+    const latest = transactions[0];
+    const isPending = latest.statusId !== 5 && latest.statusId !== 6;
+    if (isPending !== isWithdrawing) {
+      // 👈 only dispatch if value actually changes
+      dispatch({ type: "SET_WITHDRAWING", payload: isPending });
+    }
+  }, [transactions[0]?.statusId]);
   if (isLoading) return <div>იტვირთება...</div>;
 
   if (!isLoading && transactions.length === 0 && !isWithdrawing)

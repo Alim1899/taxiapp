@@ -25,7 +25,6 @@ const Withdraw = ({ close, header }) => {
     isWithdrawing,
     withdrawStatus,
   } = state;
-console.log(token);
   const isAccountSelected = !!selectedAccount?.id;
   return (
     <Formik
