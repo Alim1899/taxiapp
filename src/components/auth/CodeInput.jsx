@@ -27,7 +27,7 @@ console.log(state);
         onSubmit={(values, { resetForm }) => {
           checkLogin(
             userNumber,
-            Number(Object.values(values).join("")),
+            String(Object.values(values).join("")),
             dispatch,
           );
           resetForm({ values: { 0: "", 1: "", 2: "", 3: "" } });

@@ -20,6 +20,7 @@ export const onSubmit = (data, dispatch) => {
 
 // |||||||||   CHECK ARRIVED CODE
 export const checkLogin = async (number, code, dispatch) => {
+  console.log(code);
   dispatch({ type: "CHECKING_CODE" });
   try {
     const res = await fetch(`${CHECK_CODE}`, {
