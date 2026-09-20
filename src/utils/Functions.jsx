@@ -75,12 +75,13 @@ export const checkNumber = async (number, dispatch) => {
     }),
   })
     .then((res) => {
+      console.log(res.status);
       if (res.status === 201 && res.ok) {
         dispatch({
           type: "NUMBER_SUCCESS",
           payload: `+995${number}`,
         });
-      } else if (res.statusCode === 500) {
+      } else if (res.statusCode === 500||res.status===401) {
         dispatch({ type: "WRONG_NUMBER" });
       }
     })
