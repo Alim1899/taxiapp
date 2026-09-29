@@ -17,7 +17,6 @@ const Navbar = ({
   const fullName = firstName
     ? `${firstName || ""} ${lastName[0] || ""}.`
     : null;
-
   return (
     <div className={classes.navbar}>
       <img alt="logo" src={logo} className={classes.logo} />

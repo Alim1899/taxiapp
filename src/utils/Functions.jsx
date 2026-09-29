@@ -20,7 +20,6 @@ export const onSubmit = (data, dispatch) => {
 
 // |||||||||   CHECK ARRIVED CODE
 export const checkLogin = async (number, code, dispatch) => {
-  console.log(code);
   dispatch({ type: "CHECKING_CODE" });
   try {
     const res = await fetch(`${CHECK_CODE}`, {
@@ -75,13 +74,12 @@ export const checkNumber = async (number, dispatch) => {
     }),
   })
     .then((res) => {
-      console.log(res.status);
       if (res.status === 201 && res.ok) {
         dispatch({
           type: "NUMBER_SUCCESS",
           payload: `+995${number}`,
         });
-      } else if (res.statusCode === 500||res.status===401) {
+      } else if (res.statusCode === 500 || res.status === 401) {
         dispatch({ type: "WRONG_NUMBER" });
       }
     })

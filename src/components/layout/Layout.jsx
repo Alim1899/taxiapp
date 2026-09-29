@@ -36,7 +36,7 @@ const Layout = () => {
       <Navbar
         isLoggedIn={isLoggedIn}
         dispatch={handleLogout}
-        firstName={userDetails?.firstName}
+        firstName={isLoggedIn ? userDetails?.firstName : null}
         lastName={userDetails?.lastName}
         token={token}
       />
